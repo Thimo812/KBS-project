@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KBS_project
+namespace KBS_project.Enums
 {
-    public enum Interest
+    public enum SexualPreference
     {
-        //hier moeten alle mogelijke interesses nog toegevoegd worden
+        Men,
+        Women,
+        All
     }
 }

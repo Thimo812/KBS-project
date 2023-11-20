@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KBS_project
+namespace KBS_project.Enums
 {
-    public enum SexualPreference
+    public enum Gender
     {
-        Men,
-        Women,
-        All
+        Male,
+        Female,
+        NonBinary
     }
 }

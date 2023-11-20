@@ -1,9 +1,10 @@
 ﻿using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
+using KBS_project.Enums;
 
 namespace KBS_project
 {
-	public class Profile
+    public class Profile
 	{
 		public string UserName { get; set; }
 		public string FirstName { get; set; }
