@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using KBS_project.Enums;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,16 @@ namespace MatchingAppWindow.Views
             }
         }
 
+        private void RegisterAccount(object sender, RoutedEventArgs e)
+        {
+            string userName = UserNameInput.Text;
+            string firstName = FirstNameInput.Text;
+            string lastName = LastNameInput.Text;
+            DateTime birthDate = (DateTime) BirthDatePicker.SelectedDate;
+            //Gender gender = 
+            //SexualPreference sexualPreference, string postalCode, string country,string adress, string city
+        }
+
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
@@ -51,9 +62,5 @@ namespace MatchingAppWindow.Views
 
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
