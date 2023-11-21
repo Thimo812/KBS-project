@@ -9,42 +9,47 @@ namespace MatchingApp.DataAccess.SQL
 {
     class Program
     {
-        static void Main(string[] args)
+
+    }
+
+    public class SQLBuilder
+    {
+        string sql;
+
+        public SqlConnectionStringBuilder SQLBuilder1()
         {
-            try
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "127.0.0.1";
+            builder.UserID = "SA";
+            builder.Password = "D1t1sEenSqlServertju";
+            builder.InitialCatalog = "testDB";
+            builder.TrustServerCertificate = false;
+            return builder;
+        }
+
+        public void SQLEdit(string sql)
+        {
+            SqlConnectionStringBuilder builder = SQLBuilder1();
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(); //Kan miss bet in een class kijk vid voor meer info
-                builder.DataSource = "127.0.0.1";
-                builder.UserID = "SA";
-                builder.Password = "D1t1sEenSqlServertju";
-                builder.InitialCatalog = "testDB";
-                builder.TrustServerCertificate = false;
+                Console.WriteLine("\nQuery data example:");
+                Console.WriteLine("=========================================\n");
 
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                sql = "SELECT id, name, quantity FROM Inventory";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    Console.WriteLine("\nQuery data example:");
-                    Console.WriteLine("=========================================\n");
-
-                    String sql = "SELECT id, name, quantity FROM Inventory";
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        connection.Open();
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                Console.WriteLine("{0} {1} {2}", reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2));
-                            }
+                            Console.WriteLine("{0} {1} {2}", reader.GetInt32(0), reader.GetString(1), reader.GetInt32(2));
                         }
                     }
                 }
             }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            Console.ReadLine();
+
         }
     }
 }
