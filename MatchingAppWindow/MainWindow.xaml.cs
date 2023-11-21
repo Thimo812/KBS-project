@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MatchingAppWindow;
 
 namespace MatchingAppWindow
 {
@@ -23,6 +24,21 @@ namespace MatchingAppWindow
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        bool filterVisible = false;
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(!filterVisible)
+            {
+                filterPanel.Visibility = Visibility.Visible;
+                filterVisible = true;
+            }
+            else
+            {
+                filterPanel.Visibility = Visibility.Collapsed;
+                filterVisible = false;
+            }
         }
     }
 }

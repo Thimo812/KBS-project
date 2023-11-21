@@ -7,6 +7,63 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <Button Name="filterButton" Content="Filter profielen" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top" Click="Button_Click" RenderTransformOrigin="-5.202,0.503"/>
+        <!--<Frame Name="filterPage" Source="Page1.xaml" Visibility="Collapsed"></Frame>-->
+        <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="24,58,600,24" Visibility="Collapsed">
+            <StackPanel Background="LightGray" Height="1000">
+                <Label 
+                Content="Locatie" 
+                RenderTransformOrigin="0.483,-0.398"
+            />
+                <CheckBox 
+                    Content="CheckBox" Height="20"
+                />
+                <CheckBox 
+                Content="CheckBox" Height="20"
+            />
+                <CheckBox 
+                Content="CheckBox" Height="27"
+            />
+                <Label 
+                Content="Hobby" 
+                RenderTransformOrigin="0,0.474"
+            />
+                <CheckBox 
+                Content="CheckBox" Height="22"
+            />
+                <CheckBox 
+                Content="CheckBox" 
+                RenderTransformOrigin="0.261,-11.3" Height="21"
+            />
+                <CheckBox 
+                Content="CheckBox" Height="27"
+            />
+                <Label 
+                Content="Dieet"
+            />
+                <CheckBox 
+                Content="CheckBox" Height="22"
+            />
+                <CheckBox 
+                Content="CheckBox" Height="21"
+            />
+                <CheckBox 
+                Content="CheckBox" Height="26"
+            />
+                <Label 
+                Content="Matchingspercentage"
+            />
+                <Slider Width="120"/>
+                <Label 
+                    Content="Extra"
+            />
+                <CheckBox 
+                    Content="CheckBox" Height="22"
+            />
+                <CheckBox 
+                    Content="CheckBox" Height="22"
+            />
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
