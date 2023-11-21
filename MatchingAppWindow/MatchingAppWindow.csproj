@@ -8,7 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\DefaultImage.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\KBS project\MatchingAppCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\DefaultImage.png" />
   </ItemGroup>
 
 </Project>
