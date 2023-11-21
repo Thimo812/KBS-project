@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 
-namespace KBS_project
+namespace MatchingApp.DataAccess.SQL
 {
     class Program
     {
