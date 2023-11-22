@@ -17,6 +17,6 @@ namespace KBS_project
 
 		public Profile GetProfile(string userName);
 
-		public void SaveProfile();
+		public void SaveProfile( Profile profile);
 	}
 }
