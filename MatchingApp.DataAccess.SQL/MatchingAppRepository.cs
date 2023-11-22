@@ -22,6 +22,14 @@ namespace MatchingApp.DataAccess.SQL
 			builder.InitialCatalog = "testDB";
 			builder.TrustServerCertificate = false;
 		}
+
+		public DateTime AgetoDate(int age)
+		{
+            var today = DateTime.Today;
+            var byear = today.Year - age;
+			DateTime date = new DateTime(byear, today.Month, today.Day);
+			return date;
+        }
 		public Profile GetProfile(string userName)
 		{
 			using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -48,8 +56,61 @@ namespace MatchingApp.DataAccess.SQL
 		public List<Profile> GetProfiles(LocationFilter location, int minimumAge, int maximumAge, 
 			List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
 		{
-			throw new NotImplementedException();
-		}
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
+                if (location != null)
+                {
+					sql += $"AND location = {location} "; 
+				}
+                if (minimumAge != null)
+                {
+                    sql += $"AND Geboortedatum >= {AgetoDate(minimumAge)} "; 
+				} 
+				if (maximumAge != null)
+                {
+                    sql += $"AND Geboortedatum <= {AgetoDate(maximumAge)} ";
+                }
+                if (includedHobbys != null)
+                {
+                    foreach (var inclhobby in includedHobbys)
+                    {
+                        sql += $"AND {inclhobby} ";
+                    }
+                }
+                if (excludedHobbys != null)
+                {
+                    foreach (var exlhobby in excludedHobbys)
+                    {
+                        sql += $"AND NOT {exlhobby} ";
+                    }
+                }
+                if (includedDiets != null)
+                {
+                    foreach (var incldiet in includedDiets)
+                    {
+                        sql += $"AND {incldiet} ";
+                    }
+                }
+                if (excludedDiets != null)
+                {
+                    foreach (var exldiet in excludedDiets)
+                    {
+                        sql += $"AND NOT {exldiet} ";
+                    }
+                }
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        Console.WriteLine(reader.GetString);
+                    }
+                }
+                connection.Close();
+            }
+            return null;
+        }
 
 		public void SaveProfile(Profile profile)
 		{
