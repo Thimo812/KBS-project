@@ -8,61 +8,90 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Button Name="filterButton" Content="Filter profielen" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top" Click="Button_Click" RenderTransformOrigin="-5.202,0.503"/>
-        <!--<Frame Name="filterPage" Source="Page1.xaml" Visibility="Collapsed"></Frame>-->
-        <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="24,58,600,24" Visibility="Collapsed">
-            <StackPanel Background="LightGray" Height="1000">
+        <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="20,50, 20, 20" MaxHeight="500" MaxWidth="300" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top">
+            <StackPanel Background="LightGray" Height="500">
                 <Label 
-                Content="Locatie" 
-                RenderTransformOrigin="0.483,-0.398"
-            />
-                <CheckBox 
-                    Content="CheckBox" Height="20"
+                    Content="Locatie"
+                    FontWeight="Bold"
+                />
+                <Button
+                    Name="buttonLocation"
+                    Content="wel"
+                    Background="green" 
+                    Click="Button_Click_1"
                 />
                 <CheckBox 
-                Content="CheckBox" Height="20"
-            />
+                    Content="Globaal" 
+                    Height="20"
+                />
                 <CheckBox 
-                Content="CheckBox" Height="27"
-            />
+                    Content="Zelfde land" 
+                    Height="20"
+                />
+                <CheckBox 
+                    Content="Zelfde woonplaats" 
+                    Height="27"
+                />
                 <Label 
-                Content="Hobby" 
-                RenderTransformOrigin="0,0.474"
-            />
+                    Content="Hobby"
+                    FontWeight="Bold"
+                />
+                <Button
+                    Content="wel"
+                    Background="green" 
+                    Click="Button_Click_1"
+                />
                 <CheckBox 
-                Content="CheckBox" Height="22"
-            />
+                    Content="Voetbal" 
+                    Height="22"
+                />
                 <CheckBox 
-                Content="CheckBox" 
-                RenderTransformOrigin="0.261,-11.3" Height="21"
-            />
+                    Content="Gamen" 
+                    Height="21"
+                />
                 <CheckBox 
-                Content="CheckBox" Height="27"
-            />
+                    Content="Schilderen" 
+                    Height="27"
+                />
                 <Label 
-                Content="Dieet"
-            />
+                    Content="Dieet"
+                    FontWeight="Bold"
+                />
+                <Button
+                    Content="wel"
+                    Background="green" 
+                    Click="Button_Click_1"
+                />
                 <CheckBox 
-                Content="CheckBox" Height="22"
-            />
+                    Content="Vegetarisch" 
+                    Height="22"
+                />
                 <CheckBox 
-                Content="CheckBox" Height="21"
-            />
-                <CheckBox 
-                Content="CheckBox" Height="26"
-            />
+                    Content="Veganistisch" 
+                    Height="21"
+                />
                 <Label 
-                Content="Matchingspercentage"
-            />
-                <Slider Width="120"/>
+                    Content="Seksuele voorkeur"
+                    FontWeight="Bold"
+                />
+                <Button
+                    Content="wel"
+                    Background="green" 
+                    Click="Button_Click_1"
+                />
+                <CheckBox  
+                    Content="Man"
+                    Height="22"
+                />
+                <CheckBox 
+                    Content="Vrouw" 
+                    Height="22"
+                />
                 <Label 
-                    Content="Extra"
-            />
-                <CheckBox 
-                    Content="CheckBox" Height="22"
-            />
-                <CheckBox 
-                    Content="CheckBox" Height="22"
-            />
+                    Content="Maximale leeftijdsverschil"
+                    FontWeight="Bold"
+                />
+                <Slider Margin="10,10"/>
             </StackPanel>
         </ScrollViewer>
     </Grid>

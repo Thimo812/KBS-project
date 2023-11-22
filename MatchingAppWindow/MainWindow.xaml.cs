@@ -26,18 +26,30 @@ namespace MatchingAppWindow
             InitializeComponent();
         }
 
-        bool filterVisible = false;
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if(!filterVisible)
+            if(filterPanel.Visibility == Visibility.Collapsed)
             {
                 filterPanel.Visibility = Visibility.Visible;
-                filterVisible = true;
             }
             else
             {
                 filterPanel.Visibility = Visibility.Collapsed;
-                filterVisible = false;
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            if((string)button.Content == "wel")
+            {
+                button.Background = Brushes.Red;
+                button.Content = "niet";
+            }
+            else
+            {
+                button.Background = Brushes.Green;
+                button.Content = "wel";
             }
         }
     }
