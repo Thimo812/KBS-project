@@ -29,9 +29,11 @@ namespace MatchingAppWindow
 
             var startScreen = new StartScreen();
 
+            var matchingQuiz = new Matchingquiz();
+
             startScreen.RegisterButton.Click += SwitchToRegisterScreen;
 
-            Content = startScreen;
+            Content = matchingQuiz;
         }
 
         private void SwitchToRegisterScreen(Object? sender, EventArgs args)
