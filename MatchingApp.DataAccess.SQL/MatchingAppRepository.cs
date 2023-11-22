@@ -19,25 +19,41 @@ namespace MatchingApp.DataAccess.SQL
 			builder.DataSource = "127.0.0.1";
 			builder.UserID = "SA";
 			builder.Password = "D1t1sEenSqlServertju";
-			builder.InitialCatalog = "testDB";
+			builder.InitialCatalog = "MatchingDB";
 			builder.TrustServerCertificate = false;
 		}
 		public Profile GetProfile(string userName)
 		{
+			Profile profile;
+
 			using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
 			{
-				var sql = $"SELECT * FROM Profile WHERE Gebruikersnaam = {userName}";
+				var sql = $"SELECT * FROM Profiel WHERE Gebruikersnaam = @Username";
 				connection.Open();
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
-					using (SqlDataReader reader = command.ExecuteReader())
+                    command.Parameters.AddWithValue("Username", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
 					{
-						Console.WriteLine(reader.GetString);
+						reader.Read();
+						string firstName = reader.GetString(1);
+						string lastName = reader.GetString(2);
+						string infix = reader.GetString(3);
+						DateTime birthDate = reader.GetDateTime(4);
+						SexualPreference pref = (SexualPreference) int.Parse(reader.GetString(5));
+						Gender gender = (Gender) int.Parse((reader.GetString(6)));
+						string city = reader.GetString(7);
+
+
+
+						profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, city);
 					}
 				}
 				connection.Close();
 			}
-			return null;
+			return profile;
 		}
 
 		public List<Profile> GetProfiles()
@@ -55,8 +71,8 @@ namespace MatchingApp.DataAccess.SQL
 		{
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "INSERT INTO Profile (Gebruikersnaam, Naam, Achternaam, Tussenvoegsels, Geboortedatum, Seksuele preferentie, Geslacht, Woonplaats) " +
-                        "VALUES (@Gebruikersnaam, @Naam, @Achternaam, @Tussenvoegsels, @Geboortedatum, @Seksuelepreferentie, @Geslacht, @Woonplaats)";
+                var sql = "INSERT INTO Profiel (Gebruikersnaam, Naam, Achternaam, Tussenvoegsels, Geboortedatum, Seksuele_preferentie, Geslacht, Woonplaats) " +
+                        "VALUES (@Gebruikersnaam, @Naam, @Achternaam, @Tussenvoegsels, @Geboortedatum, @Sekspref, @Geslacht, @Woonplaats)";
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -65,7 +81,7 @@ namespace MatchingApp.DataAccess.SQL
                     command.Parameters.AddWithValue("Achternaam", profile.LastName);
                     command.Parameters.AddWithValue("Tussenvoegsels", profile.Infix);
                     command.Parameters.AddWithValue("Geboortedatum", $"{profile.BirthDate.Year}-{profile.BirthDate.Month}-{profile.BirthDate.Day}");
-					command.Parameters.AddWithValue("seksuelepreferentie", profile.SexualPreference);
+					command.Parameters.AddWithValue("sekspref", profile.SexualPreference);
 					command.Parameters.AddWithValue("Geslacht", profile.Gender);
 					command.Parameters.AddWithValue("Woonplaats", profile.City);
 					command.ExecuteNonQuery();
