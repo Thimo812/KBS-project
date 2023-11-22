@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MatchingApp.DataAccess.SQL
 {
-	public class MatchingAppRepository : IMatchingAppRepository
+	public class MatchingAppRepository
 	{
 		private SqlConnectionStringBuilder builder;
 		public MatchingAppRepository()
@@ -19,16 +19,17 @@ namespace MatchingApp.DataAccess.SQL
 			builder.DataSource = "127.0.0.1";
 			builder.UserID = "SA";
 			builder.Password = "D1t1sEenSqlServertju";
-			builder.InitialCatalog = "testDB";
+			builder.InitialCatalog = "MatchingDB";
 			builder.TrustServerCertificate = false;
 		}
 
-		public DateTime AgetoDate(int age)
+		public string AgetoDate(int age)
 		{
             var today = DateTime.Today;
             var byear = today.Year - age;
 			DateTime date = new DateTime(byear, today.Month, today.Day);
-			return date;
+            var datestring = date.ToString("yyyy-MM-dd");
+            return datestring;
         }
 		public Profile GetProfile(string userName)
 		{
@@ -58,45 +59,45 @@ namespace MatchingApp.DataAccess.SQL
 		{
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
-                if (location != null)
+                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
+                if (location != 0)
                 {
-					sql += $"AND location = {location} "; 
+					sql += $"AND Woonplaats = '{location}' "; 
 				}
                 if (minimumAge != null)
                 {
-                    sql += $"AND Geboortedatum >= {AgetoDate(minimumAge)} "; 
+                    sql += $"AND Geboortedatum <= '{AgetoDate(minimumAge)}' "; 
 				} 
 				if (maximumAge != null)
                 {
-                    sql += $"AND Geboortedatum <= {AgetoDate(maximumAge)} ";
+                    sql += $"AND Geboortedatum >= '{AgetoDate(maximumAge)}' ";
                 }
                 if (includedHobbys != null)
                 {
                     foreach (var inclhobby in includedHobbys)
                     {
-                        sql += $"AND {inclhobby} ";
+                        sql += $"AND Hobby = {inclhobby} ";
                     }
                 }
                 if (excludedHobbys != null)
                 {
                     foreach (var exlhobby in excludedHobbys)
                     {
-                        sql += $"AND NOT {exlhobby} ";
+                        sql += $"AND NOT Hobby = '{exlhobby}' ";
                     }
                 }
                 if (includedDiets != null)
                 {
                     foreach (var incldiet in includedDiets)
                     {
-                        sql += $"AND {incldiet} ";
+                        sql += $"AND Dieet = '{incldiet}' ";
                     }
                 }
                 if (excludedDiets != null)
                 {
                     foreach (var exldiet in excludedDiets)
                     {
-                        sql += $"AND NOT {exldiet} ";
+                        sql += $"AND NOT Dieet = '{exldiet}' ";
                     }
                 }
                 connection.Open();
@@ -104,7 +105,10 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        Console.WriteLine(reader.GetString);
+                        while (reader.Read())
+                        {
+                            Console.WriteLine(reader.GetString(0));
+                        }
                     }
                 }
                 connection.Close();
