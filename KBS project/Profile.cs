@@ -8,6 +8,7 @@ namespace KBS_project
 	{
 		public string UserName { get; set; }
 		public string FirstName { get; set; }
+		public string Infix { get; set; }
 		public string LastName { get; set; }
 		public DateTime BirthDate { get; set; }
 		public Gender Gender { get; set; }
@@ -24,11 +25,12 @@ namespace KBS_project
 		public List<Interest> Interests { get; set; }
 		public List<string> Images { get; set; }
 
-		public Profile(string userName, string firstName, string lastName, DateTime birthDate, Gender gender, 
+		public Profile(string userName, string firstName, string infix, string lastName, DateTime birthDate, Gender gender, 
 			SexualPreference sexualPreference, string postalCode, string country,string adress, string city)
 		{
 			UserName = userName;
 			FirstName = firstName;
+			Infix = infix;
 			LastName = lastName;
 			BirthDate = birthDate;
 			Gender = gender;

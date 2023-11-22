@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingAppCore", "KBS proj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingAppWindow", "MatchingAppWindow\MatchingAppWindow.csproj", "{923013EF-3A26-453B-B517-463A857E0D4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchingApp.DataAccess.SQL", "MatchingApp.DataAccess.SQL\MatchingApp.DataAccess.SQL.csproj", "{F8D2ACC9-55EE-463A-B265-F38B4B826E8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingApp.DataAccess.SQL", "MatchingApp.DataAccess.SQL\MatchingApp.DataAccess.SQL.csproj", "{F8D2ACC9-55EE-463A-B265-F38B4B826E8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchingAppConsole", "MatchingAppConsole\MatchingAppConsole.csproj", "{AE762E66-CA70-4BAC-AFD5-8F13538DA43C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{F8D2ACC9-55EE-463A-B265-F38B4B826E8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8D2ACC9-55EE-463A-B265-F38B4B826E8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8D2ACC9-55EE-463A-B265-F38B4B826E8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE762E66-CA70-4BAC-AFD5-8F13538DA43C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE762E66-CA70-4BAC-AFD5-8F13538DA43C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE762E66-CA70-4BAC-AFD5-8F13538DA43C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE762E66-CA70-4BAC-AFD5-8F13538DA43C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
