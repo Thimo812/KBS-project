@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MatchingAppWindow;
 
 namespace MatchingAppWindow
 {
@@ -40,5 +41,31 @@ namespace MatchingAppWindow
         }
 
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(filterPanel.Visibility == Visibility.Collapsed)
+            {
+                filterPanel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                filterPanel.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            if((string)button.Content == "wel")
+            {
+                button.Background = Brushes.Red;
+                button.Content = "niet";
+            }
+            else
+            {
+                button.Background = Brushes.Green;
+                button.Content = "wel";
+            }
+        }
     }
 }
