@@ -54,21 +54,21 @@ namespace MatchingApp.DataAccess.SQL
 			throw new NotImplementedException();
 		}
 
-		public List<Profile> GetProfiles(LocationFilter location, int minimumAge, int maximumAge, 
-			List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
-		{
+        public List<Profile> GetProfiles(LocationFilter location, int minimumAge, int maximumAge,
+            List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
+        {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
                 if (location != 0)
                 {
-					sql += $"AND Woonplaats = '{location}' "; 
-				}
+                    sql += $"AND Woonplaats = '{location}' ";
+                }
                 if (minimumAge != null)
                 {
-                    sql += $"AND Geboortedatum <= '{AgetoDate(minimumAge)}' "; 
-				} 
-				if (maximumAge != null)
+                    sql += $"AND Geboortedatum <= '{AgetoDate(minimumAge)}' ";
+                }
+                if (maximumAge != null)
                 {
                     sql += $"AND Geboortedatum >= '{AgetoDate(maximumAge)}' ";
                 }
@@ -116,7 +116,7 @@ namespace MatchingApp.DataAccess.SQL
             return null;
         }
 
-		public void SaveProfile(Profile profile)
+        public void SaveProfile(Profile profile)
 		{
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {

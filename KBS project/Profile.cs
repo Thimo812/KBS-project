@@ -40,5 +40,9 @@ namespace KBS_project
 			Adress = adress;
 			City = city;
 		}
-	}
+
+        public Profile()
+        {
+        }
+    }
 }

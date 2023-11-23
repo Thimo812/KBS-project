@@ -61,7 +61,7 @@ namespace MatchingAppWindow.Views
                 button.Background = Brushes.Red;
                 button.Content = "niet";
             }
-            else
+            else if((string)button.Content == "niet")
             {
                 button.Background = Brushes.Green;
                 button.Content = "wel";
@@ -89,18 +89,35 @@ namespace MatchingAppWindow.Views
         private void HobbyChecked(object sender, RoutedEventArgs e)
         {
             CheckBox senderHobby = (CheckBox)sender;
-
-            if(senderHobby.Name == "Soccer")
+            if(buttonHobby.Content == "wel")
             {
-                includedHobbies.Add(Interest.Soccer);
+                if (senderHobby.Name == "Soccer")
+                {
+                    includedHobbies.Add(Interest.Soccer);
+                }
+                if (senderHobby.Name == "Gaming")
+                {
+                    includedHobbies.Add(Interest.Gaming);
+                }
+                if (senderHobby.Name == "Art")
+                {
+                    includedHobbies.Add(Interest.Art);
+                }
             }
-            if(senderHobby.Name == "Gaming")
+            else if(buttonHobby.Content == "niet")
             {
-                includedHobbies.Add(Interest.Gaming);
-            }
-            if(senderHobby.Name == "Art")
-            {
-                includedHobbies.Add(Interest.Art);
+                if (senderHobby.Name == "Soccer")
+                {
+                    excludedHobbies.Add(Interest.Soccer);
+                }
+                if (senderHobby.Name == "Gaming")
+                {
+                    excludedHobbies.Add(Interest.Gaming);
+                }
+                if (senderHobby.Name == "Art")
+                {
+                    excludedHobbies.Add(Interest.Art);
+                }
             }
         }
 
@@ -108,13 +125,27 @@ namespace MatchingAppWindow.Views
         {
             CheckBox senderDiet = (CheckBox)sender;
 
-            if(senderDiet.Name == "Vegetarian")
+            if((string)buttonDiet.Content == "wel")
             {
-                includedDiets.Add(Diet.Vegetarian);
+                if (senderDiet.Name == "Vegetarian")
+                {
+                    includedDiets.Add(Diet.Vegetarian);
+                }
+                if (senderDiet.Name == "Vegan")
+                {
+                    includedDiets.Add(Diet.Vegan);
+                }
             }
-            if(senderDiet.Name == "Vegan")
+            else if ((string)buttonDiet.Content == "niet")
             {
-                includedDiets.Add(Diet.Vegan);
+                if (senderDiet.Name == "Vegetarian")
+                {
+                    excludedDiets.Add(Diet.Vegetarian);
+                }
+                if (senderDiet.Name == "Vegan")
+                {
+                    excludedDiets.Add(Diet.Vegan);
+                }
             }
         }
 
