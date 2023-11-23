@@ -22,9 +22,9 @@ namespace MatchingAppWindow
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class FilterScreen : Page
+    public partial class MainWindow : Window
     {
-        public FilterScreen()
+        public MainWindow()
         {
             InitializeComponent();
 

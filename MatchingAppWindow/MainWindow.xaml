@@ -1,11 +1,11 @@
-﻿<Page x:Class="MatchingAppWindow.FilterScreen"
+﻿<Window x:Class="MatchingAppWindow.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MatchingAppWindow"
         mc:Ignorable="d"
-        Title="FilterScreen" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Button Name="filterButton" Content="Filter profielen" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top" Click="Button_Click" RenderTransformOrigin="-5.202,0.503"/>
         <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="20,50, 20, 20" MaxHeight="500" MaxWidth="300" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top">
@@ -95,4 +95,4 @@
             </StackPanel>
         </ScrollViewer>
     </Grid>
-</Page>
+</Window>
