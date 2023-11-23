@@ -30,7 +30,7 @@ namespace MatchingAppWindow
 
             var startScreen = new StartScreen();
 
-            startScreen.RegisterButton.Click += SwitchToRegisterScreen;
+            startScreen.RegisterButton.Click += SwitchToFilterScreen;
 
             Content = startScreen;
         }
@@ -39,33 +39,11 @@ namespace MatchingAppWindow
         {
             Content = new RegisterScreen();
         }
-
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void SwitchToFilterScreen(Object? sender, EventArgs args)
         {
-            if(filterPanel.Visibility == Visibility.Collapsed)
-            {
-                filterPanel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                filterPanel.Visibility = Visibility.Collapsed;
-            }
+            Content = new FilterScreen();
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            if((string)button.Content == "wel")
-            {
-                button.Background = Brushes.Red;
-                button.Content = "niet";
-            }
-            else
-            {
-                button.Background = Brushes.Green;
-                button.Content = "wel";
-            }
-        }
+
     }
 }
