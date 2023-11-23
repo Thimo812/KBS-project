@@ -7,77 +7,98 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Name="filterButton" Content="Filter profielen" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top" Click="Button_Click" RenderTransformOrigin="-5.202,0.503"/>
+        <Button Name="filterButton" Content=">" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top" Click="buttonExtendFilters_Click" RenderTransformOrigin="-5.202,0.503"/>
         <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="20,50, 20, 20" MaxHeight="500" MaxWidth="300" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top">
-            <StackPanel Background="LightGray" Height="500">
+            <StackPanel Background="LightGray">
+                
+                <!--Filter location-->
                 <Label 
                     Content="Locatie"
                     FontWeight="Bold"
                 />
-                <Button
-                    Name="buttonLocation"
-                    Content="wel"
-                    Background="green" 
-                    Click="Button_Click_1"
-                />
-                <CheckBox 
+                <RadioButton 
+                    Name="Global"
                     Content="Globaal" 
-                    Height="20"
+                    Height="20" 
+                    Checked="LocationChecked"
                 />
-                <CheckBox 
+                <RadioButton 
+                    Name="Country"
                     Content="Zelfde land" 
                     Height="20"
+                    Checked="LocationChecked"
                 />
-                <CheckBox 
+                <RadioButton 
+                    Name="City"
                     Content="Zelfde woonplaats" 
                     Height="27"
+                    Checked="LocationChecked"
                 />
+                
+                <!--Filter hobbyies-->
                 <Label 
                     Content="Hobby"
                     FontWeight="Bold"
                 />
                 <Button
+                    Name="buttonHobby"
                     Content="wel"
                     Background="green" 
-                    Click="Button_Click_1"
+                    Click="IncOrExcButton_Click"
                 />
                 <CheckBox 
+                    Name="Soccer"
                     Content="Voetbal" 
-                    Height="22"
+                    Height="22" 
+                    Checked="HobbyChecked"
                 />
-                <CheckBox 
+                <CheckBox
+                    Name="Gaming"
                     Content="Gamen" 
                     Height="21"
+                    Checked="HobbyChecked"
                 />
                 <CheckBox 
+                    Name="Art"
                     Content="Schilderen" 
                     Height="27"
+                    Checked="HobbyChecked"
                 />
+                
+                <!--Filter diets-->
                 <Label 
                     Content="Dieet"
                     FontWeight="Bold"
                 />
                 <Button
+                    Name="buttonDiet"
                     Content="wel"
                     Background="green" 
-                    Click="Button_Click_1"
+                    Click="IncOrExcButton_Click"
                 />
                 <CheckBox 
+                    Name="Vegetarian"
                     Content="Vegetarisch" 
-                    Height="22"
+                    Height="22" 
+                    Checked="DietChecked"
                 />
                 <CheckBox 
+                    Name="Vegan"
                     Content="Veganistisch" 
                     Height="21"
+                    Checked="DietChecked"
                 />
+                
+                <!--Filter sexual preference-->
                 <Label 
                     Content="Seksuele voorkeur"
                     FontWeight="Bold"
                 />
                 <Button
+                    Name="buttonSexualPreference"
                     Content="wel"
                     Background="green" 
-                    Click="Button_Click_1"
+                    Click="IncOrExcButton_Click"
                 />
                 <CheckBox  
                     Content="Man"
@@ -87,11 +108,33 @@
                     Content="Vrouw" 
                     Height="22"
                 />
+                
+                <!--Filter minimum age-->
                 <Label 
-                    Content="Maximale leeftijdsverschil"
+                    Content="Minimale leeftijd"
                     FontWeight="Bold"
                 />
-                <Slider Margin="10,10"/>
+                <TextBox
+                    Name="MinAge"    
+                />
+                
+                <!--Filter maxmum age-->
+                <Label
+                    Content="Maximale leeftijd"
+                    FontWeight="Bold"
+                />
+                <TextBox
+                    Name="MaxAge"    
+                />
+                
+                <!--Save filteroptions-->
+                <Button
+                    Name="buttonFilter"
+                    Content="Filter"
+                    Background="CornflowerBlue"
+                    Click="FilterButton_Click"
+                />
+                
             </StackPanel>
         </ScrollViewer>
     </Grid>
