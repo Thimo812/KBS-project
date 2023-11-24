@@ -54,10 +54,12 @@ namespace MatchingApp.DataAccess.SQL
 						SexualPreference pref = (SexualPreference) int.Parse(reader.GetString(5));
 						Gender gender = (Gender) int.Parse((reader.GetString(6)));
 						string city = reader.GetString(7);
+                        string country = reader.GetString(14);
+                        string postalCode = reader.GetString(15);
 
 
 
-						profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, city);
+						profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode);
 					}
 				}
 				connection.Close();
@@ -136,8 +138,8 @@ namespace MatchingApp.DataAccess.SQL
 		{
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "INSERT INTO Profiel (Gebruikersnaam, Naam, Achternaam, Tussenvoegsels, Geboortedatum, Seksuele_preferentie, Geslacht, Woonplaats) " +
-                        "VALUES (@Gebruikersnaam, @Naam, @Achternaam, @Tussenvoegsels, @Geboortedatum, @Sekspref, @Geslacht, @Woonplaats)";
+                var sql = "INSERT INTO Profiel (Gebruikersnaam, Naam, Achternaam, Tussenvoegsels, Geboortedatum, Seksuele_preferentie, Geslacht, Woonplaats, Land, Postcode) " +
+                        "VALUES (@Gebruikersnaam, @Naam, @Achternaam, @Tussenvoegsels, @Geboortedatum, @Sekspref, @Geslacht, @Woonplaats, @land, @postcode)";
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -149,7 +151,9 @@ namespace MatchingApp.DataAccess.SQL
 					command.Parameters.AddWithValue("sekspref", profile.SexualPreference);
 					command.Parameters.AddWithValue("Geslacht", profile.Gender);
 					command.Parameters.AddWithValue("Woonplaats", profile.City);
-					command.ExecuteNonQuery();
+                    command.Parameters.AddWithValue("land", profile.Country);
+                    command.Parameters.AddWithValue("postcode", profile.PostalCode);
+                    command.ExecuteNonQuery();
 				}
 				connection.Close();
             }
