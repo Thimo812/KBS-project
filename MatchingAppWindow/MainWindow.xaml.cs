@@ -25,16 +25,19 @@ namespace MatchingAppWindow
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static Profile? profile;
+        private MatchingAppRepository repository;
+
         private StartScreen startScreen = new();
-        private RegisterScreen registerScreen = new();
+        private RegisterScreen registerScreen;
         private Matchingquiz matchingquiz = new();
         private Navigation navigation = new();
 
-        public static Profile? profile;
-        private MatchingAppRepository repository;
         public MainWindow()
         {
             repository = new MatchingAppRepository();
+
+            registerScreen = new(repository);
 
             InitializeComponent();
 
@@ -46,9 +49,7 @@ namespace MatchingAppWindow
 
         private void registerAccount(Object? sender, EventArgs args)
         {
-            profile = registerScreen.Profile;
             Content = navigation;
-            repository.SaveProfile(profile);
         }
 
 

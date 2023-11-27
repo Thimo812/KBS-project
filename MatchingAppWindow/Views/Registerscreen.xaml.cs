@@ -1,9 +1,15 @@
 ﻿using KBS_project;
 using KBS_project.Enums;
+using MatchingApp.DataAccess.SQL;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,49 +29,78 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class RegisterScreen : Page
     {
-        public Profile Profile {  get; set; }
-        public RegisterScreen()
+        public Profile? Profile {  get; set; }
+
+        private MatchingAppRepository Repo {  get; set; }
+
+        public ObservableCollection<BitmapImage> ImageList { get; set; } = new();
+
+        public RegisterScreen(MatchingAppRepository repo)
         {
+            Repo = repo;
+
             InitializeComponent();
+
+            DataContext = this;
+
+            imageBox.SelectionChanged += (object sender, SelectionChangedEventArgs e) => 
+            { 
+                if (imageBox.SelectedItem != null)
+                {
+                    DeletePhotoButton.IsEnabled = true;
+                }
+                else
+                {
+                    DeletePhotoButton.IsEnabled = false;
+                }
+            };
+
+            imageBox.LostFocus += (object sender, RoutedEventArgs e) => imageBox.SelectedItem = null;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void AddPhoto(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image files|*.jpg;*.png";
             if (openFileDialog.ShowDialog() == true)
             {
-                ProfileImage.Source = new BitmapImage(new Uri(openFileDialog.FileName));
+                //ImageList.Add(new Image() { ImagePath = openFileDialog.FileName });
+                ImageList.Add(new BitmapImage(new Uri(openFileDialog.FileName)));
             }
+        }
+
+        private void DeletePhoto(object sender, RoutedEventArgs e)
+        {
+            ImageList.RemoveAt(imageBox.SelectedIndex);
         }
 
         private void RegisterAccount(object sender, RoutedEventArgs e)
         {
             try
             {
-                string userName = UserNameInput.Text.Equals(String.Empty) ? throw new FieldEmptyException() : UserNameInput.Text;
-                string firstName = FirstNameInput.Text.Equals(String.Empty) ? throw new FieldEmptyException() : FirstNameInput.Text;
-                string lastName = LastNameInput.Text.Equals(String.Empty) ? throw new FieldEmptyException() : LastNameInput.Text;
-                DateTime birthDate = BirthDatePicker.SelectedDate.Equals(null) ? throw new FieldEmptyException() : (DateTime)BirthDatePicker.SelectedDate;
-                Gender gender = GetGender();
-                SexualPreference sexualPreference = getSexuality();
-                string city = CityInput.Text.Equals(String.Empty) ? throw new FieldEmptyException() : CityInput.Text;
-                string postalCode = PostalCodeInput.Text.Equals(String.Empty) ? throw new FieldEmptyException() : PostalCodeInput.Text;
-                string country = CountryInput.Text.Equals(String.Empty) ? throw new FieldEmptyException() : CountryInput.Text;
+                string userName = RegistrationFieldsExtensions.Validate(UserNameInput.Text, RegistrationFields.UserName, Repo);
+                string firstName = RegistrationFieldsExtensions.Validate(FirstNameInput.Text, RegistrationFields.FirstName, Repo);
+                string infix = RegistrationFieldsExtensions.Validate(InfixInput.Text, RegistrationFields.Infix, Repo);
+                string lastName = RegistrationFieldsExtensions.Validate(LastNameInput.Text, RegistrationFields.LastName, Repo);
+                string city = RegistrationFieldsExtensions.Validate(CityInput.Text, RegistrationFields.City, Repo);
+                string country = RegistrationFieldsExtensions.Validate(CountryInput.Text, RegistrationFields.Country, Repo);
+                string postalCode = RegistrationFieldsExtensions.Validate(PostalCodeInput.Text, RegistrationFields.PostalCode, Repo);
 
-                Profile = new(userName, firstName, String.Empty, lastName, birthDate, gender, sexualPreference, city, postalCode, country);
+                DateTime birthdate = RegistrationFieldsExtensions.Validate(BirthDatePicker.SelectedDate);
+
+                List<bool?> genderRadioButtonValues = new List<bool?>() { MaleGender.IsChecked, FemaleGender.IsChecked, NonBinaryGender.IsChecked };
+                Gender gender = RegistrationFieldsExtensions.ValidateGender(genderRadioButtonValues);
+
+                List<bool?> sexRadioButtonValues = new List<bool?>() { MaleGender.IsChecked, FemaleGender.IsChecked, NonBinaryGender.IsChecked };
+                SexualPreference sexuality = RegistrationFieldsExtensions.ValidateSexuality(sexRadioButtonValues);
+
+                List<string> ImagePaths = ImageList.Select(x => x.UriSource.ToString()).ToList();
+
+                Profile = new Profile(userName, firstName, infix, lastName, birthdate, gender, sexuality, city, postalCode, country, ImagePaths);
             } 
             catch (FieldEmptyException fee)
             {
-                if (UserNameInput.InputBindings.Equals(String.Empty)) { DisplayTextBoxError(UserNameInput); }
-                if (FirstNameInput.InputBindings.Equals(String.Empty)) DisplayTextBoxError(FirstNameInput);
-                if (LastNameInput.InputBindings.Equals(String.Empty)) DisplayTextBoxError(LastNameInput);
-                if (CityInput.InputBindings.Equals(String.Empty)) DisplayTextBoxError(CityInput);
-                if (PostalCodeInput.InputBindings.Equals(String.Empty)) DisplayTextBoxError(PostalCodeInput);
-                if (CountryInput.InputBindings.Equals(String.Empty)) DisplayTextBoxError(CountryInput);
-                if (!(bool)MaleGender.IsChecked && !(bool)FemaleGender.IsChecked && !(bool)NonBinaryGender.IsChecked) DisplayRadioBoxError(new RadioButton[] { MaleGender, FemaleGender, NonBinaryGender});
-                if (!(bool)MaleSexuality.IsChecked && !(bool)FemaleSexuality.IsChecked && !(bool)EveryoneSexuality.IsChecked) DisplayRadioBoxError(new RadioButton[] { MaleSexuality, FemaleSexuality, EveryoneSexuality });
-                if (BirthDatePicker.SelectedDate.Equals(null)) DisplayDatePickerError(BirthDatePicker);
+                
             }
         }
 
@@ -84,13 +119,13 @@ namespace MatchingAppWindow.Views
 
         }
 
-        private void DisplayTextBoxError(TextBox textBox)
+        private void DisplayFieldError(TextBox textBox)
         {
             textBox.Background = Brushes.Pink;
             textBox.BorderBrush = Brushes.Red;
         }
 
-        private void DisplayRadioBoxError(RadioButton[] radioButtons)
+        private void DisplayFieldError(RadioButton[] radioButtons)
         {
             foreach (RadioButton radioButton in radioButtons)
             {
@@ -100,45 +135,10 @@ namespace MatchingAppWindow.Views
             }
         }
 
-        private void DisplayDatePickerError(DatePicker datePicker)
+        private void DisplayFieldError(DatePicker datePicker)
         {
             datePicker.Background = Brushes.Pink;
             datePicker.BorderBrush = Brushes.Red;
         }
-
-        private Gender GetGender()
-        {
-            if ((bool)MaleGender.IsChecked)
-            {
-                return Gender.Male;
-            } 
-            else if ((bool)FemaleGender.IsChecked)
-            {
-                return Gender.Female;
-            } 
-            else if ((bool)NonBinaryGender.IsChecked)
-            {
-                return Gender.NonBinary;
-            }
-            throw new FieldEmptyException();
-        }
-
-        private SexualPreference getSexuality()
-        {
-            if ((bool)MaleSexuality.IsChecked)
-            {
-                return SexualPreference.Men;
-            } 
-            else if ((bool)FemaleSexuality.IsChecked)
-            {
-                return SexualPreference.Women;
-            } 
-            else if ((bool)EveryoneSexuality.IsChecked)
-            {
-                return SexualPreference.All;
-            }
-            throw new FieldEmptyException();
-        }
-
     }
 }

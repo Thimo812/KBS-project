@@ -25,7 +25,7 @@ namespace KBS_project
 		public List<string> Images { get; set; }
 
 		public Profile(string userName, string firstName, string infix, string lastName, DateTime birthDate, Gender gender, 
-			SexualPreference sexualPreference, string city, string postalCode, string country)
+			SexualPreference sexualPreference, string city, string postalCode, string country, List<string> images)
 		{
 			UserName = userName;
 			FirstName = firstName;
@@ -37,6 +37,7 @@ namespace KBS_project
 			City = city;
 			PostalCode = postalCode;
 			Country = country;
+			Images = images;
 		}
 
         public override string ToString()

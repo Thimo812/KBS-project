@@ -5,12 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace MatchingApp.DataAccess.SQL
 {
-	public class MatchingAppRepository
+	public class MatchingAppRepository : IMatchingAppRepository
 	{
 		private SqlConnectionStringBuilder builder;
 		public MatchingAppRepository()
@@ -59,7 +61,7 @@ namespace MatchingApp.DataAccess.SQL
 
 
 
-						profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode);
+						profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode, new List<string>());
 					}
 				}
 				connection.Close();
@@ -69,7 +71,37 @@ namespace MatchingApp.DataAccess.SQL
 
 		public List<Profile> GetProfiles()
 		{
-			throw new NotImplementedException();
+            List<Profile> profiles = new List<Profile>();
+
+			using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT * FROM Profiel";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while(reader.Read())
+                        {
+                            string userName = reader.GetString(0);
+                            string firstName = reader.GetString(1);
+                            string lastName = reader.GetString(2);
+                            string infix = reader.GetString(3);
+                            DateTime birthDate = reader.GetDateTime(4);
+                            SexualPreference pref = (SexualPreference)int.Parse(reader.GetString(5));
+                            Gender gender = (Gender)int.Parse((reader.GetString(6)));
+                            string city = reader.GetString(7);
+                            string country = reader.GetString(14);
+                            string postalCode = reader.GetString(15);
+
+                            profiles.Add(new Profile(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode, new List<string>()));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return profiles;
 		}
 
 		public List<Profile> GetProfiles(LocationFilter location, int minimumAge, int maximumAge, 
@@ -158,5 +190,100 @@ namespace MatchingApp.DataAccess.SQL
 				connection.Close();
             }
         }
-	}
+
+        public void StoreImages(Profile profile)
+        {
+            CheckPhotoAlbum(profile);
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                foreach (var image in profile.Images)
+                {
+                    byte[] imageData = File.ReadAllBytes(image);
+                    var sql = $"INSERT INTO Foto(FotoData, FotoAlbumID) VALUES (@imageData, (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName))";
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("imageData", imageData);
+                        command.Parameters.AddWithValue("userName", profile.UserName);
+                        command.ExecuteNonQuery();
+                    }
+                }
+                connection.Close();
+            }
+        }
+
+
+        public List<Image> RetrieveImages(Profile profile)
+        {
+            List<Image> images = new List<Image>();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+
+                var sql = $"SELECT FotoData FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @gebruikersnaam)";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("gebruikersnaam", profile.UserName);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            byte[] imageData = (byte[])reader["FotoData"];
+
+                            images.Add(ByteArrayToImage(imageData));
+                        }
+                    }
+                }
+            }
+
+            return images;
+        }
+
+        static Image ByteArrayToImage(byte[] byteArray)
+        {
+            using (MemoryStream stream = new MemoryStream(byteArray))
+            {
+                return Image.FromStream(stream);
+            }
+        }
+
+        private void CheckPhotoAlbum(Profile profile)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"SELECT COUNT(*) as amount FROM FotoAlbum WHERE ProfielGebruikersnaam = @Gebruikersnaam";
+
+                int amount;
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        amount = (int)reader["amount"];
+                    }
+                }
+
+                if (amount == 0)
+                {
+                    var insertAlbumQuery = $"INSERT INTO FotoAlbum (ProfielGebruikersnaam) VALUES (@Gebruikersnaam)";
+
+                    using (SqlCommand command = new SqlCommand(insertAlbumQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+                connection.Close();
+            }
+        }
+    }
 }
