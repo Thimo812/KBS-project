@@ -8,7 +8,6 @@ namespace KBS_project.Enums.FilterOptions
 {
     public enum LocationFilter
     {
-        None = 0,
         City,
         Country,
         Global

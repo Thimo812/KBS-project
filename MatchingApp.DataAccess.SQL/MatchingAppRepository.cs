@@ -7,7 +7,9 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Renci.SshNet;
+using Renci.SshNet.Common;
+using static System.Net.Mime.MediaTypeNames;
 namespace MatchingApp.DataAccess.SQL
 {
 	public class MatchingAppRepository
@@ -30,6 +32,28 @@ namespace MatchingApp.DataAccess.SQL
 			DateTime date = new DateTime(byear, today.Month, today.Day);
             var datestring = date.ToString("yyyy-MM-dd");
             return datestring;
+        }
+
+        public bool IsInDatabase(string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"SELECT ProfielGebruikersnaam FROM FotoAlbum WHERE Gebruikersnaam = {userName}";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.GetString != null)
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                }
+                connection.Close();
+            }
+            return false;
         }
 		public Profile GetProfile(string userName)
 		{
@@ -80,11 +104,13 @@ namespace MatchingApp.DataAccess.SQL
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
-                if (location != 0)
+                if (location != LocationFilter.Global)
                 {
-                    sql += $"AND Woonplaats = '{location}' ";
+                    if (location == LocationFilter.City) { sql += $"AND Woonplaats = 'Mountaintop' AND Land = 'Nederland' "; } //Moet uiteindelijk van het profiel komen
+                    if (location == LocationFilter.Country) { sql += $"AND Land = 'Nederland' "; }
+
                 }
-                if (minimumAge != 0)
+                if (minimumAge != null)
                 {
                     sql += $"AND Geboortedatum <= '{AgetoDate(minimumAge)}' ";
                 }
@@ -158,5 +184,68 @@ namespace MatchingApp.DataAccess.SQL
 				connection.Close();
             }
         }
-	}
+
+        public void StoreFile(string filename)
+        {
+            if (1!=2)//Als foto album niet er is ga door anders sla over
+            {
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    var sql = $"INSERT INTO FotoAlbum(ProfielGebruikersnaam) VALUES ('gebruikersnaam')";
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.ExecuteNonQuery() ;
+                    }
+                    connection.Close();
+                }
+            }
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"INSERT INTO Foto(ID, FotoTitel, FotoData, FotoAlbumID) VALUES (int, {Path.GetFileName(filename)}, {File.ReadAllBytes(filename)}, int)";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        Console.WriteLine(reader.GetString);
+                    }
+                }
+                connection.Close();
+            }
+        }
+    }
+
+        /*public byte[] RetrieveFile(string filename)
+
+        {
+            SqlConnection connection = new SqlConnection("Server=(local) ; Initial Catalog = FileStore ; Integrated Security = SSPI");
+
+            SqlCommand command = new SqlCommand("SELECT * FROM MyFiles WHERE Filename=@Filename", connection);
+
+            command.Parameters.AddWithValue("@Filename", filename); connection.Open();
+            SqlDataReader reader = command.ExecuteReader(System.Data.CommandBehavior.SequentialAccess);
+            reader.Read();
+            MemoryStream memory = new MemoryStream();
+            long startIndex = 0;
+            const int ChunkSize = 256;
+            while (true)
+
+            {
+
+                byte[] buffer = new byte[ChunkSize];
+                long retrievedBytes = reader.GetBytes(1, startIndex, buffer, 0, ChunkSize);
+                memory.Write(buffer, 0, (int)retrievedBytes);
+                startIndex += retrievedBytes;
+                if (retrievedBytes != ChunkSize)
+                    break;
+            }
+
+            connection.Close();
+            byte[] data = memory.ToArray();
+            memory.Dispose();
+            return data;
+
+        }
+    }*/
 }
