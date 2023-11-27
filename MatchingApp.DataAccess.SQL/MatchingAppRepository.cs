@@ -73,40 +73,12 @@ namespace MatchingApp.DataAccess.SQL
             return null;
         }
 
-<<<<<<< Updated upstream
+
 		public List<Profile> GetProfiles()
 		{
 			throw new NotImplementedException();
 		}
-=======
-        public List<string> GetProfiles()
-        {
-            List<string> results = new();
 
-            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            {
-                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel";
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            results.Add(reader.GetString(0));
-                        }
-                    }
-                }
-                connection.Close();
-            }
-            return results;
-        }
-
-        public List<string> GetProfiles(LocationFilter location, int minimumAge, int maximumAge,
-            List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
-        {
-            List<string> results = new();
->>>>>>> Stashed changes
 
 		public List<Profile> GetProfiles(LocationFilter location, int minimumAge, int maximumAge, 
 			List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
@@ -171,14 +143,8 @@ namespace MatchingApp.DataAccess.SQL
             }
             return null;
         }
-
-<<<<<<< Updated upstream
-		public void SaveProfile(Profile profile)
-		{
-=======
         public void SaveProfile(Profile profile)
         {
->>>>>>> Stashed changes
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = "INSERT INTO Profile (Gebruikersnaam, Naam, Achternaam, Tussenvoegsels, Geboortedatum, Seksuele preferentie, Geslacht, Woonplaats) " +
