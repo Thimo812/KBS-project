@@ -38,11 +38,9 @@ namespace KBS_project
 			City = city;
 		}
 
-        public override string ToString()
-        {
+		public override string ToString()
+		{
 			return $"Username: {UserName}\nFull name: {FirstName + Infix + LastName}\nBirth date: {BirthDate.Day}-{BirthDate.Month}-{BirthDate.Year}\nGender: {Gender}\nSexual preference: {SexualPreference}";
-        public Profile()
-        {
-        }
+		}
     }
 }
