@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBS_project.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +21,10 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class AccountEditScreen : Page
     {
-        DateOnly birthdate;
+        DateTime birthdate;
         string residence;
+        Gender gender;
+        SexualPreference sexualPreference;
 
 
         public AccountEditScreen()
@@ -40,7 +43,44 @@ namespace MatchingAppWindow.Views
 
         private void ConfirmChanges(object sender, RoutedEventArgs e)
         {
+            birthdate = BirthDatePicker.DisplayDate;
+            residence = CityBox.Text;
+            gender = GetGender();
+            sexualPreference = getSexuality();
+        }
 
+        private Gender GetGender()
+        {
+            if ((bool)MaleGender.IsChecked)
+            {
+                return Gender.Male;
+            }
+            else if ((bool)FemaleGender.IsChecked)
+            {
+                return Gender.Female;
+            }
+            else if ((bool)NonBinaryGender.IsChecked)
+            {
+                return Gender.NonBinary;
+            }
+            return Gender.Male;
+        }
+
+        private SexualPreference getSexuality()
+        {
+            if ((bool)MaleSexuality.IsChecked)
+            {
+                return SexualPreference.Men;
+            }
+            else if ((bool)FemaleSexuality.IsChecked)
+            {
+                return SexualPreference.Women;
+            }
+            else if ((bool)EveryoneSexuality.IsChecked)
+            {
+                return SexualPreference.All;
+            }
+            return SexualPreference.Men;
         }
     }
 }
