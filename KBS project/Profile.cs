@@ -8,6 +8,7 @@ namespace KBS_project
 	{
 		public string UserName { get; set; }
 		public string FirstName { get; set; }
+		public string Infix { get; set; }
 		public string LastName { get; set; }
 		public DateTime BirthDate { get; set; }
 		public Gender Gender { get; set; }
@@ -24,19 +25,22 @@ namespace KBS_project
 		public List<Interest> Interests { get; set; }
 		public List<string> Images { get; set; }
 
-		public Profile(string userName, string firstName, string lastName, DateTime birthDate, Gender gender, 
-			SexualPreference sexualPreference, string postalCode, string country,string adress, string city)
+		public Profile(string userName, string firstName, string infix, string lastName, DateTime birthDate, Gender gender, 
+			SexualPreference sexualPreference, string city)
 		{
 			UserName = userName;
 			FirstName = firstName;
+			Infix = infix;
 			LastName = lastName;
 			BirthDate = birthDate;
 			Gender = gender;
 			SexualPreference = sexualPreference;
-			PostalCode = postalCode;
-			Country = country;
-			Adress = adress;
 			City = city;
 		}
-	}
+
+		public override string ToString()
+		{
+			return $"Username: {UserName}\nFull name: {FirstName + Infix + LastName}\nBirth date: {BirthDate.Day}-{BirthDate.Month}-{BirthDate.Year}\nGender: {Gender}\nSexual preference: {SexualPreference}";
+		}
+    }
 }

@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MatchingAppWindow;
 
 namespace MatchingAppWindow
 {
@@ -30,15 +31,22 @@ namespace MatchingAppWindow
 
             var startScreen = new StartScreen();
 
-            startScreen.RegisterButton.Click += SwitchToRegisterScreen;
+            var matchingQuiz = new Matchingquiz();
 
-            Content = startScreen;
+            startScreen.RegisterButton.Click += SwitchToRegisterScreen;
+            startScreen.LoginButton.Click += SwitchToFilterScreen;
+
+            Content = matchingQuiz;
         }
 
         public void SwitchToRegisterScreen(Object sender, RoutedEventArgs e)
         {
             SwitchToProfileScreen(sender, e);
             //Content = new RegisterScreen();
+        }
+        private void SwitchToFilterScreen(Object? sender, EventArgs args)
+        {
+            Content = new FilterScreen();
         }
 
         public void SwitchToProfileScreen(Object sender, RoutedEventArgs e)
