@@ -16,15 +16,15 @@
         <TextBox x:Name="CityBox" Margin="300,66,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="26" FontSize="15" HorizontalAlignment="Left" Width="138"/>
 
         <Label Content="Seksuele voorkeur:" Margin="150,103,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <RadioButton Content="Vrouwen" Margin="300,111,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Content="Mannen" Margin="395,111,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Content="Iedereen" Margin="487,111,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.474,0.158"/>
+        <RadioButton Content="Vrouwen" GroupName="Sexuality" Margin="300,111,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Mannen" GroupName="Sexuality" Margin="395,111,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Iedereen" GroupName="Sexuality" Margin="487,111,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.474,0.158"/>
 
         
         <Label Content="Geslacht:" Margin="150,137,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <RadioButton Content="Vrouw" Margin="303,145,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Content="Man" Margin="395,145,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Content="Non-binair" Margin="487,145,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Vrouw" GroupName="Gender" Margin="303,145,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Man" GroupName="Gender" Margin="395,145,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Non-binair" GroupName="Gender" Margin="487,145,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
 
         <Button x:Name="ConfirmButton" Content="Opslaan" Margin="152,370,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276" Click="ConfirmChanges"/>
 
