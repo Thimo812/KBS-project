@@ -30,6 +30,9 @@ namespace MatchingAppWindow
         private RegisterScreen registerScreen = new();
         private Matchingquiz matchingquiz = new();
         private Navigation navigation = new();
+        private ProfileEditScreen ProfileEditScreen = new();
+        private AccountEditScreen AccountEditScreen = new();
+        private PhotoEditScreen PhotoEditScreen = new();
 
         public static Profile? profile;
         private MatchingAppRepository repository;
@@ -42,8 +45,17 @@ namespace MatchingAppWindow
             startScreen.RegisterButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
             registerScreen.CreateAccountButton.Click += registerAccount;
 
+            ProfileEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
+            ProfileEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
 
-            Content = startScreen;
+            AccountEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
+            AccountEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
+
+            PhotoEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
+            PhotoEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
+
+
+            Content = ProfileEditScreen;
         }
 
         private void registerAccount(Object? sender, EventArgs args)
@@ -55,29 +67,17 @@ namespace MatchingAppWindow
 
         public void SwitchToProfileScreen(Object sender, RoutedEventArgs e)
         {
-            var profileEditScreen = new ProfileEditScreen();
-            profileEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
-            profileEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
-
-            Content = profileEditScreen;
+            Content = ProfileEditScreen;
         }
 
         public void SwitchToAccountScreen(Object sender, RoutedEventArgs e)
         {
-            var accountScreen = new AccountEditScreen();
-            accountScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
-            accountScreen.ProfileEditButton.Click += SwitchToProfileScreen;
-
-            Content = accountScreen;
+           Content = AccountEditScreen;
         }
 
         public void SwitchToPhotoScreen(Object sender, RoutedEventArgs e)
         {
-            var photoScreen = new PhotoEditScreen();
-            photoScreen.ProfileEditButton.Click += SwitchToProfileScreen;
-            photoScreen.AccountScreenButton.Click += SwitchToAccountScreen;
-
-            Content = photoScreen;
+           Content = PhotoEditScreen;
         }
 
     }

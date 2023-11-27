@@ -1,4 +1,5 @@
-﻿using KBS_project.Enums;
+﻿using KBS_project;
+using KBS_project.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,14 +22,23 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class AccountEditScreen : Page
     {
-        DateTime birthdate;
-        string residence;
-        Gender gender;
-        SexualPreference sexualPreference;
+        private Profile? profile;
+        DateTime? birthdate;
+        string? residence;
+        Gender? gender;
+        SexualPreference? sexualPreference;
 
 
         public AccountEditScreen()
         {
+            profile = MainWindow.profile;
+            if (profile != null)
+            {
+                BirthDatePicker.DisplayDate = profile.BirthDate;
+                CityBox.Text = profile.City;
+                SetGender(profile.Gender);
+                setPreference(profile.SexualPreference);
+            }
             InitializeComponent();
         }
 
@@ -47,6 +57,38 @@ namespace MatchingAppWindow.Views
             residence = CityBox.Text;
             gender = GetGender();
             sexualPreference = getSexuality();
+        }
+
+        private void SetGender(Gender gender)
+        {
+            switch (gender)
+            {
+                case Gender.Male:
+                    MaleGender.IsChecked = true;
+                    break;
+                case Gender.Female:
+                    FemaleGender.IsChecked = true;
+                    break;
+                default: 
+                    NonBinaryGender.IsChecked = true;
+                    break;
+            }
+        }
+
+        private void setPreference(SexualPreference sp)
+        {
+            switch(sp)
+            {
+                case SexualPreference.Men:
+                    MaleSexuality.IsChecked = true;
+                    break;
+                case SexualPreference.Women:
+                    FemaleSexuality.IsChecked = true;
+                    break;
+                default:
+                    EveryoneSexuality.IsChecked = true;
+                    break;
+            }
         }
 
         private Gender GetGender()

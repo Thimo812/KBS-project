@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBS_project;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,15 +21,24 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class ProfileEditScreen : Page
     {
-        string description;
-        string hobbies;
-        string education;
-        string school;
-        string employment;
-        string diet;
+        private Profile? profile;
+        string? description;
+        string? hobbies;
+        string? education;
+        string? school;
+        string? employment;
+        string? diet;
 
         public ProfileEditScreen()
         {
+            profile = MainWindow.profile;
+            if (profile != null ) {
+                BeschrijvingBox.Text = profile.Description;
+                OpleidingBox.Text = profile.degree;
+                SchoolBox.Text = profile.School;
+                WerkplekBox.Text = profile.WorkPlace;
+                DieetBox.Text = profile.Diet;
+            }
             InitializeComponent();
         }
 
@@ -42,12 +52,14 @@ namespace MatchingAppWindow.Views
 
         private void ConfirmChanges(object sender, RoutedEventArgs e)
         {
-            description = BeschrijvingBox.Text;
-            hobbies = HobbyBox.Text;
-            education = OpleidingBox.Text;
-            school = SchoolBox.Text;
-            employment  = WerkplekBox.Text;
-            diet = DieetBox.Text;
+            profile.Description = BeschrijvingBox.Text;
+            profile.degree = OpleidingBox.Text;
+            profile.School = SchoolBox.Text;
+            profile.WorkPlace  = WerkplekBox.Text;
+            profile.Diet = DieetBox.Text;
+
+            MainWindow.profile = profile;
+
         }
     }
 }

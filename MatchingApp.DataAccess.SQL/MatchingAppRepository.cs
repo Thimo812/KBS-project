@@ -206,6 +206,33 @@ namespace MatchingApp.DataAccess.SQL
             }
         }
 
+        public void updateProfile(Profile profile) 
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "UPDATE profiel SET Gebruikersnaam = @Gebruikersnaam, Naam = @Naam, Achternaam = @Achternaam, Tussenvoegsels = @Tussenvoegsels," +
+                    " Geboortedatum = @Geboortedatum, Seksuele_preferentie = @Sekspref, Geslacht = @Geslacht, Woonplaats = @Woonplaats, Land = @Land, Postcode = @Postcode" +
+                    "WHERE Gebruikersnaam = @Gebruikersnaam";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
+                    command.Parameters.AddWithValue("Naam", profile.FirstName);
+                    command.Parameters.AddWithValue("Achternaam", profile.LastName);
+                    command.Parameters.AddWithValue("Tussenvoegsels", profile.Infix);
+                    command.Parameters.AddWithValue("Geboortedatum", $"{profile.BirthDate.Year}-{profile.BirthDate.Month}-{profile.BirthDate.Day}");
+                    command.Parameters.AddWithValue("sekspref", profile.SexualPreference);
+                    command.Parameters.AddWithValue("Geslacht", profile.Gender);
+                    command.Parameters.AddWithValue("Woonplaats", profile.City);
+                    command.Parameters.AddWithValue("land", profile.Country);
+                    command.Parameters.AddWithValue("postcode", profile.PostalCode);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+                
+        }
+
         public void StoreFile(string filename)
         {
             if (1!=2)//Als foto album niet er is ga door anders sla over
