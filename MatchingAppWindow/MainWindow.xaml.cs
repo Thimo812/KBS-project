@@ -23,6 +23,7 @@ namespace MatchingAppWindow
     /// </summary>
     public partial class MainWindow : Window
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -34,11 +35,38 @@ namespace MatchingAppWindow
             Content = startScreen;
         }
 
-        private void SwitchToRegisterScreen(Object? sender, EventArgs args)
+        public void SwitchToRegisterScreen(Object sender, RoutedEventArgs e)
         {
-            Content = new RegisterScreen();
+            SwitchToProfileScreen(sender, e);
+            //Content = new RegisterScreen();
         }
 
+        public void SwitchToProfileScreen(Object sender, RoutedEventArgs e)
+        {
+            var profileEditScreen = new ProfileEditScreen();
+            profileEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
+            profileEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
+
+            Content = profileEditScreen;
+        }
+
+        public void SwitchToAccountScreen(Object sender, RoutedEventArgs e)
+        {
+            var accountScreen = new AccountEditScreen();
+            accountScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
+            accountScreen.ProfileEditButton.Click += SwitchToProfileScreen;
+
+            Content = accountScreen;
+        }
+
+        public void SwitchToPhotoScreen(Object sender, RoutedEventArgs e)
+        {
+            var photoScreen = new PhotoEditScreen();
+            photoScreen.ProfileEditButton.Click += SwitchToProfileScreen;
+            photoScreen.AccountScreenButton.Click += SwitchToAccountScreen;
+
+            Content = photoScreen;
+        }
 
     }
 }

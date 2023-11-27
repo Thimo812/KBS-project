@@ -16,28 +16,22 @@ using System.Windows.Shapes;
 namespace MatchingAppWindow.Views
 {
     /// <summary>
-    /// Interaction logic for StartScreen.xaml
+    /// Interaction logic for AccountEditScreen.xaml
     /// </summary>
-    public partial class StartScreen : Page
+    public partial class AccountEditScreen : Page
     {
-        public StartScreen()
+        public AccountEditScreen()
         {
             InitializeComponent();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private void SwitchToPhotoEditScreen(Object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private void SwitchToProfileEditScreen(Object sender, RoutedEventArgs e)
+        {
         }
     }
 }
