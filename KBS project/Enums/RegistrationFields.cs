@@ -52,6 +52,7 @@ namespace KBS_project.Enums
             return field switch
             {
                 RegistrationFields.PostalCode => "^[a-zA-Z0-9]+$",
+                RegistrationFields.UserName => "^[a-zA-Z0-9]+$",
                 _ => "^[a-zA-Z]+$",
             } ;
         }

@@ -97,6 +97,7 @@ namespace MatchingAppWindow.Views
                 List<string> ImagePaths = ImageList.Select(x => x.UriSource.ToString()).ToList();
 
                 Profile = new Profile(userName, firstName, infix, lastName, birthdate, gender, sexuality, city, postalCode, country, ImagePaths);
+                Repo.SaveProfile(Profile);
             } 
             catch (FieldEmptyException fee)
             {
