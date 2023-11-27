@@ -15,7 +15,6 @@ namespace KBS_project
 		public SexualPreference SexualPreference { get; set; }
 		public string PostalCode { get; set; }
 		public string Country { get; set; }
-		public string Adress { get; set; }
 		public string City { get; set; }
 		public string School { get; set; }
 		public string degree { get; set; }
@@ -26,7 +25,7 @@ namespace KBS_project
 		public List<string> Images { get; set; }
 
 		public Profile(string userName, string firstName, string infix, string lastName, DateTime birthDate, Gender gender, 
-			SexualPreference sexualPreference, string city)
+			SexualPreference sexualPreference, string city, string postalCode, string country)
 		{
 			UserName = userName;
 			FirstName = firstName;
@@ -36,6 +35,8 @@ namespace KBS_project
 			Gender = gender;
 			SexualPreference = sexualPreference;
 			City = city;
+			PostalCode = postalCode;
+			Country = country;
 		}
 
 		public override string ToString()

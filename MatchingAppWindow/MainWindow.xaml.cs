@@ -1,4 +1,6 @@
-﻿using MatchingAppWindow.Views;
+﻿using KBS_project;
+using MatchingApp.DataAccess.SQL;
+using MatchingAppWindow.Views;
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using System;
@@ -24,29 +26,31 @@ namespace MatchingAppWindow
     /// </summary>
     public partial class MainWindow : Window
     {
+        private StartScreen startScreen = new();
+        private RegisterScreen registerScreen = new();
+        private Matchingquiz matchingquiz = new();
+        private Navigation navigation = new();
 
+        public static Profile? profile;
+        private MatchingAppRepository repository;
         public MainWindow()
         {
+            repository = new MatchingAppRepository();
+
             InitializeComponent();
 
-            var startScreen = new StartScreen();
+            startScreen.RegisterButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
+            registerScreen.CreateAccountButton.Click += registerAccount;
 
-            var matchingQuiz = new Matchingquiz();
 
-            startScreen.RegisterButton.Click += SwitchToRegisterScreen;
-            startScreen.LoginButton.Click += SwitchToFilterScreen;
-
-            Content = matchingQuiz;
+            Content = startScreen;
         }
 
-        public void SwitchToRegisterScreen(Object sender, RoutedEventArgs e)
+        private void registerAccount(Object? sender, EventArgs args)
         {
-            SwitchToProfileScreen(sender, e);
-            //Content = new RegisterScreen();
-        }
-        private void SwitchToFilterScreen(Object? sender, EventArgs args)
-        {
-            Content = new FilterScreen();
+            profile = registerScreen.Profile;
+            Content = navigation;
+            repository.SaveProfile(profile);
         }
 
         public void SwitchToProfileScreen(Object sender, RoutedEventArgs e)
