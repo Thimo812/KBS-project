@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MatchingAppWindow;
 
 namespace MatchingAppWindow
 {
@@ -32,6 +33,7 @@ namespace MatchingAppWindow
             var matchingQuiz = new Matchingquiz();
 
             startScreen.RegisterButton.Click += SwitchToRegisterScreen;
+            startScreen.LoginButton.Click += SwitchToFilterScreen;
 
             Content = matchingQuiz;
         }
@@ -39,6 +41,10 @@ namespace MatchingAppWindow
         private void SwitchToRegisterScreen(Object? sender, EventArgs args)
         {
             Content = new RegisterScreen();
+        }
+        private void SwitchToFilterScreen(Object? sender, EventArgs args)
+        {
+            Content = new FilterScreen();
         }
 
 

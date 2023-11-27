@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingApp.DataAccess.SQL"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingAppConsole", "MatchingAppConsole\MatchingAppConsole.csproj", "{AE762E66-CA70-4BAC-AFD5-8F13538DA43C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingAppWindow", "MatchingAppWindow\MatchingAppWindow.csproj", "{2E6B6D29-930B-453D-9C5F-EC24320B67FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{AE762E66-CA70-4BAC-AFD5-8F13538DA43C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AE762E66-CA70-4BAC-AFD5-8F13538DA43C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AE762E66-CA70-4BAC-AFD5-8F13538DA43C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E6B6D29-930B-453D-9C5F-EC24320B67FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E6B6D29-930B-453D-9C5F-EC24320B67FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E6B6D29-930B-453D-9C5F-EC24320B67FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E6B6D29-930B-453D-9C5F-EC24320B67FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

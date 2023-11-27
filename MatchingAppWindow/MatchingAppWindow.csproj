@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KBS project\MatchingAppCore.csproj" />
+    <ProjectReference Include="..\MatchingApp.DataAccess.SQL\MatchingApp.DataAccess.SQL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
