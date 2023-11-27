@@ -35,7 +35,7 @@ namespace MatchingAppWindow
             startScreen.RegisterButton.Click += SwitchToRegisterScreen;
             startScreen.LoginButton.Click += SwitchToFilterScreen;
 
-            Content = matchingQuiz;
+            Content = startScreen;
         }
 
         private void SwitchToRegisterScreen(Object? sender, EventArgs args)
