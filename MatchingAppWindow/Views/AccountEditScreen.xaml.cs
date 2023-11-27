@@ -20,6 +20,10 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class AccountEditScreen : Page
     {
+        DateOnly birthdate;
+        string residence;
+
+
         public AccountEditScreen()
         {
             InitializeComponent();
@@ -32,6 +36,11 @@ namespace MatchingAppWindow.Views
 
         private void SwitchToProfileEditScreen(Object sender, RoutedEventArgs e)
         {
+        }
+
+        private void ConfirmChanges(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

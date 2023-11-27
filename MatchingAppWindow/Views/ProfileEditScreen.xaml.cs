@@ -20,6 +20,13 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class ProfileEditScreen : Page
     {
+        string description;
+        string hobbies;
+        string education;
+        string school;
+        string employment;
+        string diet;
+
         public ProfileEditScreen()
         {
             InitializeComponent();
@@ -31,6 +38,16 @@ namespace MatchingAppWindow.Views
 
         private void SwitchToAccountEditScreen(object sender, RoutedEventArgs e)
         {
+        }
+
+        private void ConfirmChanges(object sender, RoutedEventArgs e)
+        {
+            description = BeschrijvingBox.Text;
+            hobbies = HobbyBox.Text;
+            education = OpleidingBox.Text;
+            school = SchoolBox.Text;
+            employment  = WerkplekBox.Text;
+            diet = DieetBox.Text;
         }
     }
 }
