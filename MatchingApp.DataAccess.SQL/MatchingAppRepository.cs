@@ -12,24 +12,24 @@ using Renci.SshNet.Common;
 using static System.Net.Mime.MediaTypeNames;
 namespace MatchingApp.DataAccess.SQL
 {
-	public class MatchingAppRepository
-	{
-		private SqlConnectionStringBuilder builder;
-		public MatchingAppRepository()
-		{
-			builder = new SqlConnectionStringBuilder();
-			builder.DataSource = "127.0.0.1";
-			builder.UserID = "SA";
-			builder.Password = "D1t1sEenSqlServertju";
-			builder.InitialCatalog = "MatchingDB";
-			builder.TrustServerCertificate = false;
-		}
+    public class MatchingAppRepository
+    {
+        private SqlConnectionStringBuilder builder;
+        public MatchingAppRepository()
+        {
+            builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "127.0.0.1";
+            builder.UserID = "SA";
+            builder.Password = "D1t1sEenSqlServertju";
+            builder.InitialCatalog = "MatchingDB";
+            builder.TrustServerCertificate = false;
+        }
 
-		public string AgetoDate(int age)
-		{
+        public string AgetoDate(int age)
+        {
             var today = DateTime.Today;
             var byear = today.Year - age;
-			DateTime date = new DateTime(byear, today.Month, today.Day);
+            DateTime date = new DateTime(byear, today.Month, today.Day);
             var datestring = date.ToString("yyyy-MM-dd");
             return datestring;
         }
@@ -55,28 +55,58 @@ namespace MatchingApp.DataAccess.SQL
             }
             return false;
         }
-		public Profile GetProfile(string userName)
-		{
-			using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-			{
-				var sql = $"SELECT * FROM Profile WHERE Gebruikersnaam = {userName}";
-				connection.Open();
-				using (SqlCommand command = new SqlCommand(sql, connection))
-				{
-					using (SqlDataReader reader = command.ExecuteReader())
-					{
-						Console.WriteLine(reader.GetString);
-					}
-				}
-				connection.Close();
-			}
-			return null;
-		}
+        public Profile GetProfile(string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"SELECT * FROM Profile WHERE Gebruikersnaam = {userName}";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        Console.WriteLine(reader.GetString);
+                    }
+                }
+                connection.Close();
+            }
+            return null;
+        }
 
+<<<<<<< Updated upstream
 		public List<Profile> GetProfiles()
 		{
 			throw new NotImplementedException();
 		}
+=======
+        public List<string> GetProfiles()
+        {
+            List<string> results = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add(reader.GetString(0));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return results;
+        }
+
+        public List<string> GetProfiles(LocationFilter location, int minimumAge, int maximumAge,
+            List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
+        {
+            List<string> results = new();
+>>>>>>> Stashed changes
 
 		public List<Profile> GetProfiles(LocationFilter location, int minimumAge, int maximumAge, 
 			List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
@@ -142,8 +172,13 @@ namespace MatchingApp.DataAccess.SQL
             return null;
         }
 
+<<<<<<< Updated upstream
 		public void SaveProfile(Profile profile)
 		{
+=======
+        public void SaveProfile(Profile profile)
+        {
+>>>>>>> Stashed changes
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = "INSERT INTO Profile (Gebruikersnaam, Naam, Achternaam, Tussenvoegsels, Geboortedatum, Seksuele preferentie, Geslacht, Woonplaats) " +
@@ -151,23 +186,23 @@ namespace MatchingApp.DataAccess.SQL
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-					command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
+                    command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
                     command.Parameters.AddWithValue("Naam", profile.FirstName);
                     command.Parameters.AddWithValue("Achternaam", profile.LastName);
                     command.Parameters.AddWithValue("Tussenvoegsels", profile.Infix);
                     command.Parameters.AddWithValue("Geboortedatum", $"{profile.BirthDate.Year}-{profile.BirthDate.Month}-{profile.BirthDate.Day}");
-					command.Parameters.AddWithValue("seksuelepreferentie", profile.SexualPreference);
-					command.Parameters.AddWithValue("Geslacht", profile.Gender);
-					command.Parameters.AddWithValue("Woonplaats", profile.City);
-					command.ExecuteNonQuery();
-				}
-				connection.Close();
+                    command.Parameters.AddWithValue("seksuelepreferentie", profile.SexualPreference);
+                    command.Parameters.AddWithValue("Geslacht", profile.Gender);
+                    command.Parameters.AddWithValue("Woonplaats", profile.City);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
             }
         }
 
         public void StoreFile(string filename)
         {
-            if (1!=2)//Als foto album niet er is ga door anders sla over
+            if (1 != 2)//Als foto album niet er is ga door anders sla over
             {
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
@@ -175,12 +210,12 @@ namespace MatchingApp.DataAccess.SQL
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        command.ExecuteNonQuery() ;
+                        command.ExecuteNonQuery();
                     }
                     connection.Close();
                 }
             }
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = $"INSERT INTO Foto(ID, FotoTitel, FotoData, FotoAlbumID) VALUES (int, {Path.GetFileName(filename)}, {File.ReadAllBytes(filename)}, int)";
                 connection.Open();
@@ -194,38 +229,39 @@ namespace MatchingApp.DataAccess.SQL
                 connection.Close();
             }
         }
-    }
 
-        /*public byte[] RetrieveFile(string filename)
 
+        public byte[] RetrieveFile(string filename)
         {
-            SqlConnection connection = new SqlConnection("Server=(local) ; Initial Catalog = FileStore ; Integrated Security = SSPI");
-
-            SqlCommand command = new SqlCommand("SELECT * FROM MyFiles WHERE Filename=@Filename", connection);
-
-            command.Parameters.AddWithValue("@Filename", filename); connection.Open();
-            SqlDataReader reader = command.ExecuteReader(System.Data.CommandBehavior.SequentialAccess);
-            reader.Read();
-            MemoryStream memory = new MemoryStream();
-            long startIndex = 0;
-            const int ChunkSize = 256;
-            while (true)
-
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
+                var sql = $"SELECT * FROM MyFiles WHERE Filename=@Filename";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        MemoryStream memory = new MemoryStream();
+                        long startIndex = 0;
+                        const int ChunkSize = 256;
+                        while (true)
+                        {
+                            byte[] buffer = new byte[ChunkSize];
+                            long retrievedBytes = reader.GetBytes(1, startIndex, buffer, 0, ChunkSize);
+                            memory.Write(buffer, 0, (int)retrievedBytes);
+                            startIndex += retrievedBytes;
+                            if (retrievedBytes != ChunkSize)
+                            break;
+                        }
 
-                byte[] buffer = new byte[ChunkSize];
-                long retrievedBytes = reader.GetBytes(1, startIndex, buffer, 0, ChunkSize);
-                memory.Write(buffer, 0, (int)retrievedBytes);
-                startIndex += retrievedBytes;
-                if (retrievedBytes != ChunkSize)
-                    break;
+                        connection.Close();
+                        byte[] data = memory.ToArray();
+                        memory.Dispose();
+                        return data;
+                    }
+                }
             }
-
-            connection.Close();
-            byte[] data = memory.ToArray();
-            memory.Dispose();
-            return data;
-
         }
-    }*/
+    }
 }
