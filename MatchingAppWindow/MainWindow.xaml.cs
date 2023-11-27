@@ -34,6 +34,7 @@ namespace MatchingAppWindow
         private RegisterScreen registerScreen;
         private Matchingquiz matchingquiz = new();
         private Navigation navigation = new();
+        private FilterScreen filterScreen = new();
 
         public MainWindow()
         {
@@ -44,6 +45,7 @@ namespace MatchingAppWindow
             InitializeComponent();
 
             startScreen.RegisterButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
+            startScreen.LoginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
             registerScreen.CreateAccountButton.Click += registerAccount;
 
             Content = startScreen;

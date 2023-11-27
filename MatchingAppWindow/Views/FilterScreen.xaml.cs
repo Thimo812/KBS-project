@@ -42,9 +42,9 @@ namespace MatchingAppWindow.Views
             InitializeComponent();
 
             //Showing all profiles from the database on the screen
-            foreach(string profile in repo.GetProfiles())
+            foreach(Profile profile in repo.GetProfiles())
             {
-                resultString += profile + "\n";
+                resultString += profile.UserName + "\n";
             }
 
             filteredProfiles.Content = resultString;
@@ -191,7 +191,7 @@ namespace MatchingAppWindow.Views
             int.TryParse(MinAge.Text, out minimumAge);
             int.TryParse(MaxAge.Text, out maximumAge);
 
-            List<string>  results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
+            List<string>  results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets).Select(x => x.UserName).ToList();
 
             resultString = string.Empty;
 
