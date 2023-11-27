@@ -110,7 +110,7 @@ namespace MatchingApp.DataAccess.SQL
                     if (location == LocationFilter.Country) { sql += $"AND Land = 'Nederland' "; }
 
                 }
-                if (minimumAge != null)
+                if (minimumAge != 0)
                 {
                     sql += $"AND Geboortedatum <= '{AgetoDate(minimumAge)}' ";
                 }
@@ -146,6 +146,7 @@ namespace MatchingApp.DataAccess.SQL
                         sql += $"AND NOT Dieet = '{exldiet}' ";
                     }
                 }
+
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {

@@ -28,7 +28,7 @@ namespace MatchingAppWindow.Views
 
         //Creating all attributes
         MatchingAppRepository repo = new MatchingAppRepository();
-        private LocationFilter location;
+        private LocationFilter location = LocationFilter.Global;
         private int minimumAge;
         private int maximumAge;
         private List<Interest> includedHobbies = new();
@@ -126,30 +126,30 @@ namespace MatchingAppWindow.Views
             CheckBox senderHobby = (CheckBox)sender;
             if ((string)buttonHobby.Content == "wel")
             {
-                if (senderHobby.Name == "Soccer")
+                if (senderHobby.Name == "Reading")
                 {
                     includedHobbies.Add(Interest.Reading);
                 }
-                if (senderHobby.Name == "Gaming")
+                if (senderHobby.Name == "Cycling")
                 {
                     includedHobbies.Add(Interest.Cycling);
                 }
-                if (senderHobby.Name == "Art")
+                if (senderHobby.Name == "Cooking")
                 {
                     includedHobbies.Add(Interest.Cooking);
                 }
             }
             else if((string)buttonHobby.Content == "niet")
             {
-                if (senderHobby.Name == "Soccer")
+                if (senderHobby.Name == "Reading")
                 {
                     excludedHobbies.Add(Interest.Reading);
                 }
-                if (senderHobby.Name == "Gaming")
+                if (senderHobby.Name == "Cycling")
                 {
                     excludedHobbies.Add(Interest.Cycling);
                 }
-                if (senderHobby.Name == "Art")
+                if (senderHobby.Name == "Cooking")
                 {
                     excludedHobbies.Add(Interest.Cooking);
                 }

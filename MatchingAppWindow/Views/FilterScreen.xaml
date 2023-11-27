@@ -47,19 +47,19 @@
                     Click="IncOrExcHobby_Click"
                 />
                 <CheckBox 
-                    Name="Soccer"
+                    Name="Reading"
                     Content="Lezen" 
                     Height="22" 
                     Checked="HobbyChecked"
                 />
                 <CheckBox
-                    Name="Gaming"
+                    Name="Cycling"
                     Content="Fietsen" 
                     Height="21"
                     Checked="HobbyChecked"
                 />
                 <CheckBox 
-                    Name="Art"
+                    Name="Cooking"
                     Content="Koken" 
                     Height="27"
                     Checked="HobbyChecked"
