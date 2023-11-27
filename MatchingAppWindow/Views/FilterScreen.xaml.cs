@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using KBS_project;
 using MatchingApp.DataAccess.SQL;
+using System.Security.Policy;
 
 namespace MatchingAppWindow.Views
 {
@@ -24,8 +25,9 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class FilterScreen : Page
     {
-        MatchingAppRepository repo = new MatchingAppRepository();
 
+        //Creating all attributes
+        MatchingAppRepository repo = new MatchingAppRepository();
         private LocationFilter location;
         private int minimumAge;
         private int maximumAge;
@@ -33,13 +35,23 @@ namespace MatchingAppWindow.Views
         private List<Interest> excludedHobbies = new();
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
+        private string resultString;
 
         public FilterScreen()
         {
             InitializeComponent();
+
+            //Showing all profiles from the database on the screen
+            foreach(string profile in repo.GetProfiles())
+            {
+                resultString += profile + "\n";
+            }
+
+            filteredProfiles.Content = resultString;
         }
 
-        private void buttonExtendFilters_Click(object sender, RoutedEventArgs e)
+        //Button to extend or collapse the filteroptions
+        private void buttonExpandFilters_Click(object sender, RoutedEventArgs e)
         {
             if (filterPanel.Visibility == Visibility.Collapsed)
             {
@@ -53,24 +65,46 @@ namespace MatchingAppWindow.Views
             }
         }
 
-        private void IncOrExcButton_Click(object sender, RoutedEventArgs e)
+        //Button to include or exclude hobbies
+        private void IncOrExcHobby_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             if ((string)button.Content == "wel")
             {
+                excludedHobbies.Clear();
                 button.Background = Brushes.Red;
                 button.Content = "niet";
             }
             else if((string)button.Content == "niet")
             {
+                includedHobbies.Clear();
                 button.Background = Brushes.Green;
                 button.Content = "wel";
             }
         }
 
+        //Button to include or exclude diets
+        private void IncOrExcDiet_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            if ((string)button.Content == "wel")
+            {
+                excludedDiets.Clear();
+                button.Background = Brushes.Red;
+                button.Content = "niet";
+            }
+            else if ((string)button.Content == "niet")
+            {
+                includedDiets.Clear();
+                button.Background = Brushes.Green;
+                button.Content = "wel";
+            }
+        }
+
+        //CheckBoxes to filter on location
         private void LocationChecked(object sender, RoutedEventArgs e)
         {
-            RadioButton senderLoc = (RadioButton)sender;
+            CheckBox senderLoc = (CheckBox)sender;
 
             if(senderLoc.Name == "Global")
             {
@@ -86,41 +120,43 @@ namespace MatchingAppWindow.Views
             }
         }
 
+        //CheckBoxes to filter on hobbies
         private void HobbyChecked(object sender, RoutedEventArgs e)
         {
             CheckBox senderHobby = (CheckBox)sender;
-            if(buttonHobby.Content == "wel")
+            if ((string)buttonHobby.Content == "wel")
             {
                 if (senderHobby.Name == "Soccer")
                 {
-                    includedHobbies.Add(Interest.Soccer);
+                    includedHobbies.Add(Interest.Reading);
                 }
                 if (senderHobby.Name == "Gaming")
                 {
-                    includedHobbies.Add(Interest.Gaming);
+                    includedHobbies.Add(Interest.Cycling);
                 }
                 if (senderHobby.Name == "Art")
                 {
-                    includedHobbies.Add(Interest.Art);
+                    includedHobbies.Add(Interest.Cooking);
                 }
             }
-            else if(buttonHobby.Content == "niet")
+            else if((string)buttonHobby.Content == "niet")
             {
                 if (senderHobby.Name == "Soccer")
                 {
-                    excludedHobbies.Add(Interest.Soccer);
+                    excludedHobbies.Add(Interest.Reading);
                 }
                 if (senderHobby.Name == "Gaming")
                 {
-                    excludedHobbies.Add(Interest.Gaming);
+                    excludedHobbies.Add(Interest.Cycling);
                 }
                 if (senderHobby.Name == "Art")
                 {
-                    excludedHobbies.Add(Interest.Art);
+                    excludedHobbies.Add(Interest.Cooking);
                 }
             }
         }
 
+        //CheckBoxes to filter on diet
         private void DietChecked(object sender, RoutedEventArgs e)
         {
             CheckBox senderDiet = (CheckBox)sender;
@@ -149,12 +185,30 @@ namespace MatchingAppWindow.Views
             }
         }
 
+        //Button to save the filteroptions and show the matching profiles
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
             int.TryParse(MinAge.Text, out minimumAge);
             int.TryParse(MaxAge.Text, out maximumAge);
 
-            repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
+            List<string>  results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
+
+            resultString = string.Empty;
+
+            foreach(string result in results)
+            {
+                resultString += result + "\n";
+            }
+
+            filteredProfiles.Content = resultString;
+
+            location = 0;
+            minimumAge = 0;
+            maximumAge = 0;
+            includedHobbies.Clear();
+            excludedHobbies.Clear();
+            includedDiets.Clear();
+            excludedDiets.Clear();
         }
     }
 }
