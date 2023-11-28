@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -97,11 +98,82 @@ namespace MatchingAppWindow.Views
                 List<string> ImagePaths = ImageList.Select(x => x.UriSource.ToString()).ToList();
 
                 Profile = new Profile(userName, firstName, infix, lastName, birthdate, gender, sexuality, city, postalCode, country, ImagePaths);
-                Repo.SaveProfile(Profile);
-            } 
-            catch (FieldEmptyException fee)
+
+                ClearErrorFields();
+
+                ExitPage?.Invoke(this, EventArgs.Empty);
+            }
+            catch (AggregateException aggEx)
             {
-                
+                foreach (var exception in aggEx.InnerExceptions)
+                {
+                    if (exception is FieldEmptyException fee)
+                    {
+                        AddValidationError(fee);
+                    }
+
+                    ShowErrors();
+                }
+            }
+            catch (SqlException sqlEx)
+            {
+                MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
+            }
+        }
+
+        private List<Control> validationErrors = new List<Control>();
+
+        private void AddValidationError(FieldEmptyException exception)
+        {
+            switch (exception.Field)
+            {
+                case RegistrationFields.UserName:
+                    validationErrors.Add(UserNameInput);
+                    break;
+                case RegistrationFields.FirstName:
+                    validationErrors.Add(FirstNameInput);
+                    break;
+                case RegistrationFields.LastName:
+                    validationErrors.Add(LastNameInput);
+                    break;
+                case RegistrationFields.Infix:
+                    validationErrors.Add(InfixInput);
+                    break;
+                case RegistrationFields.City:
+                    validationErrors.Add(CityInput);
+                    break;
+                case RegistrationFields.Country:
+                    validationErrors.Add(CountryInput);
+                    break;
+                case RegistrationFields.PostalCode:
+                    validationErrors.Add(PostalCodeInput);
+                    break;
+                case RegistrationFields.Gender:
+                    validationErrors.AddRange(new List<RadioButton>() { MaleGender, FemaleGender, NonBinaryGender });
+                    break;
+                case RegistrationFields.Sexuality:
+                    validationErrors.AddRange(new List<RadioButton>() { MaleSexuality, FemaleSexuality, EveryoneSexuality });
+                    break;
+
+            }
+
+        }
+
+        private void ClearErrorFields()
+        {
+
+            foreach (Control field in validationErrors)
+            {
+                field.Background = null;
+                field.BorderBrush = null;
+            }
+        }
+
+        private void ShowErrors()
+        {
+            foreach (var field in validationErrors)
+            {
+                DisplayFieldError(field);
             }
         }
 
@@ -120,26 +192,12 @@ namespace MatchingAppWindow.Views
 
         }
 
-        private void DisplayFieldError(TextBox textBox)
+        private void DisplayFieldError(Control inputField)
         {
-            textBox.Background = Brushes.Pink;
-            textBox.BorderBrush = Brushes.Red;
+            inputField.Background = Brushes.Pink;
+            inputField.BorderBrush = Brushes.Red;
         }
 
-        private void DisplayFieldError(RadioButton[] radioButtons)
-        {
-            foreach (RadioButton radioButton in radioButtons)
-            {
-                radioButton.Background = Brushes.Pink;
-                radioButton.BorderBrush = Brushes.Red;
-
-            }
-        }
-
-        private void DisplayFieldError(DatePicker datePicker)
-        {
-            datePicker.Background = Brushes.Pink;
-            datePicker.BorderBrush = Brushes.Red;
-        }
+        public event EventHandler ExitPage;
     }
 }

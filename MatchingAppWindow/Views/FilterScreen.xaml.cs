@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using KBS_project;
 using MatchingApp.DataAccess.SQL;
 using System.Security.Policy;
+using System.Data.SqlClient;
 
 namespace MatchingAppWindow.Views
 {
@@ -41,13 +42,19 @@ namespace MatchingAppWindow.Views
         {
             InitializeComponent();
 
-            //Showing all profiles from the database on the screen
-            foreach(Profile profile in repo.GetProfiles())
+            try
             {
-                resultString += profile.UserName + "\n";
+                //Showing all profiles from the database on the screen
+                foreach (Profile profile in repo.GetProfiles())
+                {
+                    resultString += profile.UserName + "\n";
+                    filteredProfiles.Content = resultString;
+                }
+            } 
+            catch (SqlException sqlEx)
+            {
+                MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
             }
-
-            filteredProfiles.Content = resultString;
         }
 
         //Button to extend or collapse the filteroptions

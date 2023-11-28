@@ -46,14 +46,10 @@ namespace MatchingAppWindow
 
             startScreen.RegisterButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
             startScreen.LoginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
-            registerScreen.CreateAccountButton.Click += registerAccount;
+
+            registerScreen.ExitPage += (object sender, EventArgs e) => Content = filterScreen;
 
             Content = startScreen;
-        }
-
-        private void registerAccount(Object? sender, EventArgs args)
-        {
-            Content = navigation;
         }
 
         public static BitmapImage ImageToBitmapImage(Image image)
