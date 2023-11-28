@@ -1,0 +1,227 @@
+﻿<Page x:Class="MatchingAppWindow.Matchingquiz"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="clr-namespace:MatchingAppWindow"
+      Title="Matchingquiz" Height="600" Width="800">
+
+    <!-- Page Resources -->
+    <Page.Resources>
+        <!-- Define FontFamily resources -->
+        <FontFamily x:Key="FirstFont">Arial</FontFamily>
+        <FontFamily x:Key="SecondFont">Times New Roman</FontFamily>
+
+        <!-- Define Styles with different FontSizes -->
+        <Style x:Key="LargeTextBlock" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource FirstFont}"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Margin" Value="5,0,5,15"/>
+            <!-- Add more style properties as needed -->
+        </Style>
+
+        <Style x:Key="SmallRadioButton" TargetType="RadioButton">
+            <Setter Property="FontFamily" Value="{StaticResource SecondFont}"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Margin" Value="0,0,60,0"/>
+            <!-- Add more style properties as needed -->
+        </Style>
+
+        <Style x:Key="GroupBoxStyle" TargetType="GroupBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="BorderBrush" Value="DarkGray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Page.Resources>
+
+    <!-- Page Layout -->
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+
+        <!-- Menu bar -->
+     <Rectangle Grid.Row="0" Fill="Gray" Height="40"/>
+
+        <!-- Content Pane -->
+        <ScrollViewer Grid.Row="1"  VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Width="800" Height="390" HorizontalScrollBarVisibility="Visible" Grid.RowSpan="2" >
+            <StackPanel>
+                <!-- Vraag 1 -->
+                <GroupBox Header="Vraag 1" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Ben je meer een introvert of extrovert?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Introvert" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Extrovert" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Vraag 2 -->
+                <GroupBox Header="Vraag 2" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Wil je dat je partner introverted of extroverted is?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Introvert" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Extrovert" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                     </StackPanel>
+                </GroupBox>
+
+            <!-- Vraag 3 -->
+                <GroupBox Header="Vraag 3" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Hoe belangrijk is religie voor jou?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Niet belangrijk" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="beetje belangrijk" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="erg belangrijk" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            <!-- Vraag 4 -->
+                <GroupBox Header="Vraag 4" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Hoe belangrijk is carrière voor jou?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Niet belangrijk" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Beetje belangrijk" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Erg belangrijk" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            <!-- Vraag 5 -->
+                <GroupBox Header="Vraag 5" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Wat is jouw 'love language'?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Woorden van bevestiging" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Iets doen voor een ander" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Cadeaus geven" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Quality Time" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Aanraking en intimiteit" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            <!-- Vraag 6 -->
+                <GroupBox Header="Vraag 6" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Wat wil je dat je partners 'love language' is?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Woorden van bevestiging" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Iets doen voor een ander" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Cadeaus geven" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Quality time" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Aanraking en intimiteit" Style="{StaticResource SmallRadioButton}"/>
+                         </StackPanel>
+                     </StackPanel>
+                 </GroupBox>
+
+            <!-- Vraag 7 -->
+                <GroupBox Header="Vraag 7" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Hoe belangrijk is fysieke fitness voor jou?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Niet belangrijk" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Beetje belangrijk" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Erg belangrijk" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            <!-- Vraag 8 -->
+                <GroupBox Header="Vraag 8" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Wat denk je over kinderen famillie plannen?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Ik wil geen kinderen" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Open tot discussie" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Ik wil kinderen" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            <!-- Vraag 9 -->
+                <GroupBox Header="Vraag 9" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Ben je op zoek naar een serieuze relatie?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Ja" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Nee" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            <!-- Vraag 10 -->
+                <GroupBox Header="Vraag 10" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Ben je een ochtend of avond mens?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Ochtend mens" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Avond mens" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Beide" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            <!-- Vraag 11 -->
+                <GroupBox Header="Vraag 11" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Heb je liever buitendoorse activiteiten, binnen activiteiten of allebij?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Buitendoorse activiteiten" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Binnen activiteiten" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Mix of beide" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                 </GroupBox>
+
+            <!-- Vraag 12 -->
+                <GroupBox Header="Vraag 12" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Wat is je religie?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Christelijk" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Moslim" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Joods" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Anders" Style="{StaticResource SmallRadioButton}"/>
+                         </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            <!-- Vraag 13 -->
+                <GroupBox Header="Vraag 13" Style="{StaticResource GroupBoxStyle}">
+                    <StackPanel>
+                        <TextBlock Text="Als je partner een huisdier heeft, hoe zou je dit vinden?" Style="{StaticResource LargeTextBlock}" />
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <RadioButton Content="Geen probleem" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Ligt aan het soort huisdier" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Ik heb allergiën" Style="{StaticResource SmallRadioButton}"/>
+                            <RadioButton Content="Liever geen huisdieren" Style="{StaticResource SmallRadioButton}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+            <!-- Hier plek voor meer vragen... -->
+            
+                
+                <!-- Opslaan antwoorden button -->
+             <Button Content="Opslaan" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Click="SaveAnswers_Click"/>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer bar -->
+    <Rectangle Grid.Row="2" Fill="Gray" Height="20" VerticalAlignment="Bottom"/>
+    </Grid>
+</Page>
