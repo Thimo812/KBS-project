@@ -113,13 +113,15 @@ namespace MatchingApp.DataAccess.SQL
                 var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
                 if (location != 0)
                 {
-					sql += $"AND Woonplaats = '{location}' "; 
-				}
-                if (minimumAge != null)
+                    if (location == LocationFilter.City) { sql += $"AND Woonplaats = 'Mountaintop' AND Land = 'Nederland' "; } //Moet uiteindelijk van het profiel komen boop
+                    if (location == LocationFilter.Country) { sql += $"AND Land = 'Nederland' "; }
+
+                }
+                if (minimumAge != 0)
                 {
                     sql += $"AND Geboortedatum <= '{AgetoDate(minimumAge)}' "; 
 				} 
-				if (maximumAge != null)
+				if (maximumAge != 0)
                 {
                     sql += $"AND Geboortedatum >= '{AgetoDate(maximumAge)}' ";
                 }
@@ -127,7 +129,7 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     foreach (var inclhobby in includedHobbys)
                     {
-                        sql += $"AND Hobby = {inclhobby} ";
+                        sql += $"AND Hobby = '{inclhobby}' ";
                     }
                 }
                 if (excludedHobbys != null)
