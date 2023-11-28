@@ -105,9 +105,10 @@ namespace MatchingApp.DataAccess.SQL
             return profiles;
 		}
 
-		public List<Profile> GetProfiles(LocationFilter location, int minimumAge, int maximumAge, 
+		public List<string> GetProfiles(LocationFilter location, int minimumAge, int maximumAge, 
 			List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
 		{
+            List<string> results = new();
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
@@ -160,13 +161,13 @@ namespace MatchingApp.DataAccess.SQL
                     {
                         while (reader.Read())
                         {
-                            Console.WriteLine(reader.GetString(0));
+                            results.Add(reader.GetString(0));
                         }
                     }
                 }
                 connection.Close();
             }
-            return null;
+            return results;
         }
 
 		public void SaveProfile(Profile profile)
