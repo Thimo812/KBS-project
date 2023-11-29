@@ -137,8 +137,6 @@
             </StackPanel>
         </ScrollViewer>
         
-        <ScrollViewer Margin="215,50,62,48">
-            <Label Name="filteredProfiles"/>
-        </ScrollViewer>
+        <ListBox Name="resultBox" Margin="215,50,78,48"/>
     </Grid>
 </Page>

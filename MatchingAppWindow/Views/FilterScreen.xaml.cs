@@ -48,7 +48,6 @@ namespace MatchingAppWindow.Views
                 foreach (Profile profile in repo.GetProfiles())
                 {
                     resultString += profile.UserName + "\n";
-                    filteredProfiles.Content = resultString;
                 }
             } 
             catch (SqlException sqlEx)
@@ -186,6 +185,8 @@ namespace MatchingAppWindow.Views
             }
         }
 
+        
+
         //Button to save the filteroptions and show the matching profiles
         private void FilterButton_Click(object sender, RoutedEventArgs e)
         {
@@ -201,7 +202,8 @@ namespace MatchingAppWindow.Views
                 resultString += result + "\n";
             }
 
-            filteredProfiles.Content = resultString;
+            resultBox.Visibility = Visibility.Visible;
+            resultBox.ItemsSource = results;
 
             location = 0;
             minimumAge = 18;
