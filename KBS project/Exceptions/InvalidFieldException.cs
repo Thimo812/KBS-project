@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KBS_project
+namespace KBS_project.Exceptions
 {
-    public class FieldEmptyException : Exception
+    public class InvalidFieldException : Exception
     {
-        public RegistrationFields Field {  get; set; }
-        public FieldEmptyException(RegistrationFields field)
+        public RegistrationFields Field { get; set; }
+        public InvalidFieldException(RegistrationFields field)
         {
             Field = field;
         }

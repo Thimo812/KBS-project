@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-
+using KBS_project.Exceptions;
 
 namespace MatchingApp.DataAccess.SQL
 {
@@ -193,10 +193,14 @@ namespace MatchingApp.DataAccess.SQL
 				}
 				connection.Close();
             }
+
+            StoreImages(profile);
         }
 
         public void StoreImages(Profile profile)
         {
+            if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
+
             CheckPhotoAlbum(profile);
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -288,6 +292,33 @@ namespace MatchingApp.DataAccess.SQL
 
                 connection.Close();
             }
+        }
+
+        public bool ValidateUserName(string userName)
+        {
+            using (SqlConnection connection = new SqlConnection())
+            {
+                var sql = "SELECT COUNT(*) as amount FROM Profiel WHERE username = @userName";
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+
+                        if (reader.GetInt32(0) == 0)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
         }
     }
 }

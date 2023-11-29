@@ -1,5 +1,6 @@
 ﻿using KBS_project;
 using KBS_project.Enums;
+using KBS_project.Exceptions;
 using MatchingApp.DataAccess.SQL;
 using Microsoft.Win32;
 using System;
@@ -30,9 +31,10 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class RegisterScreen : Page
     {
-        public Profile? Profile {  get; set; }
 
         private MatchingAppRepository Repo {  get; set; }
+
+        private List<Control> invalidFields;
 
         public ObservableCollection<BitmapImage> ImageList { get; set; } = new();
 
@@ -55,8 +57,6 @@ namespace MatchingAppWindow.Views
                     DeletePhotoButton.IsEnabled = false;
                 }
             };
-
-            imageBox.LostFocus += (object sender, RoutedEventArgs e) => imageBox.SelectedItem = null;
         }
 
         private void AddPhoto(object sender, RoutedEventArgs e)
@@ -65,7 +65,6 @@ namespace MatchingAppWindow.Views
             openFileDialog.Filter = "Image files|*.jpg;*.png";
             if (openFileDialog.ShowDialog() == true)
             {
-                //ImageList.Add(new Image() { ImagePath = openFileDialog.FileName });
                 ImageList.Add(new BitmapImage(new Uri(openFileDialog.FileName)));
             }
         }
@@ -73,108 +72,126 @@ namespace MatchingAppWindow.Views
         private void DeletePhoto(object sender, RoutedEventArgs e)
         {
             ImageList.RemoveAt(imageBox.SelectedIndex);
+            imageBox.SelectedItem = null;
         }
 
         private void RegisterAccount(object sender, RoutedEventArgs e)
         {
+            ClearErrorFields();
+
+            invalidFields = new List<Control>();
+
+            string userName = CheckTextField(UserNameInput, RegistrationFields.UserName);
+            string firstName = CheckTextField(FirstNameInput, RegistrationFields.FirstName);
+            string infix = CheckTextField(InfixInput, RegistrationFields.Infix);
+            string lastName = CheckTextField(LastNameInput, RegistrationFields.LastName);
+            string city = CheckTextField(CityInput, RegistrationFields.City);
+            string country = CheckTextField(CountryInput, RegistrationFields.Country);
+            string postalCode = CheckTextField(PostalCodeInput, RegistrationFields.PostalCode);
+            Gender gender = new();
+            SexualPreference sexualPreference = new();
+            DateTime birthDate = new();
+
             try
             {
-                string userName = RegistrationFieldsExtensions.Validate(UserNameInput.Text, RegistrationFields.UserName, Repo);
-                string firstName = RegistrationFieldsExtensions.Validate(FirstNameInput.Text, RegistrationFields.FirstName, Repo);
-                string infix = RegistrationFieldsExtensions.Validate(InfixInput.Text, RegistrationFields.Infix, Repo);
-                string lastName = RegistrationFieldsExtensions.Validate(LastNameInput.Text, RegistrationFields.LastName, Repo);
-                string city = RegistrationFieldsExtensions.Validate(CityInput.Text, RegistrationFields.City, Repo);
-                string country = RegistrationFieldsExtensions.Validate(CountryInput.Text, RegistrationFields.Country, Repo);
-                string postalCode = RegistrationFieldsExtensions.Validate(PostalCodeInput.Text, RegistrationFields.PostalCode, Repo);
-
-                DateTime birthdate = RegistrationFieldsExtensions.Validate(BirthDatePicker.SelectedDate);
-
-                List<bool?> genderRadioButtonValues = new List<bool?>() { MaleGender.IsChecked, FemaleGender.IsChecked, NonBinaryGender.IsChecked };
-                Gender gender = RegistrationFieldsExtensions.ValidateGender(genderRadioButtonValues);
-
-                List<bool?> sexRadioButtonValues = new List<bool?>() { MaleGender.IsChecked, FemaleGender.IsChecked, NonBinaryGender.IsChecked };
-                SexualPreference sexuality = RegistrationFieldsExtensions.ValidateSexuality(sexRadioButtonValues);
-
-                List<string> ImagePaths = ImageList.Select(x => x.UriSource.ToString()).ToList();
-
-                Profile = new Profile(userName, firstName, infix, lastName, birthdate, gender, sexuality, city, postalCode, country, ImagePaths);
-
-                ClearErrorFields();
-
-                ExitPage?.Invoke(this, EventArgs.Empty);
+                gender = RegistrationFieldsExtensions.ValidateGender(new List<bool?>() { MaleGender.IsChecked, FemaleGender.IsChecked, NonBinaryGender.IsChecked });
             }
-            catch (AggregateException aggEx)
+            catch (InvalidFieldException)
             {
-                foreach (var exception in aggEx.InnerExceptions)
-                {
-                    if (exception is FieldEmptyException fee)
-                    {
-                        AddValidationError(fee);
-                    }
+                invalidFields.AddRange(new List<Control>() { MaleGender, FemaleGender, NonBinaryGender } );
+            }
 
-                    ShowErrors();
-                }
+            try
+            {
+                sexualPreference = RegistrationFieldsExtensions.ValidateSexuality(new List<bool?>() { MaleSexuality.IsChecked, FemaleSexuality.IsChecked, EveryoneSexuality.IsChecked });
+            }
+            catch (InvalidFieldException)
+            {
+                invalidFields.AddRange(new List<Control>() { MaleSexuality, FemaleSexuality, EveryoneSexuality });
+            }
+
+            try
+            {
+                birthDate = RegistrationFieldsExtensions.Validate(BirthDatePicker.SelectedDate);
+            }
+            catch (InvalidFieldException)
+            {
+                invalidFields.Add(BirthDatePicker);
+            }
+
+            if (invalidFields.Count > 0)
+            {
+                ShowErrors();
+                return;
+            }
+
+            List<string> imagePaths = ImageList.Select(x => x.UriSource.ToString()).ToList();
+
+            MainWindow.profile = new Profile(userName, firstName, infix, lastName, birthDate, gender, sexualPreference, city, postalCode, country, imagePaths);
+
+            Repo.SaveProfile(MainWindow.profile);
+        }
+
+        private string CheckTextField(TextBox textBox, RegistrationFields field)
+        {
+            try
+            {
+                return RegistrationFieldsExtensions.Validate(textBox.Text, field, Repo);
+            }
+            catch (InvalidFieldException)
+            {
+                invalidFields.Add(textBox);
             }
             catch (SqlException sqlEx)
             {
                 MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
             }
-        }
-
-        private List<Control> validationErrors = new List<Control>();
-
-        private void AddValidationError(FieldEmptyException exception)
-        {
-            switch (exception.Field)
-            {
-                case RegistrationFields.UserName:
-                    validationErrors.Add(UserNameInput);
-                    break;
-                case RegistrationFields.FirstName:
-                    validationErrors.Add(FirstNameInput);
-                    break;
-                case RegistrationFields.LastName:
-                    validationErrors.Add(LastNameInput);
-                    break;
-                case RegistrationFields.Infix:
-                    validationErrors.Add(InfixInput);
-                    break;
-                case RegistrationFields.City:
-                    validationErrors.Add(CityInput);
-                    break;
-                case RegistrationFields.Country:
-                    validationErrors.Add(CountryInput);
-                    break;
-                case RegistrationFields.PostalCode:
-                    validationErrors.Add(PostalCodeInput);
-                    break;
-                case RegistrationFields.Gender:
-                    validationErrors.AddRange(new List<RadioButton>() { MaleGender, FemaleGender, NonBinaryGender });
-                    break;
-                case RegistrationFields.Sexuality:
-                    validationErrors.AddRange(new List<RadioButton>() { MaleSexuality, FemaleSexuality, EveryoneSexuality });
-                    break;
-
-            }
-
+            return String.Empty;
         }
 
         private void ClearErrorFields()
         {
-
-            foreach (Control field in validationErrors)
+            var fields = new List<Control>()
             {
-                field.Background = null;
-                field.BorderBrush = null;
+                UserNameInput,
+                FirstNameInput,
+                LastNameInput,
+                InfixInput,
+                CityInput,
+                CountryInput,
+                PostalCodeInput,
+                BirthDatePicker,
+                MaleGender,
+                FemaleGender,
+                NonBinaryGender,
+                MaleSexuality,
+                FemaleSexuality,
+                EveryoneSexuality
+            };
+
+            foreach (Control field in fields)
+            {
+                field.Background = Brushes.White;
+                field.BorderBrush = Brushes.Gray;
             }
+
+            errorMessage.Visibility = Visibility.Hidden;
         }
 
         private void ShowErrors()
         {
-            foreach (var field in validationErrors)
+            foreach (var field in invalidFields)
             {
                 DisplayFieldError(field);
             }
+
+            errorMessage.Visibility = Visibility.Visible;
+        }
+
+        private void DisplayFieldError(Control inputField)
+        {
+            inputField.Background = Brushes.Pink;
+            inputField.BorderBrush = Brushes.Red;
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -190,12 +207,6 @@ namespace MatchingAppWindow.Views
         private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
         {
 
-        }
-
-        private void DisplayFieldError(Control inputField)
-        {
-            inputField.Background = Brushes.Pink;
-            inputField.BorderBrush = Brushes.Red;
         }
 
         public event EventHandler ExitPage;

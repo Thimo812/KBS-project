@@ -198,7 +198,7 @@ namespace MatchingAppWindow.Views
             int.TryParse(MinAge.Text, out minimumAge);
             int.TryParse(MaxAge.Text, out maximumAge);
 
-            List<string>  results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
+            List<string> results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
             resultString = string.Empty;
 

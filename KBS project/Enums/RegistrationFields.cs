@@ -68,12 +68,12 @@ namespace KBS_project.Enums
 
             if (field.Equals(RegistrationFields.UserName) && repo.GetProfiles().Where(x => x.UserName == input).Count() > 0)
             {
-                throw new FieldEmptyException(field);
+                throw new InvalidFieldException(field);
             }
 
             if (!pattern.IsMatch(input))
             {
-                throw new FieldEmptyException(field);
+                throw new InvalidFieldException(field);
             }
 
             return input;
@@ -86,7 +86,7 @@ namespace KBS_project.Enums
 
             if (input == null || minimumBirthDate.CompareTo(input) <= 0)
             {
-                throw new FieldEmptyException(RegistrationFields.BirthDate);
+                throw new InvalidFieldException(RegistrationFields.BirthDate);
             }
             return (DateTime)input;
         }
@@ -97,7 +97,7 @@ namespace KBS_project.Enums
             {
                 if ((bool)radioButtons[i]) return (Gender)i;
             }
-            throw new FieldEmptyException(RegistrationFields.Gender);
+            throw new InvalidFieldException(RegistrationFields.Gender);
         }
 
         public static SexualPreference ValidateSexuality(List<bool?> radioButtons)
@@ -106,7 +106,7 @@ namespace KBS_project.Enums
             {
                 if ((bool)radioButtons[i]) return (SexualPreference)i;
             }
-            throw new FieldEmptyException(RegistrationFields.Sexuality);
+            throw new InvalidFieldException(RegistrationFields.Sexuality);
         }
     }
 }

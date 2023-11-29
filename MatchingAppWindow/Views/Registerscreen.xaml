@@ -38,6 +38,22 @@
         <Label Content="Gebruikersnaam:" Margin="98,151,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
         <TextBox x:Name="UserNameInput" Margin="256,152,0,0" TextWrapping="Wrap" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="142" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1" />
 
+        <Label Content="Woonplaats:" Margin="416,151,0,0" Height="31" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
+        <TextBox x:Name="CityInput" Margin="548,151,110,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" Grid.Column="1"/>
+
+        <Label Content="Voornaam:" Margin="98,188,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="FirstNameInput" Margin="256,189,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="90" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
+        <TextBox x:Name="InfixInput" Margin="350,189,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="48" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
+
+        <Label Content="Land:" Margin="416,188,0,0" Height="30" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
+        <TextBox x:Name="CountryInput" Margin="548,189,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" HorizontalAlignment="Left" Width="142" BorderThickness="2,2,2,2" RenderTransformOrigin="0.5,0.5" Grid.Column="1"/>
+
+        <Label Content="Achternaam:" Margin="98,226,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBox x:Name="LastNameInput" Margin="256,226,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="142" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
+
+        <Label Content="Postcode:" Margin="416,227,0,0" Height="30" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
+        <TextBox x:Name="PostalCodeInput" Margin="548,226,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" HorizontalAlignment="Left" Width="142" Grid.Column="1"/>
+
         <Label Content="Seksuele preferentie:" Margin="98,262,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
         <RadioButton x:Name="FemaleSexuality" GroupName="Sexuality" Content="Vrouwen" Margin="260,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
         <RadioButton x:Name="MaleSexuality" GroupName="Sexuality" Content="Mannen" Margin="0,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Center" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
@@ -51,25 +67,11 @@
         <Label Content="Geboortedatum:" Margin="98,336,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
         <DatePicker x:Name="BirthDatePicker" Margin="260,336,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" HorizontalAlignment="Left" Width="142" Height="32" BorderThickness="2,2,2,2" BorderBrush="#FFA3AEB9" Background="White" Grid.Column="1"/>
 
-        <Label Content="Postcode:" Margin="416,227,0,0" Height="30" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
-        <TextBox x:Name="PostalCodeInput" Margin="548,226,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" HorizontalAlignment="Left" Width="142" Grid.Column="1"/>
-
-        <Label Content="Woonplaats:" Margin="416,151,0,0" Height="31" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
-        <TextBox x:Name="CityInput" Margin="548,151,110,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" Grid.Column="1"/>
-
-        <Label Content="Voornaam:" Margin="98,188,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="FirstNameInput" Margin="256,189,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="90" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
-        <TextBox x:Name="InfixInput" Margin="350,189,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="48" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
-
-        <Label Content="Achternaam:" Margin="98,226,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="LastNameInput" Margin="256,226,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="142" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
-
-        <Label Content="Land:" Margin="416,188,0,0" Height="30" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
-        <TextBox x:Name="CountryInput" Margin="548,189,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" HorizontalAlignment="Left" Width="142" BorderThickness="2,2,2,2" RenderTransformOrigin="0.5,0.5" Grid.Column="1"/>
-
         <Label x:Name="ErrorLabel" Content="Alle verplichte velden invullen" HorizontalAlignment="Center" Height="33" Margin="0,339,0,0" VerticalAlignment="Top" Width="276" HorizontalContentAlignment="Center" FontSize="15" Foreground="Red" Visibility="Hidden" Grid.ColumnSpan="2"/>
 
         <Button x:Name="CreateAccountButton" Content="Account aanmaken" Margin="0,383,0,0" Click="RegisterAccount" FontSize="15" HorizontalAlignment="Center" Width="264" Background="White" Grid.Column="1" Height="34" VerticalAlignment="Top"/>
+
+        <Label x:Name="errorMessage" Content="Incorrecte waarden ingevoerd" Grid.ColumnSpan="2" Margin="0,383,39,0" Foreground="Red" FontWeight="Bold" FontSize="15" HorizontalAlignment="Right" Width="224" Height="30" VerticalAlignment="Top" Visibility="Hidden" />
 
     </Grid>
 </Page>
