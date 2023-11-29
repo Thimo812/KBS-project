@@ -58,7 +58,7 @@ namespace MatchingAppWindow.Views
         }
 
         //Button to extend or collapse the filteroptions
-        private void buttonExpandFilters_Click(object sender, RoutedEventArgs e)
+        private void ButtonExpandFilters_Click(object sender, RoutedEventArgs e)
         {
             if (filterPanel.Visibility == Visibility.Collapsed)
             {
@@ -210,8 +210,8 @@ namespace MatchingAppWindow.Views
             filteredProfiles.Content = resultString;
 
             location = 0;
-            minimumAge = 0;
-            maximumAge = 0;
+            minimumAge = 18;
+            maximumAge = 200;
             includedHobbies.Clear();
             excludedHobbies.Clear();
             includedDiets.Clear();

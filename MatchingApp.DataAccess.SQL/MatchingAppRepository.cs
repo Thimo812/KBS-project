@@ -26,13 +26,13 @@ namespace MatchingApp.DataAccess.SQL
 			builder.TrustServerCertificate = false;
 		}
 
-		public string AgetoDate(int age)
+		public string AgeToDate(int age)
 		{
             var today = DateTime.Today;
             var byear = today.Year - age;
 			DateTime date = new DateTime(byear, today.Month, today.Day);
-            var datestring = date.ToString("yyyy-MM-dd");
-            return datestring;
+            var dateString = date.ToString("yyyy-MM-dd");
+            return dateString;
         }
 		public Profile GetProfile(string userName)
 		{
@@ -120,38 +120,38 @@ namespace MatchingApp.DataAccess.SQL
                 }
                 if (minimumAge != 0)
                 {
-                    sql += $"AND Geboortedatum <= '{AgetoDate(minimumAge)}' "; 
+                    sql += $"AND Geboortedatum <= '{AgeToDate(minimumAge)}' "; 
 				} 
 				if (maximumAge != 0)
                 {
-                    sql += $"AND Geboortedatum >= '{AgetoDate(maximumAge)}' ";
+                    sql += $"AND Geboortedatum >= '{AgeToDate(maximumAge)}' ";
                 }
                 if (includedHobbys != null)
                 {
-                    foreach (var inclhobby in includedHobbys)
+                    foreach (var inclHobby in includedHobbys)
                     {
-                        sql += $"AND Hobby = '{inclhobby}' ";
+                        sql += $"AND Hobby = '{inclHobby}' ";
                     }
                 }
                 if (excludedHobbys != null)
                 {
-                    foreach (var exlhobby in excludedHobbys)
+                    foreach (var exlHobby in excludedHobbys)
                     {
-                        sql += $"AND NOT Hobby = '{exlhobby}' ";
+                        sql += $"AND NOT Hobby = '{exlHobby}' ";
                     }
                 }
                 if (includedDiets != null)
                 {
-                    foreach (var incldiet in includedDiets)
+                    foreach (var inclDiet in includedDiets)
                     {
-                        sql += $"AND Dieet = '{incldiet}' ";
+                        sql += $"AND Dieet = '{inclDiet}' ";
                     }
                 }
                 if (excludedDiets != null)
                 {
-                    foreach (var exldiet in excludedDiets)
+                    foreach (var exlDiet in excludedDiets)
                     {
-                        sql += $"AND NOT Dieet = '{exldiet}' ";
+                        sql += $"AND NOT Dieet = '{exlDiet}' ";
                     }
                 }
                 connection.Open();

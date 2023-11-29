@@ -50,11 +50,11 @@ namespace MatchingAppWindow.Views
             { 
                 if (imageBox.SelectedItem != null)
                 {
-                    DeletePhotoButton.IsEnabled = true;
+                    deletePhotoButton.IsEnabled = true;
                 }
                 else
                 {
-                    DeletePhotoButton.IsEnabled = false;
+                    deletePhotoButton.IsEnabled = false;
                 }
             };
         }
@@ -130,6 +130,8 @@ namespace MatchingAppWindow.Views
             MainWindow.profile = new Profile(userName, firstName, infix, lastName, birthDate, gender, sexualPreference, city, postalCode, country, imagePaths);
 
             Repo.SaveProfile(MainWindow.profile);
+
+            ExitPage?.Invoke(this, EventArgs.Empty);
         }
 
         private string CheckTextField(TextBox textBox, RegistrationFields field)
@@ -146,7 +148,9 @@ namespace MatchingAppWindow.Views
             {
                 MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
             }
+
             return String.Empty;
+
         }
 
         private void ClearErrorFields()
@@ -208,7 +212,8 @@ namespace MatchingAppWindow.Views
         {
 
         }
-
+        
         public event EventHandler ExitPage;
+
     }
 }
