@@ -21,24 +21,9 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class ProfileEditScreen : Page
     {
-        private Profile? profile;
-        string? description;
-        string? hobbies;
-        string? education;
-        string? school;
-        string? employment;
-        string? diet;
 
         public ProfileEditScreen()
         {
-            profile = MainWindow.profile;
-            if (profile != null ) {
-                BeschrijvingBox.Text = profile.Description;
-                OpleidingBox.Text = profile.degree;
-                SchoolBox.Text = profile.School;
-                WerkplekBox.Text = profile.WorkPlace;
-                DieetBox.Text = profile.Diet;
-            }
             InitializeComponent();
         }
 
@@ -48,18 +33,6 @@ namespace MatchingAppWindow.Views
 
         private void SwitchToAccountEditScreen(object sender, RoutedEventArgs e)
         {
-        }
-
-        private void ConfirmChanges(object sender, RoutedEventArgs e)
-        {
-            profile.Description = BeschrijvingBox.Text;
-            profile.degree = OpleidingBox.Text;
-            profile.School = SchoolBox.Text;
-            profile.WorkPlace  = WerkplekBox.Text;
-            profile.Diet = DieetBox.Text;
-
-            MainWindow.profile = profile;
-
         }
     }
 }

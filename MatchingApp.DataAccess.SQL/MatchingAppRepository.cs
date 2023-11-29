@@ -78,12 +78,23 @@ namespace MatchingApp.DataAccess.SQL
 						SexualPreference pref = (SexualPreference) int.Parse(reader.GetString(5));
 						Gender gender = (Gender) int.Parse((reader.GetString(6)));
 						string city = reader.GetString(7);
+                        string? description = reader.GetTextReader(8).ReadLine();
+                        string? degree = reader.GetTextReader(9).ReadLine();
+                        string? school = reader.GetTextReader(10).ReadLine();
+                        string? workplace = reader.GetTextReader(11).ReadLine();
+                        string? diet = reader.GetTextReader(12).ReadLine();
+                        string? vaxed = reader.GetTextReader(13).ReadLine();
                         string country = reader.GetString(14);
                         string postalCode = reader.GetString(15);
 
 
 
 						profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode);
+                        profile.Description = description;
+                        profile.degree = degree;
+                        profile.School = school;
+                        profile.WorkPlace = workplace;
+                        profile.Diet = diet;
 					}
 				}
 				connection.Close();
@@ -206,13 +217,13 @@ namespace MatchingApp.DataAccess.SQL
             }
         }
 
-        public void updateProfile(Profile profile) 
+        public void UpdateProfile(Profile profile) 
         {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = "UPDATE profiel SET Gebruikersnaam = @Gebruikersnaam, Naam = @Naam, Achternaam = @Achternaam, Tussenvoegsels = @Tussenvoegsels," +
-                    " Geboortedatum = @Geboortedatum, Seksuele_preferentie = @Sekspref, Geslacht = @Geslacht, Woonplaats = @Woonplaats, Land = @Land, Postcode = @Postcode" +
-                    "WHERE Gebruikersnaam = @Gebruikersnaam";
+                    " Geboortedatum = @Geboortedatum, Seksuele_preferentie = @Sekspref, Geslacht = @Geslacht, Woonplaats = @Woonplaats, Land = @Land, Postcode = @Postcode," +
+                    " Beschrijving = @Beschrijving, Opleiding = @Opleiding, School = @School, Werkplek = @Werkplek, Dieet = @Dieet WHERE Gebruikersnaam = @Gebruikersnaam";
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -221,11 +232,16 @@ namespace MatchingApp.DataAccess.SQL
                     command.Parameters.AddWithValue("Achternaam", profile.LastName);
                     command.Parameters.AddWithValue("Tussenvoegsels", profile.Infix);
                     command.Parameters.AddWithValue("Geboortedatum", $"{profile.BirthDate.Year}-{profile.BirthDate.Month}-{profile.BirthDate.Day}");
-                    command.Parameters.AddWithValue("sekspref", profile.SexualPreference);
+                    command.Parameters.AddWithValue("Sekspref", profile.SexualPreference);
                     command.Parameters.AddWithValue("Geslacht", profile.Gender);
                     command.Parameters.AddWithValue("Woonplaats", profile.City);
-                    command.Parameters.AddWithValue("land", profile.Country);
-                    command.Parameters.AddWithValue("postcode", profile.PostalCode);
+                    command.Parameters.AddWithValue("Land", profile.Country);
+                    command.Parameters.AddWithValue("Postcode", profile.PostalCode);
+                    command.Parameters.AddWithValue("Beschrijving", profile.Description);
+                    command.Parameters.AddWithValue("Opleiding", profile.degree);
+                    command.Parameters.AddWithValue("School", profile.School);
+                    command.Parameters.AddWithValue("Werkplek", profile.WorkPlace);
+                    command.Parameters.AddWithValue("Dieet", profile.Diet);
                     command.ExecuteNonQuery();
                 }
                 connection.Close();

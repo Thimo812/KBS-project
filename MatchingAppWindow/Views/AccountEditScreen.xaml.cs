@@ -22,23 +22,8 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class AccountEditScreen : Page
     {
-        private Profile? profile;
-        DateTime? birthdate;
-        string? residence;
-        Gender? gender;
-        SexualPreference? sexualPreference;
-
-
         public AccountEditScreen()
         {
-            profile = MainWindow.profile;
-            if (profile != null)
-            {
-                BirthDatePicker.DisplayDate = profile.BirthDate;
-                CityBox.Text = profile.City;
-                SetGender(profile.Gender);
-                setPreference(profile.SexualPreference);
-            }
             InitializeComponent();
         }
 
@@ -53,13 +38,10 @@ namespace MatchingAppWindow.Views
 
         private void ConfirmChanges(object sender, RoutedEventArgs e)
         {
-            birthdate = BirthDatePicker.DisplayDate;
-            residence = CityBox.Text;
-            gender = GetGender();
-            sexualPreference = getSexuality();
+            
         }
 
-        private void SetGender(Gender gender)
+        public void SetGender(Gender gender)
         {
             switch (gender)
             {
@@ -75,7 +57,7 @@ namespace MatchingAppWindow.Views
             }
         }
 
-        private void setPreference(SexualPreference sp)
+        public void setPreference(SexualPreference sp)
         {
             switch(sp)
             {
@@ -91,7 +73,7 @@ namespace MatchingAppWindow.Views
             }
         }
 
-        private Gender GetGender()
+        public Gender GetGender()
         {
             if ((bool)MaleGender.IsChecked)
             {
@@ -108,7 +90,7 @@ namespace MatchingAppWindow.Views
             return Gender.Male;
         }
 
-        private SexualPreference getSexuality()
+        public SexualPreference getSexuality()
         {
             if ((bool)MaleSexuality.IsChecked)
             {

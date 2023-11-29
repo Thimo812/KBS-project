@@ -18,6 +18,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MatchingAppWindow;
+using KBS_project.Enums;
+using System.Security.Policy;
 
 namespace MatchingAppWindow
 {
@@ -39,21 +41,15 @@ namespace MatchingAppWindow
         public MainWindow()
         {
             repository = new MatchingAppRepository();
+            InsertDummyProfile();
 
             InitializeComponent();
 
             startScreen.RegisterButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
             registerScreen.CreateAccountButton.Click += registerAccount;
 
-            ProfileEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
-            ProfileEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
-
-            AccountEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
-            AccountEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
-
-            PhotoEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
-            PhotoEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
-
+            InitizalizeScreens();
+            AddProfileDataToScreens();
 
             Content = ProfileEditScreen;
         }
@@ -80,5 +76,73 @@ namespace MatchingAppWindow
            Content = PhotoEditScreen;
         }
 
+        public void ConfirmProfileChanges(object sender, RoutedEventArgs e)
+        {
+            if (profile != null)
+            {
+                profile.Description = ProfileEditScreen.BeschrijvingBox.Text;
+                profile.degree = ProfileEditScreen.OpleidingBox.Text;
+                profile.School = ProfileEditScreen.SchoolBox.Text;
+                profile.WorkPlace = ProfileEditScreen.WerkplekBox.Text;
+                profile.Diet = ProfileEditScreen.DieetBox.Text;
+
+                repository.UpdateProfile(profile);
+                AddProfileDataToScreens();
+            }
+        }
+
+        public void ConfirmAccountChanges(object sender, RoutedEventArgs e)
+        {
+            if (profile != null)
+            {
+                profile.BirthDate = AccountEditScreen.BirthDatePicker.DisplayDate;
+                profile.Country = AccountEditScreen.CountryBox.Text;
+                profile.City = AccountEditScreen.CityBox.Text;
+                profile.PostalCode = AccountEditScreen.PostalCodeBox.Text;
+                profile.Gender = AccountEditScreen.GetGender();
+                profile.SexualPreference = AccountEditScreen.getSexuality();
+
+                repository.UpdateProfile(profile);
+                AddProfileDataToScreens();
+            }
+        }
+
+        public void InitizalizeScreens()
+        {
+            ProfileEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
+            ProfileEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
+            ProfileEditScreen.ConfirmButton.Click += ConfirmProfileChanges;
+
+            AccountEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
+            AccountEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
+            AccountEditScreen.ConfirmButton.Click += ConfirmAccountChanges;
+
+            PhotoEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
+            PhotoEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
+        }
+
+        public void AddProfileDataToScreens()
+        {
+            if (profile != null)
+            {
+                ProfileEditScreen.BeschrijvingBox.Text = profile.Description;
+                ProfileEditScreen.OpleidingBox.Text = profile.degree;
+                ProfileEditScreen.SchoolBox.Text = profile.School;
+                ProfileEditScreen.WerkplekBox.Text = profile.WorkPlace;
+                ProfileEditScreen.DieetBox.Text = profile.Diet;
+
+                AccountEditScreen.BirthDatePicker.Text = profile.BirthDate.ToString();
+                AccountEditScreen.CountryBox.Text = profile.Country;
+                AccountEditScreen.CityBox.Text = profile.City;
+                AccountEditScreen.PostalCodeBox.Text = profile.PostalCode;
+                AccountEditScreen.SetGender(profile.Gender);
+                AccountEditScreen.setPreference(profile.SexualPreference);
+            }
+        }
+
+        public void InsertDummyProfile()
+        {
+            profile = repository.GetProfile("Henk");
+        }
     }
 }
