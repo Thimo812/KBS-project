@@ -208,7 +208,6 @@ namespace MatchingAppWindow.Views
                 resultString += result + "\n";
             }
 
-            resultBox.Visibility = Visibility.Visible;
             resultBox.ItemsSource = results;
 
             location = 0;
