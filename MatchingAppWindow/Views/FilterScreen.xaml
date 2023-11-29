@@ -16,26 +16,26 @@
                     Content="Locatie"
                     FontWeight="Bold"
                 />
-                <CheckBox 
+                <RadioButton 
                     Name="Global"
                     Content="Globaal" 
                     Height="20" 
                     Checked="LocationChecked"
                 />
-                <CheckBox 
+                <RadioButton 
                     Name="Country"
                     Content="Zelfde land" 
                     Height="20"
                     Checked="LocationChecked"
                 />
-                <CheckBox 
+                <RadioButton 
                     Name="City"
                     Content="Zelfde woonplaats" 
                     Height="27"
                     Checked="LocationChecked"
                 />
 
-                <!--Filter hobbies-->
+                <!--Filter hobby's-->
                 <Label 
                     Content="Hobby"
                     FontWeight="Bold"
@@ -51,18 +51,21 @@
                     Content="Lezen" 
                     Height="22" 
                     Checked="HobbyChecked"
+                    Unchecked="Unchecked"
                 />
                 <CheckBox
                     Name="Cycling"
                     Content="Fietsen" 
                     Height="21"
                     Checked="HobbyChecked"
+                    Unchecked="Unchecked"
                 />
                 <CheckBox 
                     Name="Cooking"
                     Content="Koken" 
                     Height="27"
                     Checked="HobbyChecked"
+                    Unchecked="Unchecked"
                 />
 
                 <!--Filter diets-->
@@ -81,33 +84,15 @@
                     Content="Vegetarisch" 
                     Height="22" 
                     Checked="DietChecked"
+                    Unchecked="Unchecked"
                 />
                 <CheckBox 
                     Name="Vegan"
                     Content="Veganistisch" 
                     Height="21"
                     Checked="DietChecked"
+                    Unchecked="Unchecked"
                 />
-
-                <!--Filter sexual preference-->
-                <!--<Label 
-                    Content="Seksuele voorkeur"
-                    FontWeight="Bold"
-                />
-                <Button
-                    Name="buttonSexualPreference"
-                    Content="wel"
-                    Background="green" 
-                    Click="IncOrExcButton_Click"
-                />
-                <CheckBox  
-                    Content="Man"
-                    Height="22"
-                />
-                <CheckBox 
-                    Content="Vrouw" 
-                    Height="22"
-                />-->
 
                 <!--Filter minimum age-->
                 <Label 
@@ -115,24 +100,30 @@
                     FontWeight="Bold"
                 />
                 <TextBox
-                    Name="MinAge"    
+                    Name="MinAge"
+                    Text="18" 
                 />
-
-                <!--Filter maxmum age-->
+                <Button
+                    Name="saveMinAgeButton"
+                    Content="opslaan"
+                    Background="CornflowerBlue" 
+                    Click="ChangeAgeButton" 
+                    
+                />
+                <!--Filter maximum age-->
                 <Label
                     Content="Maximale leeftijd"
                     FontWeight="Bold"
                 />
                 <TextBox
                     Name="MaxAge"    
+                    Text="200"
                 />
-
-                <!--Save filteroptions-->
                 <Button
-                    Name="buttonFilter"
-                    Content="Filter"
-                    Background="CornflowerBlue"
-                    Click="FilterButton_Click"
+                    Name="saveMaxAgeButton"
+                    Content="opslaan"
+                    Background="CornflowerBlue" 
+                    Click="ChangeAgeButton" 
                 />
             </StackPanel>
         </ScrollViewer>

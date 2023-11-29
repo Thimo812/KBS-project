@@ -112,11 +112,10 @@ namespace MatchingApp.DataAccess.SQL
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
-                if (location != 0)
+                if (location != LocationFilter.Global)
                 {
                     if (location == LocationFilter.City) { sql += $"AND Woonplaats = 'Mountaintop' AND Land = 'Nederland' "; } //Moet uiteindelijk van het profiel komen boop
                     if (location == LocationFilter.Country) { sql += $"AND Land = 'Nederland' "; }
-
                 }
                 if (minimumAge != 0)
                 {
@@ -126,33 +125,81 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     sql += $"AND Geboortedatum >= '{AgetoDate(maximumAge)}' ";
                 }
-                if (includedHobbys != null)
+                if (includedHobbys.Count > 0)
                 {
+                    sql += "AND (";
+
+                    bool isFirstHobby = true;
+
                     foreach (var inclhobby in includedHobbys)
                     {
-                        sql += $"AND Hobby = '{inclhobby}' ";
+                        if (!isFirstHobby)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Hobby = '{inclhobby}'";
+                        isFirstHobby = false;
                     }
+
+                    sql += ")";
                 }
-                if (excludedHobbys != null)
+                if (excludedHobbys.Count > 0)
                 {
-                    foreach (var exlhobby in excludedHobbys)
+                    sql += "AND NOT (";
+
+                    bool isFirstHobby = true;
+
+                    foreach (var exclHobby in excludedHobbys)
                     {
-                        sql += $"AND NOT Hobby = '{exlhobby}' ";
+                        if (!isFirstHobby)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Hobby = '{exclHobby}'";
+                        isFirstHobby = false;
                     }
+
+                    sql += ")";
                 }
-                if (includedDiets != null)
+                if (includedDiets.Count > 0)
                 {
-                    foreach (var incldiet in includedDiets)
+                    sql += "AND (";
+
+                    bool isFirstDiet = true;
+
+                    foreach (var inclDiet in includedDiets)
                     {
-                        sql += $"AND Dieet = '{incldiet}' ";
+                        if (!isFirstDiet)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Dieet = '{inclDiet}'";
+                        isFirstDiet = false;
                     }
+
+                    sql += ")";
                 }
-                if (excludedDiets != null)
+                if (excludedDiets.Count > 0)
                 {
-                    foreach (var exldiet in excludedDiets)
+                    sql += "AND NOT (";
+
+                    bool isFirstDiet = true;
+
+                    foreach (var exclDiet in excludedDiets)
                     {
-                        sql += $"AND NOT Dieet = '{exldiet}' ";
+                        if (!isFirstDiet)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Dieet = '{exclDiet}'";
+                        isFirstDiet = false;
                     }
+
+                    sql += ")";
                 }
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))

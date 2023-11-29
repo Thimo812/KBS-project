@@ -18,6 +18,7 @@ using KBS_project;
 using MatchingApp.DataAccess.SQL;
 using System.Security.Policy;
 using System.Data.SqlClient;
+using System.Windows.Controls.Primitives;
 
 namespace MatchingAppWindow.Views
 {
@@ -78,16 +79,20 @@ namespace MatchingAppWindow.Views
             Button button = (Button)sender;
             if ((string)button.Content == "wel")
             {
-                excludedHobbies.Clear();
+                ExcludeHobbys();
+                includedHobbies.Clear();
                 button.Background = Brushes.Red;
                 button.Content = "niet";
             }
             else if((string)button.Content == "niet")
             {
-                includedHobbies.Clear();
+                IncludeHobbys();
+                excludedHobbies.Clear();
                 button.Background = Brushes.Green;
                 button.Content = "wel";
             }
+
+            Filter();
         }
 
         //Button to include or exclude diets
@@ -96,22 +101,26 @@ namespace MatchingAppWindow.Views
             Button button = (Button)sender;
             if ((string)button.Content == "wel")
             {
-                excludedDiets.Clear();
+                ExcludeDiets();
+                includedDiets.Clear();
                 button.Background = Brushes.Red;
                 button.Content = "niet";
             }
             else if ((string)button.Content == "niet")
             {
-                includedDiets.Clear();
+                IncludeDiets();
+                excludedDiets.Clear();
                 button.Background = Brushes.Green;
                 button.Content = "wel";
             }
+
+            Filter();
         }
 
-        //CheckBoxes to filter on location
+        //RadioButtons to filter on location
         private void LocationChecked(object sender, RoutedEventArgs e)
         {
-            CheckBox senderLoc = (CheckBox)sender;
+            RadioButton senderLoc = (RadioButton)sender;
 
             if(senderLoc.Name == "Global")
             {
@@ -125,78 +134,82 @@ namespace MatchingAppWindow.Views
             {
                 location = LocationFilter.City;
             }
+
+            Filter();
         }
 
         //CheckBoxes to filter on hobbies
         private void HobbyChecked(object sender, RoutedEventArgs e)
         {
-            CheckBox senderHobby = (CheckBox)sender;
             if ((string)buttonHobby.Content == "wel")
             {
-                if (senderHobby.Name == "Reading")
-                {
-                    includedHobbies.Add(Interest.Reading);
-                }
-                if (senderHobby.Name == "Cycling")
-                {
-                    includedHobbies.Add(Interest.Cycling);
-                }
-                if (senderHobby.Name == "Cooking")
-                {
-                    includedHobbies.Add(Interest.Cooking);
-                }
+                IncludeHobbys();
             }
             else if((string)buttonHobby.Content == "niet")
             {
-                if (senderHobby.Name == "Reading")
-                {
-                    excludedHobbies.Add(Interest.Reading);
-                }
-                if (senderHobby.Name == "Cycling")
-                {
-                    excludedHobbies.Add(Interest.Cycling);
-                }
-                if (senderHobby.Name == "Cooking")
-                {
-                    excludedHobbies.Add(Interest.Cooking);
-                }
+                ExcludeHobbys();
             }
+
+            Filter();
         }
 
         //CheckBoxes to filter on diet
         private void DietChecked(object sender, RoutedEventArgs e)
         {
-            CheckBox senderDiet = (CheckBox)sender;
-
             if((string)buttonDiet.Content == "wel")
             {
-                if (senderDiet.Name == "Vegetarian")
-                {
-                    includedDiets.Add(Diet.Vegetarian);
-                }
-                if (senderDiet.Name == "Vegan")
-                {
-                    includedDiets.Add(Diet.Vegan);
-                }
+                IncludeDiets();
             }
             else if ((string)buttonDiet.Content == "niet")
             {
-                if (senderDiet.Name == "Vegetarian")
-                {
-                    excludedDiets.Add(Diet.Vegetarian);
-                }
-                if (senderDiet.Name == "Vegan")
-                {
-                    excludedDiets.Add(Diet.Vegan);
-                }
+                ExcludeDiets();
             }
+
+            Filter();
         }
 
-        //Button to save the filteroptions and show the matching profiles
-        private void FilterButton_Click(object sender, RoutedEventArgs e)
+        private void Unchecked(object sender, RoutedEventArgs e)
         {
-            int.TryParse(MinAge.Text, out minimumAge);
-            int.TryParse(MaxAge.Text, out maximumAge);
+            Filter();
+        }
+
+        private void ChangeAgeButton(object sender, RoutedEventArgs e)
+        {
+            if (int.TryParse(MinAge.Text, out int minAge) && int.TryParse(MaxAge.Text, out int maxAge))
+            {
+                if (minAge >= 18 && minAge <= 200 && minAge <= maxAge)
+                {
+                    MinAge.Background = Brushes.White;
+                    minimumAge = minAge;
+                }
+                else
+                {
+                    MinAge.Background = Brushes.PaleVioletRed;
+                }
+
+                if (maxAge >= 18 && maxAge <= 200 && maxAge >= minAge)
+                {
+                    MaxAge.Background = Brushes.White;
+                    maximumAge = maxAge;
+                }
+                else
+                {
+                    MaxAge.Background = Brushes.PaleVioletRed;
+                }
+            }
+            else
+            {
+                MinAge.Background = Brushes.PaleVioletRed;
+                MaxAge.Background = Brushes.PaleVioletRed;
+            }
+
+            Filter();
+        }
+
+        //Save the filteroptions and show the matching profiles
+        private void Filter()
+        {
+            ClearUncheckedAttributes();
 
             List<string>  results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
@@ -208,14 +221,91 @@ namespace MatchingAppWindow.Views
             }
 
             filteredProfiles.Content = resultString;
+        }
 
-            location = 0;
-            minimumAge = 0;
-            maximumAge = 0;
-            includedHobbies.Clear();
-            excludedHobbies.Clear();
-            includedDiets.Clear();
-            excludedDiets.Clear();
+        private void ClearUncheckedAttributes()
+        {
+            if (Reading.IsChecked == false)
+            {
+                includedHobbies.Remove(Interest.Reading);
+                excludedHobbies.Remove(Interest.Reading);
+            }
+            if (Cycling.IsChecked == false)
+            {
+                includedHobbies.Remove(Interest.Cycling);
+                excludedHobbies.Remove(Interest.Cycling);
+            }
+            if (Cooking.IsChecked == false)
+            {
+                includedHobbies.Remove(Interest.Cooking);
+                excludedHobbies.Remove(Interest.Cooking);
+            }
+            if (Vegetarian.IsChecked == false)
+            {
+                includedDiets.Remove(Diet.Vegetarian);
+                excludedDiets.Remove(Diet.Vegetarian);
+            }
+            if (Vegan.IsChecked == false)
+            {
+                includedDiets.Remove(Diet.Vegan);
+                includedDiets.Remove(Diet.Vegan);
+            }
+        }
+
+        private void IncludeDiets()
+        {
+            if (Vegetarian.IsChecked == true)
+            {
+                includedDiets.Add(Diet.Vegetarian);
+            }
+            if (Vegan.IsChecked == true)
+            {
+                includedDiets.Add(Diet.Vegan);
+            }
+        }
+
+        private void ExcludeDiets()
+        {
+            if (Vegetarian.IsChecked == true)
+            {
+                excludedDiets.Add(Diet.Vegetarian);
+            }
+            if (Vegan.IsChecked == true)
+            {
+                excludedDiets.Add(Diet.Vegan);
+            }
+        }
+
+        private void IncludeHobbys()
+        {
+            if (Reading.IsChecked == true)
+            {
+                includedHobbies.Add(Interest.Reading);
+            }
+            if (Cycling.IsChecked == true)
+            {
+                includedHobbies.Add(Interest.Cycling);
+            }
+            if (Cooking.IsChecked == true)
+            {
+                includedHobbies.Add(Interest.Cooking);
+            }
+        }
+
+        private void ExcludeHobbys()
+        {
+            if (Reading.IsChecked == true)
+            {
+                excludedHobbies.Add(Interest.Reading);
+            }
+            if (Cycling.IsChecked == true)
+            {
+                excludedHobbies.Add(Interest.Cycling);
+            }
+            if (Cooking.IsChecked == true)
+            {
+                excludedHobbies.Add(Interest.Cooking);
+            }
         }
     }
 }
