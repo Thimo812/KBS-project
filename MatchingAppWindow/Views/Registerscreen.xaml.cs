@@ -48,11 +48,11 @@ namespace MatchingAppWindow.Views
             { 
                 if (imageBox.SelectedItem != null)
                 {
-                    DeletePhotoButton.IsEnabled = true;
+                    deletePhotoButton.IsEnabled = true;
                 }
                 else
                 {
-                    DeletePhotoButton.IsEnabled = false;
+                    deletePhotoButton.IsEnabled = false;
                 }
             };
 
@@ -79,29 +79,29 @@ namespace MatchingAppWindow.Views
         {
             try
             {
-                string userName = RegistrationFieldsExtensions.Validate(UserNameInput.Text, RegistrationFields.UserName, Repo);
-                string firstName = RegistrationFieldsExtensions.Validate(FirstNameInput.Text, RegistrationFields.FirstName, Repo);
-                string infix = RegistrationFieldsExtensions.Validate(InfixInput.Text, RegistrationFields.Infix, Repo);
-                string lastName = RegistrationFieldsExtensions.Validate(LastNameInput.Text, RegistrationFields.LastName, Repo);
-                string city = RegistrationFieldsExtensions.Validate(CityInput.Text, RegistrationFields.City, Repo);
-                string country = RegistrationFieldsExtensions.Validate(CountryInput.Text, RegistrationFields.Country, Repo);
-                string postalCode = RegistrationFieldsExtensions.Validate(PostalCodeInput.Text, RegistrationFields.PostalCode, Repo);
+                string userName = RegistrationFieldsExtensions.Validate(userNameInput.Text, RegistrationFields.UserName, Repo);
+                string firstName = RegistrationFieldsExtensions.Validate(firstNameInput.Text, RegistrationFields.FirstName, Repo);
+                string infix = RegistrationFieldsExtensions.Validate(infixInput.Text, RegistrationFields.Infix, Repo);
+                string lastName = RegistrationFieldsExtensions.Validate(lastNameInput.Text, RegistrationFields.LastName, Repo);
+                string city = RegistrationFieldsExtensions.Validate(cityInput.Text, RegistrationFields.City, Repo);
+                string country = RegistrationFieldsExtensions.Validate(countryInput.Text, RegistrationFields.Country, Repo);
+                string postalCode = RegistrationFieldsExtensions.Validate(postalCodeInput.Text, RegistrationFields.PostalCode, Repo);
 
-                DateTime birthdate = RegistrationFieldsExtensions.Validate(BirthDatePicker.SelectedDate);
+                DateTime birthdate = RegistrationFieldsExtensions.Validate(birthDatePicker.SelectedDate);
 
-                List<bool?> genderRadioButtonValues = new List<bool?>() { MaleGender.IsChecked, FemaleGender.IsChecked, NonBinaryGender.IsChecked };
+                List<bool?> genderRadioButtonValues = new List<bool?>() { maleGender.IsChecked, femaleGender.IsChecked, nonBinaryGender.IsChecked };
                 Gender gender = RegistrationFieldsExtensions.ValidateGender(genderRadioButtonValues);
 
-                List<bool?> sexRadioButtonValues = new List<bool?>() { MaleGender.IsChecked, FemaleGender.IsChecked, NonBinaryGender.IsChecked };
+                List<bool?> sexRadioButtonValues = new List<bool?>() { maleGender.IsChecked, femaleGender.IsChecked, nonBinaryGender.IsChecked };
                 SexualPreference sexuality = RegistrationFieldsExtensions.ValidateSexuality(sexRadioButtonValues);
 
-                List<string> ImagePaths = ImageList.Select(x => x.UriSource.ToString()).ToList();
+                List<string> imagePaths = ImageList.Select(x => x.UriSource.ToString()).ToList();
 
-                Profile = new Profile(userName, firstName, infix, lastName, birthdate, gender, sexuality, city, postalCode, country, ImagePaths);
+                Profile = new Profile(userName, firstName, infix, lastName, birthdate, gender, sexuality, city, postalCode, country, imagePaths);
 
                 ClearErrorFields();
 
-                ExitPage?.Invoke(this, EventArgs.Empty);
+                exitPage?.Invoke(this, EventArgs.Empty);
             }
             catch (AggregateException aggEx)
             {
@@ -128,31 +128,31 @@ namespace MatchingAppWindow.Views
             switch (exception.Field)
             {
                 case RegistrationFields.UserName:
-                    validationErrors.Add(UserNameInput);
+                    validationErrors.Add(userNameInput);
                     break;
                 case RegistrationFields.FirstName:
-                    validationErrors.Add(FirstNameInput);
+                    validationErrors.Add(firstNameInput);
                     break;
                 case RegistrationFields.LastName:
-                    validationErrors.Add(LastNameInput);
+                    validationErrors.Add(lastNameInput);
                     break;
                 case RegistrationFields.Infix:
-                    validationErrors.Add(InfixInput);
+                    validationErrors.Add(infixInput);
                     break;
                 case RegistrationFields.City:
-                    validationErrors.Add(CityInput);
+                    validationErrors.Add(cityInput);
                     break;
                 case RegistrationFields.Country:
-                    validationErrors.Add(CountryInput);
+                    validationErrors.Add(countryInput);
                     break;
                 case RegistrationFields.PostalCode:
-                    validationErrors.Add(PostalCodeInput);
+                    validationErrors.Add(postalCodeInput);
                     break;
                 case RegistrationFields.Gender:
-                    validationErrors.AddRange(new List<RadioButton>() { MaleGender, FemaleGender, NonBinaryGender });
+                    validationErrors.AddRange(new List<RadioButton>() { maleGender, femaleGender, nonBinaryGender });
                     break;
                 case RegistrationFields.Sexuality:
-                    validationErrors.AddRange(new List<RadioButton>() { MaleSexuality, FemaleSexuality, EveryoneSexuality });
+                    validationErrors.AddRange(new List<RadioButton>() { maleSexuality, femaleSexuality, everyoneSexuality });
                     break;
 
             }
@@ -198,6 +198,6 @@ namespace MatchingAppWindow.Views
             inputField.BorderBrush = Brushes.Red;
         }
 
-        public event EventHandler ExitPage;
+        public event EventHandler exitPage;
     }
 }

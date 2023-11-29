@@ -44,10 +44,10 @@ namespace MatchingAppWindow
 
             InitializeComponent();
 
-            startScreen.RegisterButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
-            startScreen.LoginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
+            startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
+            startScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
 
-            registerScreen.ExitPage += (object sender, EventArgs e) => Content = filterScreen;
+            registerScreen.exitPage += (object sender, EventArgs e) => Content = filterScreen;
 
             Content = startScreen;
         }

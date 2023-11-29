@@ -33,39 +33,39 @@
         </ListBox>
 
         <Button x:Name="AddPhotoButton" Content="Foto toevoegen" Margin="680,70,0,0" BorderThickness="3,3,3,3" Click="AddPhoto" HorizontalAlignment="Left" Width="100" Height="24" VerticalAlignment="Top" Grid.Column="1"/>
-        <Button x:Name="DeletePhotoButton" Content="Foto Verwijderen" Margin="680,99,0,0" BorderThickness="3,3,3,3" Click="DeletePhoto" HorizontalAlignment="Left" Width="100" Height="24" VerticalAlignment="Top" IsEnabled="False" Grid.Column="1"/>
+        <Button x:Name="deletePhotoButton" Content="Foto Verwijderen" Margin="680,99,0,0" BorderThickness="3,3,3,3" Click="DeletePhoto" HorizontalAlignment="Left" Width="100" Height="24" VerticalAlignment="Top" IsEnabled="False" Grid.Column="1"/>
 
         <Label Content="Gebruikersnaam:" Margin="98,151,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="UserNameInput" Margin="256,152,0,0" TextWrapping="Wrap" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="142" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1" />
+        <TextBox x:Name="userNameInput" Margin="256,152,0,0" TextWrapping="Wrap" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="142" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1" />
 
         <Label Content="Seksuele preferentie:" Margin="98,262,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <RadioButton x:Name="FemaleSexuality" GroupName="Sexuality" Content="Vrouwen" Margin="260,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="MaleSexuality" GroupName="Sexuality" Content="Mannen" Margin="0,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Center" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="EveryoneSexuality" GroupName="Sexuality" Content="Iedereen" Margin="442,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.474,0.158" Grid.Column="1"/>
+        <RadioButton x:Name="femaleSexuality" GroupName="Sexuality" Content="Vrouwen" Margin="260,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
+        <RadioButton x:Name="maleSexuality" GroupName="Sexuality" Content="Mannen" Margin="0,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Center" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
+        <RadioButton x:Name="everyoneSexuality" GroupName="Sexuality" Content="Iedereen" Margin="442,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.474,0.158" Grid.Column="1"/>
 
         <Label Content="Geslacht:" Margin="98,299,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <RadioButton x:Name="FemaleGender" GroupName="Gender" Content="Vrouw" Margin="260,304,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="MaleGender" GroupName="Gender" Content="Man" Margin="0,305,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Center" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="NonBinaryGender" GroupName="Gender" Content="Non-binair" Margin="442,305,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="98" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
+        <RadioButton x:Name="femaleGender" GroupName="Gender" Content="Vrouw" Margin="260,304,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
+        <RadioButton x:Name="maleGender" GroupName="Gender" Content="Man" Margin="0,305,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Center" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
+        <RadioButton x:Name="nonBinaryGender" GroupName="Gender" Content="Non-binair" Margin="442,305,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="98" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
 
         <Label Content="Geboortedatum:" Margin="98,336,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <DatePicker x:Name="BirthDatePicker" Margin="260,336,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" HorizontalAlignment="Left" Width="142" Height="32" BorderThickness="2,2,2,2" BorderBrush="#FFA3AEB9" Background="White" Grid.Column="1"/>
+        <DatePicker x:Name="birthDatePicker" Margin="260,336,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" HorizontalAlignment="Left" Width="142" Height="32" BorderThickness="2,2,2,2" BorderBrush="#FFA3AEB9" Background="White" Grid.Column="1"/>
 
         <Label Content="Postcode:" Margin="416,227,0,0" Height="30" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
-        <TextBox x:Name="PostalCodeInput" Margin="548,226,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" HorizontalAlignment="Left" Width="142" Grid.Column="1"/>
+        <TextBox x:Name="postalCodeInput" Margin="548,226,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" HorizontalAlignment="Left" Width="142" Grid.Column="1"/>
 
         <Label Content="Woonplaats:" Margin="416,151,0,0" Height="31" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
-        <TextBox x:Name="CityInput" Margin="548,151,110,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" Grid.Column="1"/>
+        <TextBox x:Name="cityInput" Margin="548,151,110,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" Grid.Column="1"/>
 
         <Label Content="Voornaam:" Margin="98,188,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="FirstNameInput" Margin="256,189,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="90" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
-        <TextBox x:Name="InfixInput" Margin="350,189,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="48" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
+        <TextBox x:Name="firstNameInput" Margin="256,189,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="90" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
+        <TextBox x:Name="infixInput" Margin="350,189,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="48" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
 
         <Label Content="Achternaam:" Margin="98,226,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="LastNameInput" Margin="256,226,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="142" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
+        <TextBox x:Name="lastNameInput" Margin="256,226,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="142" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
 
         <Label Content="Land:" Margin="416,188,0,0" Height="30" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
-        <TextBox x:Name="CountryInput" Margin="548,189,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" HorizontalAlignment="Left" Width="142" BorderThickness="2,2,2,2" RenderTransformOrigin="0.5,0.5" Grid.Column="1"/>
+        <TextBox x:Name="countryInput" Margin="548,189,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" HorizontalAlignment="Left" Width="142" BorderThickness="2,2,2,2" RenderTransformOrigin="0.5,0.5" Grid.Column="1"/>
 
         <Label x:Name="ErrorLabel" Content="Alle verplichte velden invullen" HorizontalAlignment="Center" Height="33" Margin="0,339,0,0" VerticalAlignment="Top" Width="276" HorizontalContentAlignment="Center" FontSize="15" Foreground="Red" Visibility="Hidden" Grid.ColumnSpan="2"/>
 

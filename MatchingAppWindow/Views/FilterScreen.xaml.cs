@@ -58,7 +58,7 @@ namespace MatchingAppWindow.Views
         }
 
         //Button to extend or collapse the filteroptions
-        private void buttonExpandFilters_Click(object sender, RoutedEventArgs e)
+        private void ButtonExpandFilters_Click(object sender, RoutedEventArgs e)
         {
             if (filterPanel.Visibility == Visibility.Collapsed)
             {
@@ -133,30 +133,24 @@ namespace MatchingAppWindow.Views
             CheckBox senderHobby = (CheckBox)sender;
             if ((string)buttonHobby.Content == "wel")
             {
-                if (senderHobby.Name == "Reading")
                 {
                     includedHobbies.Add(Interest.Reading);
                 }
-                if (senderHobby.Name == "Cycling")
                 {
                     includedHobbies.Add(Interest.Cycling);
                 }
-                if (senderHobby.Name == "Cooking")
                 {
                     includedHobbies.Add(Interest.Cooking);
                 }
             }
             else if((string)buttonHobby.Content == "niet")
             {
-                if (senderHobby.Name == "Reading")
                 {
                     excludedHobbies.Add(Interest.Reading);
                 }
-                if (senderHobby.Name == "Cycling")
                 {
                     excludedHobbies.Add(Interest.Cycling);
                 }
-                if (senderHobby.Name == "Cooking")
                 {
                     excludedHobbies.Add(Interest.Cooking);
                 }
@@ -210,8 +204,8 @@ namespace MatchingAppWindow.Views
             filteredProfiles.Content = resultString;
 
             location = 0;
-            minimumAge = 0;
-            maximumAge = 0;
+            minimumAge = 18;
+            maximumAge = 200;
             includedHobbies.Clear();
             excludedHobbies.Clear();
             includedDiets.Clear();
