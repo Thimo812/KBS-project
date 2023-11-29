@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBS_project;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
@@ -12,9 +13,11 @@ namespace MatchingAppWindow
     public partial class Matchingquiz : Page
     {
         private readonly AnswerManager answerManager = new AnswerManager();
+        IMatchingAppRepository Repo {  get; }
 
-        public Matchingquiz()
+        public Matchingquiz(IMatchingAppRepository repo)
         {
+            Repo = repo;
             InitializeComponent();
             WireUpRadioButtons();
             var radioButtons = FindRadioButtons(this);
@@ -134,24 +137,16 @@ namespace MatchingAppWindow
                  .Except(savedAnswers.Select(x => GetQuestion(x)))
                  .ToList();
 
-            
-                
-
-            //   var unansweredQuestions1 = FindRadioButtons(this).Where(radioButton => radioButton.IsChecked == false).Select(radioButton => $"{GetQuestion(radioButton)}");
-
-
-            Console.WriteLine($"RadioButton: Content = {unansweredQuestions} ");
-            int hasElements = unansweredQuestions.Count;
-            if (hasElements > 0)
+            if (unansweredQuestions.Count > 0)
             {
-
                 MessageBox.Show($"Please answer the following questions:\n\n{string.Join("\n", unansweredQuestions)}");
             }
             else
             {
+                var answerList = savedAnswers.Select(x => GetButtonIndex(x)).ToList();
 
-
-                MessageBox.Show($"Saved Answers:\n\n{string.Join("\n", savedAnswers)}");
+                MainWindow.profile.QuizAnswers = answerList;
+                Repo.SaveMatchingQuiz(answerList);
             }
         }
     

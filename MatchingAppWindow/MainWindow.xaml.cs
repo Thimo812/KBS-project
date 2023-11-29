@@ -33,16 +33,18 @@ namespace MatchingAppWindow
 
         private StartScreen startScreen = new();
         private RegisterScreen registerScreen;
-        private Matchingquiz matchingQuiz = new();
+        private Matchingquiz matchingQuiz;
         private Navigation navigation = new();
         private FilterScreen filterScreen = new();
 
         public MainWindow()
-
         {
             repository = new MatchingAppRepository();
 
+            profile = repository.GetProfile("Thimo812");
+
             registerScreen = new(repository);
+            matchingQuiz = new(repository);
 
             InitializeComponent();
 

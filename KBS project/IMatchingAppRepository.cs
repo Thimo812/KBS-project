@@ -18,5 +18,10 @@ namespace KBS_project
 		public Profile GetProfile(string userName);
 
 		public void SaveProfile( Profile profile);
+
+		public void StoreImages(Profile profile);
+
+		public void SaveMatchingQuiz(List<int> answers);
+
 	}
 }

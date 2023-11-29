@@ -30,6 +30,7 @@ namespace KBS_project
 		public string Description { get; set; }
 		public List<Interest> Interests { get; set; }
 		public List<string> Images { get; set; }
+        public List<int> QuizAnswers {  get; set; }
 
         
 
