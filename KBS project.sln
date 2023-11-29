@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingAppCore", "KBS proj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchingAppWindow", "MatchingAppWindow\MatchingAppWindow.csproj", "{923013EF-3A26-453B-B517-463A857E0D4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchingAppTest", "MatchingAppTest\MatchingAppTest.csproj", "{2E55732F-073C-48B1-B7A7-8077D3E53DB3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MatchingTest", "MatchingTest\MatchingTest.csproj", "{E844D66F-9B8E-4CA5-99A9-0AB70FD142EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{923013EF-3A26-453B-B517-463A857E0D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{923013EF-3A26-453B-B517-463A857E0D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{923013EF-3A26-453B-B517-463A857E0D4F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E55732F-073C-48B1-B7A7-8077D3E53DB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E55732F-073C-48B1-B7A7-8077D3E53DB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E55732F-073C-48B1-B7A7-8077D3E53DB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E55732F-073C-48B1-B7A7-8077D3E53DB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E844D66F-9B8E-4CA5-99A9-0AB70FD142EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E844D66F-9B8E-4CA5-99A9-0AB70FD142EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E844D66F-9B8E-4CA5-99A9-0AB70FD142EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E844D66F-9B8E-4CA5-99A9-0AB70FD142EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

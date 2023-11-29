@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography.X509Certificates;
 using KBS_project.Enums;
 
@@ -6,7 +7,12 @@ namespace KBS_project
 {
     public class Profile
 	{
-		public string UserName { get; set; }
+        
+        public AnswerManager Answers { get; } = new AnswerManager();
+        
+
+
+        public string UserName { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public DateTime BirthDate { get; set; }
@@ -24,7 +30,9 @@ namespace KBS_project
 		public List<Interest> Interests { get; set; }
 		public List<string> Images { get; set; }
 
-		public Profile(string userName, string firstName, string lastName, DateTime birthDate, Gender gender, 
+        
+
+        public Profile(string userName, string firstName, string lastName, DateTime birthDate, Gender gender, 
 			SexualPreference sexualPreference, string postalCode, string country,string adress, string city)
 		{
 			UserName = userName;
@@ -38,5 +46,39 @@ namespace KBS_project
 			Adress = adress;
 			City = city;
 		}
+
+        public IEnumerable<string> GetQuestions()
+        {
+            return Answers.GetQuestions();
+        }
+
+        public int GetMatchingNumber(Profile otherProfile)
+        {
+            int matchingCount = 0;
+            int totalQuestions = 0;
+
+            // Iterate through each saved answer in the AnswerManager
+            foreach (var question in otherProfile.Answers.GetQuestions())
+            {
+                totalQuestions++;
+
+                // antwoord voor de vraag
+                var userAnswer = this.Answers.GetAnswer(question);
+                // antwoord voor de vraag andere profiel
+                var otherProfileAnswer = otherProfile.Answers.GetAnswer(question);
+
+                // Compare answers and increment matchingCount if they are the same
+                if (userAnswer != null && otherProfileAnswer != null && userAnswer == otherProfileAnswer)
+                {
+                    matchingCount++;
+                }
+            }
+
+            // Calculate the matching percentage
+            double matchingPercentage = (double)matchingCount / totalQuestions * 100;
+
+            return (int)matchingPercentage;
+        }
+    
 	}
 }

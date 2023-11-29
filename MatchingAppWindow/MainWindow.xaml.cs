@@ -1,4 +1,6 @@
-﻿using MatchingAppWindow.Views;
+﻿using KBS_project.Enums;
+using KBS_project;
+using MatchingAppWindow.Views;
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
 using System;
@@ -24,7 +26,9 @@ namespace MatchingAppWindow
     public partial class MainWindow : Window
     {
         public MainWindow()
+
         {
+
             InitializeComponent();
 
             var startScreen = new StartScreen();
@@ -34,12 +38,17 @@ namespace MatchingAppWindow
             startScreen.RegisterButton.Click += SwitchToRegisterScreen;
 
             Content = matchingQuiz;
+
+
         }
+
 
         private void SwitchToRegisterScreen(Object? sender, EventArgs args)
         {
             Content = new RegisterScreen();
         }
+
+      
 
 
     }
