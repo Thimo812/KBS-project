@@ -73,45 +73,40 @@ namespace MatchingAppWindow.Views
             }
         }
 
-        //Button to include or exclude hobbies
-        private void IncOrExcHobby_Click(object sender, RoutedEventArgs e)
+        private void IncOrExcHobby_Click(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            Button button = (Button)sender;
-            if ((string)button.Content == "wel")
+            Slider button = (Slider)sender;
+            if (button.Value == 1)
             {
                 ExcludeHobbys();
                 includedHobbies.Clear();
                 button.Background = Brushes.Red;
-                button.Content = "niet";
             }
-            else if((string)button.Content == "niet")
+            else if (button.Value == 0)
             {
                 IncludeHobbys();
                 excludedHobbies.Clear();
                 button.Background = Brushes.Green;
-                button.Content = "wel";
             }
 
             Filter();
         }
 
         //Button to include or exclude diets
-        private void IncOrExcDiet_Click(object sender, RoutedEventArgs e)
+        private void IncOrExcDiet_Click(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            Button button = (Button)sender;
-            if ((string)button.Content == "wel")
+            Slider button = (Slider)sender;
+            if (button.Value == 1)
             {
                 ExcludeDiets();
                 includedDiets.Clear();
                 button.Background = Brushes.Red;
-                button.Content = "niet";
             }
-            else if ((string)button.Content == "niet")
+            else if (button.Value == 0)
             {
                 IncludeDiets();
                 excludedDiets.Clear();
                 button.Background = Brushes.Green;
-                button.Content = "wel";
             }
 
             Filter();
@@ -141,11 +136,11 @@ namespace MatchingAppWindow.Views
         //CheckBoxes to filter on hobbies
         private void HobbyChecked(object sender, RoutedEventArgs e)
         {
-            if ((string)buttonHobby.Content == "wel")
+            if (buttonHobby.Value == 0)
             {
                 IncludeHobbys();
             }
-            else if((string)buttonHobby.Content == "niet")
+            else if(buttonHobby.Value == 1)
             {
                 ExcludeHobbys();
             }
@@ -156,11 +151,11 @@ namespace MatchingAppWindow.Views
         //CheckBoxes to filter on diet
         private void DietChecked(object sender, RoutedEventArgs e)
         {
-            if((string)buttonDiet.Content == "wel")
+            if(buttonDiet.Value == 0)
             {
                 IncludeDiets();
             }
-            else if ((string)buttonDiet.Content == "niet")
+            else if (buttonDiet.Value == 1)
             {
                 ExcludeDiets();
             }

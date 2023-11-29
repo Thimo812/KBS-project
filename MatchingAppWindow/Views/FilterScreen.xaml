@@ -8,7 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Button Name="filterButton" Content=">" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top" Click="buttonExpandFilters_Click" RenderTransformOrigin="-5.202,0.503"/>
-        <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="20,50, 20, 20" MaxHeight="500" MaxWidth="300" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top">
+        <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="20,49,0,0" MaxHeight="500" MaxWidth="300" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top" Width="138">
             <StackPanel Background="LightGray">
 
                 <!--Filter location-->
@@ -40,11 +40,16 @@
                     Content="Hobby"
                     FontWeight="Bold"
                 />
-                <Button
+                <Slider
                     Name="buttonHobby"
-                    Content="wel"
-                    Background="green" 
-                    Click="IncOrExcHobby_Click"
+                    Maximum="1"
+                    Width="50" 
+                    Background="Green" 
+                    HorizontalAlignment="Left" 
+                    Margin="5,0,0,5"
+                    BorderThickness="2"
+                    BorderBrush="Gray" 
+                    ValueChanged="IncOrExcHobby_Click"
                 />
                 <CheckBox 
                     Name="Reading"
@@ -73,11 +78,16 @@
                     Content="Dieet"
                     FontWeight="Bold"
                 />
-                <Button
+                <Slider
                     Name="buttonDiet"
-                    Content="wel"
-                    Background="green" 
-                    Click="IncOrExcDiet_Click"
+                    Maximum="1"
+                    Width="50" 
+                    Background="Green" 
+                    HorizontalAlignment="Left" 
+                    Margin="5,0,0,5"
+                    BorderThickness="2"
+                    BorderBrush="Gray" 
+                    ValueChanged="IncOrExcDiet_Click"
                 />
                 <CheckBox 
                     Name="Vegetarian"
@@ -127,8 +137,8 @@
                 />
             </StackPanel>
         </ScrollViewer>
-        
-        <ScrollViewer Margin="215,50,62,48">
+
+        <ScrollViewer Margin="210,50,50,50">
             <Label Name="filteredProfiles"/>
         </ScrollViewer>
     </Grid>
