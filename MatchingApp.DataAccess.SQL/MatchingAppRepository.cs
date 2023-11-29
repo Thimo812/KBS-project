@@ -289,5 +289,52 @@ namespace MatchingApp.DataAccess.SQL
                 connection.Close();
             }
         }
+
+        public void SaveMatchingQuiz(List<int> answers)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"SELECT count(*) FROM MatchingQuiz WHERE ";
+                for (int i = 1; i <= 13; i++)
+                {
+                    sql = sql + $"Vraag{i} = @vraag{i} AND ";
+                }
+                sql = sql + "1 = 1";
+
+                int amount;
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    for (int i = 0; i < answers.Count; i++)
+                    {
+                        command.Parameters.AddWithValue($"vraag{i + 1}", answers[i]);
+                    }
+                    command.ExecuteNonQuery();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        amount = reader.GetInt16(0);
+                    }
+                }
+
+                if (amount > 0)
+                {
+                    connection.Close();
+                    return;
+                }
+
+                sql = $"INSERT INTO MatchingQuiz (Vraag1, Vraag2, Vraag3, Vraag4, Vraag5, Vraag6, Vraag7, Vraag8, Vraag9, Vraag10, Vraag11, Vraag12, Vraag13) VALUES (@Vraag1, @Vraag2, @Vraag3, @Vraag4, @Vraag5, @Vraag6, @Vraag7, @Vraag8, @Vraag9, @Vraag10, @Vraag11, @Vraag12, @Vraag13)";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    for (int i = 0; i < answers.Count; i++)
+                    {
+                        command.Parameters.AddWithValue($"Vraag{i + 1}", answers[i]);
+                    }
+                }
+            }
+        }
     }
 }
