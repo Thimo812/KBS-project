@@ -14,13 +14,14 @@ namespace KBS_project
 
         public string UserName { get; set; }
 		public string FirstName { get; set; }
+
+        public string Infix {  get; set; }
 		public string LastName { get; set; }
 		public DateTime BirthDate { get; set; }
 		public Gender Gender { get; set; }
 		public SexualPreference SexualPreference { get; set; }
 		public string PostalCode { get; set; }
 		public string Country { get; set; }
-		public string Adress { get; set; }
 		public string City { get; set; }
 		public string School { get; set; }
 		public string degree { get; set; }
@@ -32,19 +33,20 @@ namespace KBS_project
 
         
 
-        public Profile(string userName, string firstName, string lastName, DateTime birthDate, Gender gender, 
-			SexualPreference sexualPreference, string postalCode, string country,string adress, string city)
+        public Profile(string userName, string firstName, string infix, string lastName, DateTime birthDate, Gender gender, 
+			SexualPreference sexualPreference, string postalCode, string country, string city, List<string> images)
 		{
 			UserName = userName;
 			FirstName = firstName;
+            Infix = infix;
 			LastName = lastName;
 			BirthDate = birthDate;
 			Gender = gender;
 			SexualPreference = sexualPreference;
 			PostalCode = postalCode;
 			Country = country;
-			Adress = adress;
 			City = city;
+            Images = images;
 		}
 
         public IEnumerable<string> GetQuestions()

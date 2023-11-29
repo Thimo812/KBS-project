@@ -33,7 +33,7 @@ namespace MatchingAppWindow
 
         private StartScreen startScreen = new();
         private RegisterScreen registerScreen;
-        private Matchingquiz matchingquiz = new();
+        private Matchingquiz matchingQuiz = new();
         private Navigation navigation = new();
         private FilterScreen filterScreen = new();
 
@@ -50,7 +50,7 @@ namespace MatchingAppWindow
             startScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
 
             registerScreen.exitPage += (object sender, EventArgs e) => Content = filterScreen;
-            startScreen.RegisterButton.Click += SwitchToRegisterScreen;
+            startScreen.registerButton.Click += SwitchToRegisterScreen;
 
             Content = matchingQuiz;
         }

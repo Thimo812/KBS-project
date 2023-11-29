@@ -62,7 +62,7 @@ namespace MatchingApp.DataAccess.SQL
 
 
 
-						profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode, new List<string>());
+						profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, postalCode, country, city, new List<string>());
 					}
 				}
 				connection.Close();
