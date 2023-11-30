@@ -47,7 +47,7 @@ namespace MatchingAppWindow
             startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
             startScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
 
-            registerScreen.exitPage += (object sender, EventArgs e) => Content = filterScreen;
+            registerScreen.ExitPage += (object sender, EventArgs e) => Content = filterScreen;
 
             Content = startScreen;
         }

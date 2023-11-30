@@ -296,9 +296,9 @@ namespace MatchingApp.DataAccess.SQL
 
         public bool ValidateUserName(string userName)
         {
-            using (SqlConnection connection = new SqlConnection())
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT COUNT(*) as amount FROM Profiel WHERE username = @userName";
+                var sql = "SELECT COUNT(*) as amount FROM Profiel WHERE Gebruikersnaam = @userName";
 
                 connection.Open();
 
