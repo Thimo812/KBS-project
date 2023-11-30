@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button Name="filterButton" Content=">" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top" Click="buttonExpandFilters_Click" RenderTransformOrigin="-5.202,0.503"/>
+        <Button Name="filterButton" Content=">" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top" Click="ButtonExpandFilters_Click" RenderTransformOrigin="-5.202,0.503"/>
         <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="20,49,0,0" MaxHeight="500" MaxWidth="300" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top" Width="138">
             <StackPanel Background="LightGray">
 

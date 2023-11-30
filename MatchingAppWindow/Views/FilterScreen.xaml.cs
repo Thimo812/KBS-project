@@ -37,7 +37,7 @@ namespace MatchingAppWindow.Views
         private List<Interest> excludedHobbies = new();
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
-        private string resultString;
+        private string? resultString;
 
         public FilterScreen()
         {
@@ -59,7 +59,7 @@ namespace MatchingAppWindow.Views
         }
 
         //Button to extend or collapse the filteroptions
-        private void buttonExpandFilters_Click(object sender, RoutedEventArgs e)
+        private void ButtonExpandFilters_Click(object sender, RoutedEventArgs e)
         {
             if (filterPanel.Visibility == Visibility.Collapsed)
             {
