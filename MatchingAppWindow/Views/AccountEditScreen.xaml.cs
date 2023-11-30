@@ -38,7 +38,17 @@ namespace MatchingAppWindow.Views
 
         private void ConfirmChanges(object sender, RoutedEventArgs e)
         {
-            
+            if (MainWindow.profile != null)
+            {
+                MainWindow.profile.BirthDate = BirthDatePicker.DisplayDate;
+                MainWindow.profile.Country = CountryBox.Text;
+                MainWindow.profile.City = CityBox.Text;
+                MainWindow.profile.PostalCode = PostalCodeBox.Text;
+                MainWindow.profile.Gender = GetGender();
+                MainWindow.profile.SexualPreference = getSexuality();
+
+                MainWindow.repository.UpdateProfile(MainWindow.profile);
+            }
         }
 
         public void SetGender(Gender gender)

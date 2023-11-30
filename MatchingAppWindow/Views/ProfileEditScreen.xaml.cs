@@ -34,5 +34,19 @@ namespace MatchingAppWindow.Views
         private void SwitchToAccountEditScreen(object sender, RoutedEventArgs e)
         {
         }
+
+        private void ConfirmChanges(object sender, RoutedEventArgs e)
+        {
+            if (MainWindow.profile != null)
+            {
+                MainWindow.profile.Description =BeschrijvingBox.Text;
+                MainWindow.profile.degree = OpleidingBox.Text;
+                MainWindow.profile.School = SchoolBox.Text;
+                MainWindow.profile.WorkPlace = WerkplekBox.Text;
+                MainWindow.profile.Diet = DieetBox.Text;
+
+                MainWindow.repository.UpdateProfile(MainWindow.profile);
+            }
+        }
     }
 }

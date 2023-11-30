@@ -37,7 +37,7 @@ namespace MatchingAppWindow
         private PhotoEditScreen PhotoEditScreen = new();
 
         public static Profile? profile;
-        private MatchingAppRepository repository;
+        public static MatchingAppRepository repository;
         public MainWindow()
         {
             repository = new MatchingAppRepository();
@@ -76,46 +76,13 @@ namespace MatchingAppWindow
            Content = PhotoEditScreen;
         }
 
-        public void ConfirmProfileChanges(object sender, RoutedEventArgs e)
-        {
-            if (profile != null)
-            {
-                profile.Description = ProfileEditScreen.BeschrijvingBox.Text;
-                profile.degree = ProfileEditScreen.OpleidingBox.Text;
-                profile.School = ProfileEditScreen.SchoolBox.Text;
-                profile.WorkPlace = ProfileEditScreen.WerkplekBox.Text;
-                profile.Diet = ProfileEditScreen.DieetBox.Text;
-
-                repository.UpdateProfile(profile);
-                AddProfileDataToScreens();
-            }
-        }
-
-        public void ConfirmAccountChanges(object sender, RoutedEventArgs e)
-        {
-            if (profile != null)
-            {
-                profile.BirthDate = AccountEditScreen.BirthDatePicker.DisplayDate;
-                profile.Country = AccountEditScreen.CountryBox.Text;
-                profile.City = AccountEditScreen.CityBox.Text;
-                profile.PostalCode = AccountEditScreen.PostalCodeBox.Text;
-                profile.Gender = AccountEditScreen.GetGender();
-                profile.SexualPreference = AccountEditScreen.getSexuality();
-
-                repository.UpdateProfile(profile);
-                AddProfileDataToScreens();
-            }
-        }
-
         public void InitizalizeScreens()
         {
             ProfileEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
             ProfileEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
-            ProfileEditScreen.ConfirmButton.Click += ConfirmProfileChanges;
-
+            
             AccountEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
             AccountEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
-            AccountEditScreen.ConfirmButton.Click += ConfirmAccountChanges;
 
             PhotoEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
             PhotoEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
