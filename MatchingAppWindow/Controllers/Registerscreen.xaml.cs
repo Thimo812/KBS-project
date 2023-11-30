@@ -110,7 +110,7 @@ namespace MatchingAppWindow.Views
                 invalidFields.Add(birthDatePicker);
             }
 
-            if (invalidFields.Count > 0)
+            if (invalidFields.Count > 0 || ImageList.Count == 0)
             {
                 ShowErrors();
                 return;
