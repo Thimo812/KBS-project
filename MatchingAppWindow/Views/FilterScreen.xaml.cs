@@ -51,7 +51,7 @@ namespace MatchingAppWindow.Views
                     resultString += profile.UserName + "\n";
                     filteredProfiles.Content = resultString;
                 }
-            } 
+            }
             catch (SqlException sqlEx)
             {
                 MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
@@ -117,15 +117,15 @@ namespace MatchingAppWindow.Views
         {
             RadioButton senderLoc = (RadioButton)sender;
 
-            if(senderLoc.Name == "Global")
+            if (senderLoc.Name == "Global")
             {
                 location = LocationFilter.Global;
             }
-            if(senderLoc.Name == "Country")
+            if (senderLoc.Name == "Country")
             {
                 location = LocationFilter.Country;
             }
-            if(senderLoc.Name == "City")
+            if (senderLoc.Name == "City")
             {
                 location = LocationFilter.City;
             }
@@ -140,7 +140,7 @@ namespace MatchingAppWindow.Views
             {
                 IncludeHobbys();
             }
-            else if(buttonHobby.Value == 1)
+            else if (buttonHobby.Value == 1)
             {
                 ExcludeHobbys();
             }
@@ -151,7 +151,7 @@ namespace MatchingAppWindow.Views
         //CheckBoxes to filter on diet
         private void DietChecked(object sender, RoutedEventArgs e)
         {
-            if(buttonDiet.Value == 0)
+            if (buttonDiet.Value == 0)
             {
                 IncludeDiets();
             }
@@ -206,11 +206,11 @@ namespace MatchingAppWindow.Views
         {
             ClearUncheckedAttributes();
 
-            List<string>  results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
+            List<string> results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
             resultString = string.Empty;
 
-            foreach(string result in results)
+            foreach (string result in results)
             {
                 resultString += result + "\n";
             }
@@ -249,11 +249,11 @@ namespace MatchingAppWindow.Views
 
         private void IncludeDiets()
         {
-            if (Vegetarian.IsChecked == true)
+            if (Vegetarian.IsChecked == true && !includedDiets.Contains(Diet.Vegetarian))
             {
                 includedDiets.Add(Diet.Vegetarian);
             }
-            if (Vegan.IsChecked == true)
+            if (Vegan.IsChecked == true && !includedDiets.Contains(Diet.Vegan))
             {
                 includedDiets.Add(Diet.Vegan);
             }
@@ -261,11 +261,11 @@ namespace MatchingAppWindow.Views
 
         private void ExcludeDiets()
         {
-            if (Vegetarian.IsChecked == true)
+            if (Vegetarian.IsChecked == true && !excludedDiets.Contains(Diet.Vegetarian))
             {
                 excludedDiets.Add(Diet.Vegetarian);
             }
-            if (Vegan.IsChecked == true)
+            if (Vegan.IsChecked == true && !excludedDiets.Contains(Diet.Vegan))
             {
                 excludedDiets.Add(Diet.Vegan);
             }
@@ -273,15 +273,15 @@ namespace MatchingAppWindow.Views
 
         private void IncludeHobbys()
         {
-            if (Reading.IsChecked == true)
+            if (Reading.IsChecked == true && !includedHobbies.Contains(Interest.Reading))
             {
                 includedHobbies.Add(Interest.Reading);
             }
-            if (Cycling.IsChecked == true)
+            if (Cycling.IsChecked == true && !includedHobbies.Contains(Interest.Cycling))
             {
                 includedHobbies.Add(Interest.Cycling);
             }
-            if (Cooking.IsChecked == true)
+            if (Cooking.IsChecked == true && !includedHobbies.Contains(Interest.Cooking))
             {
                 includedHobbies.Add(Interest.Cooking);
             }
@@ -289,15 +289,15 @@ namespace MatchingAppWindow.Views
 
         private void ExcludeHobbys()
         {
-            if (Reading.IsChecked == true)
+            if (Reading.IsChecked == true && !excludedHobbies.Contains(Interest.Reading))
             {
                 excludedHobbies.Add(Interest.Reading);
             }
-            if (Cycling.IsChecked == true)
+            if (Cycling.IsChecked == true && !excludedHobbies.Contains(Interest.Cycling))
             {
                 excludedHobbies.Add(Interest.Cycling);
             }
-            if (Cooking.IsChecked == true)
+            if (Cooking.IsChecked == true && !excludedHobbies.Contains(Interest.Cooking))
             {
                 excludedHobbies.Add(Interest.Cooking);
             }
