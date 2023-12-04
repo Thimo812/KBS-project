@@ -38,9 +38,15 @@ namespace MatchingAppWindow.Views
         private List<Diet> excludedDiets = new();
         private string resultString;
 
+        private ProfileDetails profileDetails = new();
+
         public FilterScreen()
         {
             InitializeComponent();
+
+            profileDetailsFrame.Content = profileDetails;
+
+            DataContext = this;
 
             try
             {
@@ -50,7 +56,7 @@ namespace MatchingAppWindow.Views
                     resultString += profile.UserName + "\n";
                     filteredProfiles.Content = resultString;
                 }
-            } 
+            }
             catch (SqlException sqlEx)
             {
                 MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");

@@ -16,15 +16,15 @@ namespace KBS_project
 		public string PostalCode { get; set; }
 		public string Country { get; set; }
 		public string City { get; set; }
-		public string School { get; set; }
-		public string Degree { get; set; }
-		public string WorkPlace { get; set; }
+		public string? School { get; set; }
+		public string? Degree { get; set; }
+		public string? WorkPlace { get; set; }
 		public Diet? Diet { get; set; }
-		public string Description { get; set; }
+		public string? Description { get; set; }
 		public bool? Vaccinated {  get; set; }
-		public List<Interest> Interests { get; set; }
-		public List<string> Images { get; set; }
-		public List<int> QuizAnswers { get; set; }
+		public List<Interest>? Interests { get; set; }
+		public List<string>? Images { get; set; }
+		public List<int>? QuizAnswers { get; set; }
 
 		public Profile(string userName, string firstName, string infix, string lastName, DateTime birthDate, Gender gender, 
 			SexualPreference sexualPreference, string city, string postalCode, string country, List<string> images, 
@@ -58,9 +58,35 @@ namespace KBS_project
 			Interests = new List<Interest>();
         }
 
+		public int Age()
+		{
+			int result = 0;
+			DateTime today = DateTime.Today;
+
+			result = today.Year - BirthDate.Year;
+			DateTime birthday = new DateTime(today.Year, BirthDate.Month, BirthDate.Day);
+			if(birthday.CompareTo(today) > 0)
+			{
+				result--;
+			}
+			return result;
+		}
+
         public override string ToString()
 		{
-			return $"Username: {UserName}\nFull name: {FirstName + Infix + LastName}\nBirth date: {BirthDate.Day}-{BirthDate.Month}-{BirthDate.Year}\nGender: {Gender}\nSexual preference: {SexualPreference}";
+			return
+				$"Username: {UserName}\n" +
+				$"Full name: {FirstName} {Infix} {LastName}\n" +
+				$"Birth date: {BirthDate.Day}-{BirthDate.Month}-{BirthDate.Year}\n" +
+				$"Gender: {Gender}\n" +
+				$"Sexual preference: {SexualPreference}\n" +
+				$"Adress: {PostalCode} {City}, {Country}\n" +
+				$"Degree: {Degree}\n" +
+				$"School: {School} \n" +
+				$"workplace: {WorkPlace} \n" +
+				$"Diet: {Diet}\n" +
+				$"Description: {Description} \n" +
+				$"Vaccinated: {Vaccinated} \n";
 		}
     }
 }

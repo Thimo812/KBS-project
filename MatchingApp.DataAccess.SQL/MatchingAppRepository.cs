@@ -124,14 +124,14 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     foreach (var inclDiet in includedDiets)
                     {
-                        sql += $"AND Dieet = '{inclDiet}' ";
+                        sql += $"AND Dieet = '{(int)inclDiet}' ";
                     }
                 }
                 if (excludedDiets != null)
                 {
                     foreach (var exlDiet in excludedDiets)
                     {
-                        sql += $"AND NOT Dieet = '{exlDiet}' ";
+                        sql += $"AND NOT Dieet = '{(int)exlDiet}' ";
                     }
                 }
                 connection.Open();
@@ -195,7 +195,7 @@ namespace MatchingApp.DataAccess.SQL
 
             try
             {
-                diet = (Diet)reader.GetInt32(12);
+                diet = (Diet) reader.GetInt16(12);
             }
             catch (SqlNullValueException ex) { diet = null; }
 
@@ -393,7 +393,7 @@ namespace MatchingApp.DataAccess.SQL
 
             using(SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT COUNT(*), * FROM MatchingQuiz WHERE ID = (SELECT QuizID FROM Profiel WHERE Gebruikersnaam = @userName)";
+                var sql = "SELECT * FROM MatchingQuiz WHERE ID = (SELECT QuizID FROM Profiel WHERE Gebruikersnaam = @userName)";
 
                 connection.Open();
 

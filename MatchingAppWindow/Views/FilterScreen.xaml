@@ -136,9 +136,10 @@
                 />
             </StackPanel>
         </ScrollViewer>
-        
+
         <ScrollViewer Margin="215,50,62,48">
             <Label Name="filteredProfiles"/>
         </ScrollViewer>
+        <Frame x:Name="profileDetailsFrame" Margin="550,0,0,0"/>
     </Grid>
 </Page>

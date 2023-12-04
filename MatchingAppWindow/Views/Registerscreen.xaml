@@ -55,14 +55,14 @@
         <TextBox x:Name="postalCodeInput" Margin="548,226,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" HorizontalAlignment="Left" Width="142" Grid.Column="1"/>
 
         <Label Content="Seksuele preferentie:" Margin="98,262,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <RadioButton x:Name="femaleSexuality" GroupName="Sexuality" Content="Vrouwen" Margin="260,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="maleSexuality" GroupName="Sexuality" Content="Mannen" Margin="0,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Center" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="everyoneSexuality" GroupName="Sexuality" Content="Iedereen" Margin="442,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.474,0.158" Grid.Column="1"/>
+        <RadioButton x:Name="heteroSexual" GroupName="Sexuality" Content="Hetero" Margin="260,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
+        <RadioButton x:Name="homoSexual" GroupName="Sexuality" Content="Homosexueel" Margin="357,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="112" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
+        <RadioButton x:Name="biSexual" GroupName="Sexuality" Content="Bisexueel" Margin="482,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.474,0.158" Grid.Column="1"/>
 
         <Label Content="Geslacht:" Margin="98,299,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
         <RadioButton x:Name="femaleGender" GroupName="Gender" Content="Vrouw" Margin="260,304,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
         <RadioButton x:Name="maleGender" GroupName="Gender" Content="Man" Margin="0,305,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Center" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="nonBinaryGender" GroupName="Gender" Content="Non-binair" Margin="442,305,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="98" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
+        <RadioButton x:Name="nonBinaryGender" GroupName="Gender" Content="Non-binair" Margin="482,305,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="98" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
 
         <Label Content="Geboortedatum:" Margin="98,336,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
         <DatePicker x:Name="birthDatePicker" Margin="260,336,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" HorizontalAlignment="Left" Width="142" Height="32" BorderThickness="2,2,2,2" BorderBrush="#FFA3AEB9" Background="White" Grid.Column="1"/>

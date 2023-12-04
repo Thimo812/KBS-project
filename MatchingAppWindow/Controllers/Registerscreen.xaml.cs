@@ -94,11 +94,11 @@ namespace MatchingAppWindow.Views
 
             try
             {
-                sexualPreference = RegistrationFieldsExtensions.ValidateSexuality(new List<bool?>() { maleSexuality.IsChecked, femaleSexuality.IsChecked, everyoneSexuality.IsChecked });
+                sexualPreference = RegistrationFieldsExtensions.ValidateSexuality(new List<bool?>() { heteroSexual.IsChecked, homoSexual.IsChecked, biSexual.IsChecked });
             }
             catch (InvalidFieldException)
             {
-                invalidFields.AddRange(new List<Control>() { maleSexuality, femaleSexuality, everyoneSexuality });
+                invalidFields.AddRange(new List<Control>() { heteroSexual, homoSexual, biSexual });
             }
 
             try
@@ -133,10 +133,10 @@ namespace MatchingAppWindow.Views
             {
                 invalidFields.Add(textBox);
             }
-            catch (SqlException sqlEx)
-            {
-                MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
-            }
+            //catch (SqlException sqlEx)
+            //{
+            //    MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
+            //}
 
             return String.Empty;
 
@@ -157,9 +157,9 @@ namespace MatchingAppWindow.Views
                 maleGender,
                 femaleGender,
                 nonBinaryGender,
-                maleSexuality,
-                femaleSexuality,
-                everyoneSexuality
+                heteroSexual,
+                homoSexual,
+                biSexual
             };
 
             foreach (Control field in fields)

@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\pasfoto.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\KBS project\MatchingAppCore.csproj" />
     <ProjectReference Include="..\MatchingApp.DataAccess.SQL\MatchingApp.DataAccess.SQL.csproj" />
   </ItemGroup>

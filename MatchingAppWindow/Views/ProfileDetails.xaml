@@ -11,11 +11,22 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="83*"/>
-            <RowDefinition Height="142*"/>
-
+            <RowDefinition Height="150*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="82*"/>
+            <RowDefinition Height="71*"/>
+            <RowDefinition Height="122*"/>
         </Grid.RowDefinitions>
-        <Image Source="C:/Users/bosma/Downloads/45236226.png" Margin="0,7,0,7"/>
-        
+        <Image x:Name="profileImage" Grid.Row="0" Source="/Views/pasfoto.jpg" Margin="0,7,0,7" />
+        <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center"/>
+        <TextBlock x:Name="descriptionBlock" Grid.Row="2" Text="" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+        <TextBlock x:Name="interestBlock" Grid.Row="3" Text="" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+        <ItemsControl x:Name="detailList" Grid.Row="4">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Label Content="{Binding}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Page>
