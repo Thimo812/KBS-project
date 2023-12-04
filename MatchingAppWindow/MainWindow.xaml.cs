@@ -28,20 +28,16 @@ namespace MatchingAppWindow
     public partial class MainWindow : Window
     {
         public static Profile profile;
-        private MatchingAppRepository repository;
+        public static MatchingAppRepository repo = new MatchingAppRepository();
 
         private StartScreen startScreen = new();
-        private RegisterScreen registerScreen;
+        private RegisterScreen registerScreen = new();
         private Matchingquiz matchingquiz = new();
         private Navigation navigation = new();
         private FilterScreen filterScreen = new();
 
         public MainWindow()
         {
-            repository = new MatchingAppRepository();
-
-            registerScreen = new(repository);
-
             InitializeComponent();
 
             startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;

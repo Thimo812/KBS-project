@@ -1,4 +1,5 @@
 ﻿using KBS_project;
+using MatchingApp.DataAccess.SQL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,9 @@ namespace MatchingAppWindow.Views
     public partial class ProfileDetails : Page
     {
         Profile selectedProfile;
-
         public ProfileDetails()
         {
-            selectedProfile = 
+            selectedProfile = MainWindow.repo.GetProfile("Thimo812");
 
             InitializeComponent();
 

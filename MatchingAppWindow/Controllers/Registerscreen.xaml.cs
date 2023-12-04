@@ -32,16 +32,13 @@ namespace MatchingAppWindow.Views
     public partial class RegisterScreen : Page
     {
         public event EventHandler ExitPage;
-        private MatchingAppRepository Repo {  get; set; }
 
         private List<Control> invalidFields;
 
         public ObservableCollection<string> ImageList { get; set; } = new();
 
-        public RegisterScreen(MatchingAppRepository repo)
+        public RegisterScreen()
         {
-            Repo = repo;
-
             InitializeComponent();
 
             DataContext = this;
@@ -118,7 +115,7 @@ namespace MatchingAppWindow.Views
 
             MainWindow.profile = new Profile(userName, firstName, infix, lastName, birthDate, gender, sexualPreference, city, postalCode, country, ImageList.ToList());
 
-            Repo.SaveProfile(MainWindow.profile);
+            MainWindow.repo.SaveProfile(MainWindow.profile);
 
             ExitPage?.Invoke(this, EventArgs.Empty);
         }
@@ -127,16 +124,16 @@ namespace MatchingAppWindow.Views
         {
             try
             {
-                return RegistrationFieldsExtensions.Validate(textBox.Text, field, Repo);
+                return RegistrationFieldsExtensions.Validate(textBox.Text, field, MainWindow.repo);
             }
             catch (InvalidFieldException)
             {
                 invalidFields.Add(textBox);
             }
-            //catch (SqlException sqlEx)
-            //{
-            //    MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
-            //}
+            catch (SqlException sqlEx)
+            {
+                MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
+            }
 
             return String.Empty;
 
