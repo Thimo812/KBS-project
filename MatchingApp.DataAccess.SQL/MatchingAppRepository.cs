@@ -9,7 +9,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-
+using KBS_project.Exceptions;
+using System.Data.SqlTypes;
 
 namespace MatchingApp.DataAccess.SQL
 {
@@ -48,22 +49,10 @@ namespace MatchingApp.DataAccess.SQL
                     command.ExecuteNonQuery();
 
                     using (SqlDataReader reader = command.ExecuteReader())
-					{
-						reader.Read();
-						string firstName = reader.GetString(1);
-						string lastName = reader.GetString(2);
-						string infix = reader.GetString(3);
-						DateTime birthDate = reader.GetDateTime(4);
-						SexualPreference pref = (SexualPreference) int.Parse(reader.GetString(5));
-						Gender gender = (Gender) int.Parse((reader.GetString(6)));
-						string city = reader.GetString(7);
-                        string country = reader.GetString(14);
-                        string postalCode = reader.GetString(15);
-
-
-
-						profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode, new List<string>());
-					}
+                    {
+                        reader.Read();
+                        profile = ProfileFromQuery(reader);
+                    }
 				}
 				connection.Close();
 			}
@@ -81,22 +70,13 @@ namespace MatchingApp.DataAccess.SQL
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
+                    command.ExecuteNonQuery();
+                    
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        while(reader.Read())
+                        while (reader.Read())
                         {
-                            string userName = reader.GetString(0);
-                            string firstName = reader.GetString(1);
-                            string lastName = reader.GetString(2);
-                            string infix = reader.GetString(3);
-                            DateTime birthDate = reader.GetDateTime(4);
-                            SexualPreference pref = (SexualPreference)int.Parse(reader.GetString(5));
-                            Gender gender = (Gender)int.Parse((reader.GetString(6)));
-                            string city = reader.GetString(7);
-                            string country = reader.GetString(14);
-                            string postalCode = reader.GetString(15);
-
-                            profiles.Add(new Profile(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode, new List<string>()));
+                            profiles.Add(ProfileFromQuery(reader));
                         }
                     }
                 }
@@ -144,14 +124,14 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     foreach (var inclDiet in includedDiets)
                     {
-                        sql += $"AND Dieet = '{inclDiet}' ";
+                        sql += $"AND Dieet = '{(int)inclDiet}' ";
                     }
                 }
                 if (excludedDiets != null)
                 {
                     foreach (var exlDiet in excludedDiets)
                     {
-                        sql += $"AND NOT Dieet = '{exlDiet}' ";
+                        sql += $"AND NOT Dieet = '{(int)exlDiet}' ";
                     }
                 }
                 connection.Open();
@@ -168,6 +148,65 @@ namespace MatchingApp.DataAccess.SQL
                 connection.Close();
             }
             return results;
+        }
+
+        private Profile ProfileFromQuery(SqlDataReader reader)
+        {
+            string userName = reader.GetString(0);
+            string firstName = reader.GetString(1);
+            string lastName = reader.GetString(2);
+            string infix = reader.GetString(3);
+            DateTime birthDate = reader.GetDateTime(4);
+            SexualPreference pref = (SexualPreference)int.Parse(reader.GetString(5));
+            Gender gender = (Gender)int.Parse((reader.GetString(6)));
+            string city = reader.GetString(7);
+            string country = reader.GetString(14);
+            string postalCode = reader.GetString(15);
+            string description;
+            string degree;
+            string school;
+            string workplace;
+            Diet? diet;
+            bool? vaccinated;
+
+            try
+            {
+                description = reader.GetString(8);
+            }
+            catch (SqlNullValueException ex) { description = null; }
+
+            try
+            {
+                degree = reader.GetString(9);
+            }
+            catch (SqlNullValueException ex) { degree = null; }
+
+            try
+            {
+                school = reader.GetString(10);
+            }
+            catch (SqlNullValueException ex) { school = null; }
+
+            try
+            {
+                workplace = reader.GetString(11);
+            }
+            catch (SqlNullValueException ex) { workplace = null; }
+
+            try
+            {
+                diet = (Diet) reader.GetInt16(12);
+            }
+            catch (SqlNullValueException ex) { diet = null; }
+
+            try
+            {
+                vaccinated = reader.GetBoolean(13);
+            }
+            catch (SqlNullValueException ex) { vaccinated = null; }
+
+            return new Profile(userName, firstName, infix, lastName, birthDate, gender, pref, city, postalCode, country, new List<string>(), GetHobbies(userName), GetMatchingQuiz(userName), description, degree, school, workplace, diet, vaccinated);
+
         }
 
 		public void SaveProfile(Profile profile)
@@ -193,10 +232,41 @@ namespace MatchingApp.DataAccess.SQL
 				}
 				connection.Close();
             }
+
+            StoreImages(profile);
+        }
+
+        public List<Interest> GetHobbies(string userName)
+        {
+            List<Interest> results = new List<Interest>();
+
+            using(SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "Select ID FROM Hobbies WHERE ProfielGebruikersnaam = @userName";
+
+                connection.Open();
+
+                using(SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader =  command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add((Interest)reader.GetInt32(0));
+                        }
+                    }
+                }
+            }
+            return results;
         }
 
         public void StoreImages(Profile profile)
         {
+            if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
+
             CheckPhotoAlbum(profile);
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -218,7 +288,7 @@ namespace MatchingApp.DataAccess.SQL
         }
 
 
-        public List<Image> RetrieveImages(Profile profile)
+        public List<Image> RetrieveImages(string userName)
         {
             List<Image> images = new List<Image>();
 
@@ -229,7 +299,7 @@ namespace MatchingApp.DataAccess.SQL
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("gebruikersnaam", profile.UserName);
+                    command.Parameters.AddWithValue("gebruikersnaam", userName);
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -288,6 +358,68 @@ namespace MatchingApp.DataAccess.SQL
 
                 connection.Close();
             }
+        }
+
+        public bool ValidateUserName(string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT COUNT(*) as amount FROM Profiel WHERE Gebruikersnaam = @userName";
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+
+                        if (reader.GetInt32(0) == 0)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public List<int> GetMatchingQuiz(string userName)
+        {
+            List<int> answers = new List<int>();
+
+            using(SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT * FROM MatchingQuiz WHERE ID = (SELECT QuizID FROM Profiel WHERE Gebruikersnaam = @userName)";
+
+                connection.Open();
+
+                using(SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        for (int i = 0; i < 13; i++)
+                        {
+                            try
+                            {
+                                answers.Add(reader.GetInt32(i));
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return answers;
         }
     }
 }

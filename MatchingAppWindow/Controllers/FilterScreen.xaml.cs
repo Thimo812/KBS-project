@@ -38,9 +38,15 @@ namespace MatchingAppWindow.Views
         private List<Diet> excludedDiets = new();
         private string resultString;
 
+        private ProfileDetails profileDetails = new();
+
         public FilterScreen()
         {
             InitializeComponent();
+
+            profileDetailsFrame.Content = profileDetails;
+
+            DataContext = this;
 
             try
             {
@@ -49,7 +55,7 @@ namespace MatchingAppWindow.Views
                 {
                     resultString += profile.UserName + "\n";
                 }
-            } 
+            }
             catch (SqlException sqlEx)
             {
                 MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
@@ -199,7 +205,7 @@ namespace MatchingAppWindow.Views
             int.TryParse(MinAge.Text, out minimumAge);
             int.TryParse(MaxAge.Text, out maximumAge);
 
-            List<string>  results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
+            List<string> results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
             resultString = string.Empty;
 

@@ -16,33 +16,77 @@ namespace KBS_project
 		public string PostalCode { get; set; }
 		public string Country { get; set; }
 		public string City { get; set; }
-		public string School { get; set; }
-		public string degree { get; set; }
-		public string WorkPlace { get; set; }
-		public string Diet { get; set; }
-		public string Description { get; set; }
-		public List<Interest> Interests { get; set; }
-		public List<string> Images { get; set; }
+		public string? School { get; set; }
+		public string? Degree { get; set; }
+		public string? WorkPlace { get; set; }
+		public Diet? Diet { get; set; }
+		public string? Description { get; set; }
+		public bool? Vaccinated {  get; set; }
+		public List<Interest>? Interests { get; set; }
+		public List<string>? Images { get; set; }
+		public List<int>? QuizAnswers { get; set; }
 
 		public Profile(string userName, string firstName, string infix, string lastName, DateTime birthDate, Gender gender, 
-			SexualPreference sexualPreference, string city, string postalCode, string country, List<string> images)
+			SexualPreference sexualPreference, string city, string postalCode, string country, List<string> images, 
+			List<Interest> interests, List<int> quizAnswers, string description, string degree, string school, string workplace, Diet? diet, bool? vaccinated) : 
+			this(userName, firstName, infix, lastName, birthDate, gender, sexualPreference, city, postalCode, country, images)
 		{
-			UserName = userName;
-			FirstName = firstName;
-			Infix = infix;
-			LastName = lastName;
-			BirthDate = birthDate;
-			Gender = gender;
-			SexualPreference = sexualPreference;
-			City = city;
-			PostalCode = postalCode;
-			Country = country;
-			Images = images;
+			Interests = interests;
+			QuizAnswers = quizAnswers;
+			Description = description;
+			Degree = degree;
+			School = school;
+			WorkPlace = workplace;
+			Diet = diet;
+			Vaccinated = vaccinated;
 		}
 
-		public override string ToString()
+        public Profile(string userName, string firstName, string infix, string lastName, DateTime birthDate, Gender gender,
+            SexualPreference sexualPreference, string city, string postalCode, string country, List<string> images)
+        {
+            UserName = userName;
+            FirstName = firstName;
+            Infix = infix;
+            LastName = lastName;
+            BirthDate = birthDate;
+            Gender = gender;
+            SexualPreference = sexualPreference;
+            City = city;
+            PostalCode = postalCode;
+            Country = country;
+            Images = images;
+			Interests = new List<Interest>();
+        }
+
+		public int Age()
 		{
-			return $"Username: {UserName}\nFull name: {FirstName + Infix + LastName}\nBirth date: {BirthDate.Day}-{BirthDate.Month}-{BirthDate.Year}\nGender: {Gender}\nSexual preference: {SexualPreference}";
+			int result = 0;
+			DateTime today = DateTime.Today;
+
+			result = today.Year - BirthDate.Year;
+			DateTime birthday = new DateTime(today.Year, BirthDate.Month, BirthDate.Day);
+			if(birthday.CompareTo(today) > 0)
+			{
+				result--;
+			}
+			return result;
+		}
+
+        public override string ToString()
+		{
+			return
+				$"Username: {UserName}\n" +
+				$"Full name: {FirstName} {Infix} {LastName}\n" +
+				$"Birth date: {BirthDate.Day}-{BirthDate.Month}-{BirthDate.Year}\n" +
+				$"Gender: {Gender}\n" +
+				$"Sexual preference: {SexualPreference}\n" +
+				$"Adress: {PostalCode} {City}, {Country}\n" +
+				$"Degree: {Degree}\n" +
+				$"School: {School} \n" +
+				$"workplace: {WorkPlace} \n" +
+				$"Diet: {Diet}\n" +
+				$"Description: {Description} \n" +
+				$"Vaccinated: {Vaccinated} \n";
 		}
     }
 }
