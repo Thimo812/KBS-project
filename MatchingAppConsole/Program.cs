@@ -4,9 +4,7 @@ using MatchingApp.DataAccess.SQL;
 
 var repo = new MatchingAppRepository();
 
-Profile profile = repo.GetProfile("Thimo812");
-
-Console.WriteLine(profile);
+Console.WriteLine(InterestExtensions.GetString(5));
 
 
 
