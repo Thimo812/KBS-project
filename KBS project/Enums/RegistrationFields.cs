@@ -67,7 +67,7 @@ namespace KBS_project.Enums
                 return input;
             }
 
-            if (field.Equals(RegistrationFields.UserName) && repo.GetProfiles().Where(x => x.UserName == input).Count() > 0)
+            if (field.Equals(RegistrationFields.UserName) && repo.GetProfiles().Where(x => x == input).Count() > 0)
             {
                 throw new InvalidFieldException(field);
             }

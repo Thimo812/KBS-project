@@ -36,7 +36,6 @@ namespace MatchingAppWindow.Views
         private List<Interest> excludedHobbies = new();
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
-        private string resultString;
 
         private ProfileDetails profileDetails = new();
 
@@ -44,22 +43,11 @@ namespace MatchingAppWindow.Views
         {
             InitializeComponent();
 
+            resultBox.ItemsSource = repo.GetProfiles();
+
             profileDetailsFrame.Content = profileDetails;
 
             DataContext = this;
-
-            try
-            {
-                //Showing all profiles from the database on the screen
-                foreach (Profile profile in repo.GetProfiles())
-                {
-                    resultString += profile.UserName + "\n";
-                }
-            }
-            catch (SqlException sqlEx)
-            {
-                MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
-            }
         }
 
         //Button to extend or collapse the filteroptions
@@ -135,37 +123,37 @@ namespace MatchingAppWindow.Views
         //CheckBoxes to filter on hobbies
         private void HobbyChecked(object sender, RoutedEventArgs e)
         {
-            CheckBox senderHobby = (CheckBox)sender;
-            if ((string)buttonHobby.Content == "wel")
-            {
-                if (senderHobby.Name == "Reading")
-                {
-                    includedHobbies.Add(Interest.Reading);
-                }
-                if (senderHobby.Name == "Cycling")
-                {
-                    includedHobbies.Add(Interest.Cycling);
-                }
-                if (senderHobby.Name == "Cooking")
-                {
-                    includedHobbies.Add(Interest.Cooking);
-                }
-            }
-            else if((string)buttonHobby.Content == "niet")
-            {
-                if (senderHobby.Name == "Reading")
-                {
-                    excludedHobbies.Add(Interest.Reading);
-                }
-                if (senderHobby.Name == "Cycling")
-                {
-                    excludedHobbies.Add(Interest.Cycling);
-                }
-                if (senderHobby.Name == "Cooking")
-                {
-                    excludedHobbies.Add(Interest.Cooking);
-                }
-            }
+            //CheckBox senderHobby = (CheckBox)sender;
+            //if ((string)buttonHobby.Content == "wel")
+            //{
+            //    if (senderHobby.Name == "Reading")
+            //    {
+            //        includedHobbies.Add(Interest.Reading);
+            //    }
+            //    if (senderHobby.Name == "Cycling")
+            //    {
+            //        includedHobbies.Add(Interest.Cycling);
+            //    }
+            //    if (senderHobby.Name == "Cooking")
+            //    {
+            //        includedHobbies.Add(Interest.Cooking);
+            //    }
+            //}
+            //else if((string)buttonHobby.Content == "niet")
+            //{
+            //    if (senderHobby.Name == "Reading")
+            //    {
+            //        excludedHobbies.Add(Interest.Reading);
+            //    }
+            //    if (senderHobby.Name == "Cycling")
+            //    {
+            //        excludedHobbies.Add(Interest.Cycling);
+            //    }
+            //    if (senderHobby.Name == "Cooking")
+            //    {
+            //        excludedHobbies.Add(Interest.Cooking);
+            //    }
+            //}
         }
 
         //CheckBoxes to filter on diet
@@ -221,7 +209,7 @@ namespace MatchingAppWindow.Views
         private void resultBox_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             // Get the currently selected item in the ListBox.
-            if (resultBox.SelectedIndex != null)
+            if (resultBox.SelectedItem != null)
             {
                 string curItem = resultBox.SelectedItem.ToString();
                 profileDetails.GetProfile(curItem);

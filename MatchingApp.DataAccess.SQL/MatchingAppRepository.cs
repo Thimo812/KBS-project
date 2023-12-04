@@ -59,9 +59,9 @@ namespace MatchingApp.DataAccess.SQL
 			return profile;
 		}
 
-		public List<Profile> GetProfiles()
+		public List<string> GetProfiles()
 		{
-            List<Profile> profiles = new List<Profile>();
+            List<string> profiles = new List<string>();
 
 			using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -76,7 +76,7 @@ namespace MatchingApp.DataAccess.SQL
                     {
                         while (reader.Read())
                         {
-                            profiles.Add(ProfileFromQuery(reader));
+                            profiles.Add(reader.GetString(0));
                         }
                     }
                 }

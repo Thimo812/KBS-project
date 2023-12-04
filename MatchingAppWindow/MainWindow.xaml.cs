@@ -34,16 +34,16 @@ namespace MatchingAppWindow
         private RegisterScreen registerScreen = new();
         private Matchingquiz matchingquiz = new();
         private Navigation navigation = new();
-        private FilterScreen filterScreen = new();
+        private FilterScreen filterScreen;
 
         public MainWindow()
         {
             InitializeComponent();
 
             startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
-            startScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
+            startScreen.loginButton.Click += SwitchToFilterScreen;
 
-            registerScreen.ExitPage += (object sender, EventArgs e) => Content = filterScreen;
+            registerScreen.ExitPage += SwitchToFilterScreen;
 
             Content = startScreen;
         }
@@ -63,6 +63,12 @@ namespace MatchingAppWindow
 
                 return bitmapImage;
             }
+        }
+
+        public void SwitchToFilterScreen(object sender, EventArgs e)
+        {
+            if (filterScreen == null) filterScreen = new();
+            Content = filterScreen;
         }
 
 
