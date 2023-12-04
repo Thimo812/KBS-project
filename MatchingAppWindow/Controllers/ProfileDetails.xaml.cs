@@ -26,16 +26,18 @@ namespace MatchingAppWindow.Views
         Profile selectedProfile;
         public ProfileDetails()
         {
-            selectedProfile = MainWindow.repo.GetProfile("Thimo812");
-
             InitializeComponent();
 
             DataContext = this;
+            Visibility = Visibility.Collapsed;
 
-            nameLabel.Content = $"{selectedProfile.FirstName} {selectedProfile.LastName}, {selectedProfile.Age()}";
-            descriptionBlock.Text = selectedProfile.Description;
-            interestBlock.Text = GetInterestString();
-            detailList.ItemsSource = GetProfileDetails();
+            if(selectedProfile != null )
+            {
+                nameLabel.Content = $"{selectedProfile.FirstName} {selectedProfile.LastName}, {selectedProfile.Age()}";
+                descriptionBlock.Text = selectedProfile.Description;
+                interestBlock.ItemsSource = selectedProfile.Interests;
+                detailList.ItemsSource = GetProfileDetails();
+            } 
         }
 
         public List<string> GetProfileDetails()
@@ -52,17 +54,13 @@ namespace MatchingAppWindow.Views
             return result;
         }
 
-        public string GetInterestString()
+        public void GetProfile(string profileName)
         {
-            string result = string.Empty;
-
-            foreach(var interest in selectedProfile.Interests)
-            {
-                if (result == string.Empty) result = $"{interest}";
-                else result = result + ", " + interest;
-            }
-
-            return result;
+            selectedProfile = MainWindow.repo.GetProfile(profileName);
+            nameLabel.Content = $"{selectedProfile.FirstName} {selectedProfile.LastName}, {selectedProfile.Age()}";
+            descriptionBlock.Text = selectedProfile.Description;
+            interestBlock.ItemsSource = selectedProfile.Interests;
+            detailList.ItemsSource = GetProfileDetails();
         }
     }
 }

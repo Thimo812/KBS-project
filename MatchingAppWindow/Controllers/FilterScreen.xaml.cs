@@ -207,13 +207,6 @@ namespace MatchingAppWindow.Views
 
             List<string> results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
-            resultString = string.Empty;
-
-            foreach(string result in results)
-            {
-                resultString += result + "\n";
-            }
-
             resultBox.ItemsSource = results;
 
             location = 0;
@@ -223,6 +216,17 @@ namespace MatchingAppWindow.Views
             excludedHobbies.Clear();
             includedDiets.Clear();
             excludedDiets.Clear();
+        }
+
+        private void resultBox_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            // Get the currently selected item in the ListBox.
+            if (resultBox.SelectedIndex != null)
+            {
+                string curItem = resultBox.SelectedItem.ToString();
+                profileDetails.GetProfile(curItem);
+                profileDetails.Visibility = Visibility.Visible;
+            }
         }
     }
 }

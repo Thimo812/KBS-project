@@ -5,23 +5,33 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MatchingAppWindow.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="250"
+      d:DesignHeight="450" d:DesignWidth="200"
       Title="ProfileDetails"
       Background="White">
 
-    <Grid>
+    <Grid d:Name="Grid" Background="LightGray" Margin="5,50,5,50">
         <Grid.RowDefinitions>
-            <RowDefinition Height="150*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="80*"/>
             <RowDefinition Height="25*"/>
-            <RowDefinition Height="82*"/>
-            <RowDefinition Height="71*"/>
-            <RowDefinition Height="122*"/>
+            <RowDefinition Height="150*"/>
         </Grid.RowDefinitions>
-        <Image x:Name="profileImage" Grid.Row="0" Source="/Views/pasfoto.jpg" Margin="0,7,0,7" />
-        <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center"/>
-        <TextBlock x:Name="descriptionBlock" Grid.Row="2" Text="" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-        <TextBlock x:Name="interestBlock" Grid.Row="3" Text="" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-        <ItemsControl x:Name="detailList" Grid.Row="4">
+        <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center" BorderThickness="2" BorderBrush="DarkGray" Background="White"/>
+        <TextBlock x:Name="descriptionBlock" Grid.Row="2" Text="" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="5"/>
+        <ItemsControl x:Name="interestBlock" Grid.Row="3" BorderThickness="2" BorderBrush="DarkGray" Background="White">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding}" Margin="0,0,5,5" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ItemsControl x:Name="detailList" Grid.Row="4" BorderThickness="2" BorderBrush="DarkGray" Background="White">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Label Content="{Binding}"/>
