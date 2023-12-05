@@ -32,7 +32,7 @@ namespace MatchingAppWindow.Views
         {
           
         }
-        private void ShowErrors()
+        private void ShowErrors() 
         {
 
             userNameField.Background = Brushes.Pink;

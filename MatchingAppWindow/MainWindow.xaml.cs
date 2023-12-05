@@ -75,6 +75,7 @@ namespace MatchingAppWindow
         public void SwitchToFilterScreen(object? sender, EventArgs e)
         {
             if (filterScreen == null) filterScreen = new();
+            filterScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => Content = matchingQuiz;
             Content = filterScreen;
         }
 
