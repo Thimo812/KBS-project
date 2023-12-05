@@ -202,23 +202,24 @@ namespace MatchingAppWindow.Views
             List<string> results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
             resultBox.ItemsSource = results;
+        }
 
-        private void ClearUncheckedAttributes()
+        public void ClearUncheckedAttributes()
         {
             if (Reading.IsChecked == false)
             {
-                includedHobbies.Remove(Interest.Reading);
-                excludedHobbies.Remove(Interest.Reading);
+                includedHobbies.Remove(Interest.Lezen);
+                excludedHobbies.Remove(Interest.Lezen);
             }
             if (Cycling.IsChecked == false)
             {
-                includedHobbies.Remove(Interest.Cycling);
-                excludedHobbies.Remove(Interest.Cycling);
+                includedHobbies.Remove(Interest.Fietsen);
+                excludedHobbies.Remove(Interest.Fietsen);
             }
             if (Cooking.IsChecked == false)
             {
-                includedHobbies.Remove(Interest.Cooking);
-                excludedHobbies.Remove(Interest.Cooking);
+                includedHobbies.Remove(Interest.Koken_en_bakken);
+                excludedHobbies.Remove(Interest.Koken_en_bakken);
             }
             if (Vegetarian.IsChecked == false)
             {
@@ -258,33 +259,33 @@ namespace MatchingAppWindow.Views
 
         private void IncludeHobbys()
         {
-            if (Reading.IsChecked == true && !includedHobbies.Contains(Interest.Reading))
+            if (Reading.IsChecked == true && !includedHobbies.Contains(Interest.Lezen))
             {
-                includedHobbies.Add(Interest.Reading);
+                includedHobbies.Add(Interest.Lezen);
             }
-            if (Cycling.IsChecked == true && !includedHobbies.Contains(Interest.Cycling))
+            if (Cycling.IsChecked == true && !includedHobbies.Contains(Interest.Fietsen))
             {
-                includedHobbies.Add(Interest.Cycling);
+                includedHobbies.Add(Interest.Fietsen);
             }
-            if (Cooking.IsChecked == true && !includedHobbies.Contains(Interest.Cooking))
+            if (Cooking.IsChecked == true && !includedHobbies.Contains(Interest.Koken_en_bakken))
             {
-                includedHobbies.Add(Interest.Cooking);
+                includedHobbies.Add(Interest.Koken_en_bakken);
             }
         }
 
         private void ExcludeHobbys()
         {
-            if (Reading.IsChecked == true && !excludedHobbies.Contains(Interest.Reading))
+            if (Reading.IsChecked == true && !excludedHobbies.Contains(Interest.Lezen))
             {
-                excludedHobbies.Add(Interest.Reading);
+                excludedHobbies.Add(Interest.Lezen);
             }
-            if (Cycling.IsChecked == true && !excludedHobbies.Contains(Interest.Cycling))
+            if (Cycling.IsChecked == true && !excludedHobbies.Contains(Interest.Fietsen))
             {
-                excludedHobbies.Add(Interest.Cycling);
+                excludedHobbies.Add(Interest.Fietsen);
             }
-            if (Cooking.IsChecked == true && !excludedHobbies.Contains(Interest.Cooking))
+            if (Cooking.IsChecked == true && !excludedHobbies.Contains(Interest.Koken_en_bakken))
             {
-                excludedHobbies.Add(Interest.Cooking);
+                excludedHobbies.Add(Interest.Koken_en_bakken);
             }
         }
 

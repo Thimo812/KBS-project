@@ -457,8 +457,8 @@ namespace MatchingApp.DataAccess.SQL
         }
         public bool ValidateUserName(string userName)
         {
-            List<Profile> profiles = GetProfiles();
-            return profiles.Any(profile => profile.UserName == userName);
+            List<string> profiles = GetProfiles();
+            return profiles.Any(x => x == userName);
         }
 
         public List<int> GetMatchingQuiz(string userName)

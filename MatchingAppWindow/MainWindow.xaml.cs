@@ -33,7 +33,7 @@ namespace MatchingAppWindow
 
         private StartScreen startScreen = new();
         private RegisterScreen registerScreen = new();
-        private Matchingquiz matchingquiz = new();
+        private Matchingquiz matchingQuiz = new();
         private Navigation navigation = new();
         private FilterScreen filterScreen;
 
@@ -46,7 +46,7 @@ namespace MatchingAppWindow
 
             registerScreen.ExitPage += SwitchToFilterScreen;
 
-            Content = matchingQuiz;
+            Content = startScreen;
         }
 
 

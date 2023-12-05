@@ -15,11 +15,9 @@ namespace MatchingAppWindow
         public event EventHandler<EventArgs> ExitPage;
 
         private readonly AnswerManager answerManager = new AnswerManager();
-        IMatchingAppRepository Repo {  get; }
 
-        public Matchingquiz(IMatchingAppRepository repo)
+        public Matchingquiz()
         {
-            Repo = repo;
             InitializeComponent();
             WireUpRadioButtons();
             var radioButtons = FindRadioButtons(this);
@@ -134,7 +132,7 @@ namespace MatchingAppWindow
                 var answerList = savedAnswers.Select(x => GetButtonIndex(x)).ToList();
 
                 MainWindow.profile.QuizAnswers = answerList;
-                Repo.SaveMatchingQuiz(answerList);
+                MainWindow.repo.SaveMatchingQuiz(answerList);
             }
 
             ExitPage?.Invoke(this, EventArgs.Empty);
