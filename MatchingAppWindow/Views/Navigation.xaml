@@ -7,5 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Navigation">
-
+    <Grid Margin="20,0,250,400" Background="Gray">
+        <Button Name="loginButton" Content="Username" HorizontalAlignment="Right" />
+    </Grid>
 </Page>

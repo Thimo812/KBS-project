@@ -23,6 +23,9 @@ namespace MatchingAppWindow.Views
         public Navigation()
         {
             InitializeComponent();
+
+            DataContext = this;
+            Visibility = Visibility.Visible;
         }
     }
 }
