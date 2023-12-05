@@ -1,6 +1,4 @@
 ﻿using KBS_project;
-using Microsoft.SqlServer.Dac.Model;
-using Microsoft.SqlServer.Management.Smo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +23,6 @@ namespace MatchingAppWindow.Views
     {
         //     private readonly Login login = new Login();
         private readonly IMatchingAppRepository repository;
-        private readonly LoginManager login;
         public event EventHandler loginSuccessful;
 
         public StartScreen()
@@ -33,34 +30,34 @@ namespace MatchingAppWindow.Views
             InitializeComponent();
         }
 
-        public StartScreen(IMatchingAppRepository repository)
-        {
-            InitializeComponent();
-
-            this.repository = repository;
-            this.login = new LoginManager(repository);
-        }
-
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //string username = text
+          
+        }
+        private void ShowErrors()
+        {
+
+            userNameField.Background = Brushes.Pink;
+            userNameField.BorderBrush = Brushes.Red;
+            errorMessage.Visibility = Visibility.Visible;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            string enteredUsername = userNameField.Text;
+            string enteredUserName = userNameField.Text;
 
-            if (login != null && login.ValidateLogin(enteredUsername))
+            if (MainWindow.repo.ValidateUserName(enteredUserName))
             {
-                MessageBox.Show("Login successful!");
-                // Navigate to the next page or perform additional actions for a successful login
+                
+              
                 loginSuccessful?.Invoke(this, EventArgs.Empty);
             }
             else
             {
-                MessageBox.Show("Invalid username. Please try again.");
+                ShowErrors();
 
             }
         }
+
     }
 }

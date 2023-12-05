@@ -389,10 +389,10 @@ namespace MatchingApp.DataAccess.SQL
                 }
             }
         }
-        public bool ValidateUsername(string username)
+        public bool ValidateUserName(string userName)
         {
             List<Profile> profiles = GetProfiles();
-            return profiles.Any(profile => profile.UserName == username);
+            return profiles.Any(profile => profile.UserName == userName);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace MatchingAppWindow
     public partial class MainWindow : Window
     {
         public static Profile profile;
-        private MatchingAppRepository repository;
+        public static MatchingAppRepository repo = new MatchingAppRepository();
 
         private StartScreen startScreen = new();
         private RegisterScreen registerScreen;
@@ -39,21 +39,21 @@ namespace MatchingAppWindow
 
         public MainWindow()
         {
-            repository = new MatchingAppRepository();
+            repo = new MatchingAppRepository();
 
            // profile = repository.GetProfile("Thimo812");
 
-            registerScreen = new(repository);
-            matchingQuiz = new(repository);
-            startScreen = new(repository);
+            registerScreen = new(repo);
+            matchingQuiz = new(repo);
+            startScreen = new();
 
             InitializeComponent();
 
             startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
-            startScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
+         
             
-            registerScreen.exitPage += (object sender, EventArgs e) => Content = filterScreen;
-            startScreen.loginSuccessful += SwitchToRegisterScreen;
+            registerScreen.ExitPage += (object sender, EventArgs e) => Content = filterScreen;
+            startScreen.loginSuccessful += SwitchToFilterScreen;
 
             Content = startScreen;
         }
