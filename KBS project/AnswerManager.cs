@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 
 public class AnswerManager
 {
@@ -12,5 +13,10 @@ public class AnswerManager
     public string GetAnswer(string question)
     {
         return selectedAnswers.TryGetValue(question, out var answer) ? answer : null;
+    }
+
+    public IEnumerable<string> GetQuestions()
+    {
+        return selectedAnswers.Keys;
     }
 }

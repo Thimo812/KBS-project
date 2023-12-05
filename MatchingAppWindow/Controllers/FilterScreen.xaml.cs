@@ -51,7 +51,7 @@ namespace MatchingAppWindow.Views
                     resultString += profile.UserName + "\n";
                     filteredProfiles.Content = resultString;
                 }
-            }
+            } 
             catch (SqlException sqlEx)
             {
                 MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");

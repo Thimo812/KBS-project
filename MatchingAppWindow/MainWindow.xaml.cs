@@ -1,4 +1,5 @@
-﻿using KBS_project;
+using KBS_project.Enums;
+using KBS_project;
 using MatchingApp.DataAccess.SQL;
 using MatchingAppWindow.Views;
 using Microsoft.VisualBasic;
@@ -32,7 +33,7 @@ namespace MatchingAppWindow
 
         private StartScreen startScreen = new();
         private RegisterScreen registerScreen;
-        private Matchingquiz matchingquiz = new();
+        private Matchingquiz matchingQuiz;
         private Navigation navigation = new();
         private FilterScreen filterScreen = new();
 
@@ -40,16 +41,26 @@ namespace MatchingAppWindow
         {
             repository = new MatchingAppRepository();
 
+            profile = repository.GetProfile("Thimo812");
+
             registerScreen = new(repository);
+            matchingQuiz = new(repository);
 
             InitializeComponent();
 
             startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
             startScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
 
-            registerScreen.ExitPage += (object sender, EventArgs e) => Content = filterScreen;
+            registerScreen.exitPage += (object sender, EventArgs e) => Content = filterScreen;
+            startScreen.registerButton.Click += SwitchToRegisterScreen;
 
-            Content = startScreen;
+            Content = matchingQuiz;
+        }
+
+
+        private void SwitchToRegisterScreen(Object? sender, EventArgs args)
+        {
+            Content = registerScreen;
         }
 
         public static BitmapImage ImageToBitmapImage(Image image)
@@ -68,6 +79,8 @@ namespace MatchingAppWindow
                 return bitmapImage;
             }
         }
+
+      
 
 
     }
