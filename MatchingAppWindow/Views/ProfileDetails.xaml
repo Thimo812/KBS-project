@@ -1,0 +1,44 @@
+﻿<Page x:Class="MatchingAppWindow.Views.ProfileDetails"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MatchingAppWindow.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="200"
+      Title="ProfileDetails"
+      Background="White">
+
+    <Grid d:Name="Grid" Background="LightGray" Margin="5,50,5,50">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="32*"/>
+            <RowDefinition Height="150*"/>
+        </Grid.RowDefinitions>
+        <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center" BorderThickness="2" BorderBrush="DarkGray" Background="White"/>
+        <TextBlock x:Name="descriptionBlock" Grid.Row="2" Text="" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="5"/>
+        <ItemsControl x:Name="interestBlock" Grid.Row="3" BorderThickness="2" BorderBrush="DarkGray" Background="White">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border CornerRadius="10" Background="Gray" Margin="1,1,1,1">
+                        <Label Content="{Binding}"  />
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ItemsControl x:Name="detailList" Grid.Row="4" BorderThickness="2" BorderBrush="DarkGray" Background="White">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Label Content="{Binding}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</Page>

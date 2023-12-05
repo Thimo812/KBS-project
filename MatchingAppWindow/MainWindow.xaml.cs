@@ -29,30 +29,22 @@ namespace MatchingAppWindow
     public partial class MainWindow : Window
     {
         public static Profile profile;
-        private MatchingAppRepository repository;
+        public static MatchingAppRepository repo = new MatchingAppRepository();
 
         private StartScreen startScreen = new();
-        private RegisterScreen registerScreen;
-        private Matchingquiz matchingQuiz;
+        private RegisterScreen registerScreen = new();
+        private Matchingquiz matchingquiz = new();
         private Navigation navigation = new();
-        private FilterScreen filterScreen = new();
+        private FilterScreen filterScreen;
 
         public MainWindow()
         {
-            repository = new MatchingAppRepository();
-
-            profile = repository.GetProfile("Thimo812");
-
-            registerScreen = new(repository);
-            matchingQuiz = new(repository);
-
             InitializeComponent();
 
             startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
-            startScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
+            startScreen.loginButton.Click += SwitchToFilterScreen;
 
-            registerScreen.exitPage += (object sender, EventArgs e) => Content = filterScreen;
-            startScreen.registerButton.Click += SwitchToRegisterScreen;
+            registerScreen.ExitPage += SwitchToFilterScreen;
 
             Content = matchingQuiz;
         }
@@ -80,7 +72,11 @@ namespace MatchingAppWindow
             }
         }
 
-      
+        public void SwitchToFilterScreen(object sender, EventArgs e)
+        {
+            if (filterScreen == null) filterScreen = new();
+            Content = filterScreen;
+        }
 
 
     }

@@ -37,25 +37,18 @@ namespace MatchingAppWindow.Views
         private List<Interest> excludedHobbies = new();
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
-        private string? resultString;
+
+        private ProfileDetails profileDetails = new();
 
         public FilterScreen()
         {
             InitializeComponent();
 
-            try
-            {
-                //Showing all profiles from the database on the screen
-                foreach (Profile profile in repo.GetProfiles())
-                {
-                    resultString += profile.UserName + "\n";
-                    filteredProfiles.Content = resultString;
-                }
-            } 
-            catch (SqlException sqlEx)
-            {
-                MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
-            }
+            resultBox.ItemsSource = repo.GetProfiles();
+
+            profileDetailsFrame.Content = profileDetails;
+
+            DataContext = this;
         }
 
         //Button to extend or collapse the filteroptions
@@ -208,15 +201,7 @@ namespace MatchingAppWindow.Views
 
             List<string> results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
-            resultString = string.Empty;
-
-            foreach (string result in results)
-            {
-                resultString += result + "\n";
-            }
-
-            filteredProfiles.Content = resultString;
-        }
+            resultBox.ItemsSource = results;
 
         private void ClearUncheckedAttributes()
         {
@@ -300,6 +285,17 @@ namespace MatchingAppWindow.Views
             if (Cooking.IsChecked == true && !excludedHobbies.Contains(Interest.Cooking))
             {
                 excludedHobbies.Add(Interest.Cooking);
+            }
+        }
+
+        private void resultBox_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            // Get the currently selected item in the ListBox.
+            if (resultBox.SelectedItem != null)
+            {
+                string curItem = resultBox.SelectedItem.ToString();
+                profileDetails.GetProfile(curItem);
+                profileDetails.Visibility = Visibility.Visible;
             }
         }
     }

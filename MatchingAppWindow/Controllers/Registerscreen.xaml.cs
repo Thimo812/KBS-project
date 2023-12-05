@@ -32,16 +32,13 @@ namespace MatchingAppWindow.Views
     public partial class RegisterScreen : Page
     {
         public event EventHandler ExitPage;
-        private MatchingAppRepository Repo {  get; set; }
 
         private List<Control> invalidFields;
 
         public ObservableCollection<string> ImageList { get; set; } = new();
 
-        public RegisterScreen(MatchingAppRepository repo)
+        public RegisterScreen()
         {
-            Repo = repo;
-
             InitializeComponent();
 
             DataContext = this;
@@ -94,11 +91,11 @@ namespace MatchingAppWindow.Views
 
             try
             {
-                sexualPreference = RegistrationFieldsExtensions.ValidateSexuality(new List<bool?>() { maleSexuality.IsChecked, femaleSexuality.IsChecked, everyoneSexuality.IsChecked });
+                sexualPreference = RegistrationFieldsExtensions.ValidateSexuality(new List<bool?>() { heteroSexual.IsChecked, homoSexual.IsChecked, biSexual.IsChecked });
             }
             catch (InvalidFieldException)
             {
-                invalidFields.AddRange(new List<Control>() { maleSexuality, femaleSexuality, everyoneSexuality });
+                invalidFields.AddRange(new List<Control>() { heteroSexual, homoSexual, biSexual });
             }
 
             try
@@ -118,7 +115,7 @@ namespace MatchingAppWindow.Views
 
             MainWindow.profile = new Profile(userName, firstName, infix, lastName, birthDate, gender, sexualPreference, city, postalCode, country, ImageList.ToList());
 
-            Repo.SaveProfile(MainWindow.profile);
+            MainWindow.repo.SaveProfile(MainWindow.profile);
 
             ExitPage?.Invoke(this, EventArgs.Empty);
         }
@@ -127,7 +124,7 @@ namespace MatchingAppWindow.Views
         {
             try
             {
-                return RegistrationFieldsExtensions.Validate(textBox.Text, field, Repo);
+                return RegistrationFieldsExtensions.Validate(textBox.Text, field, MainWindow.repo);
             }
             catch (InvalidFieldException)
             {
@@ -157,9 +154,9 @@ namespace MatchingAppWindow.Views
                 maleGender,
                 femaleGender,
                 nonBinaryGender,
-                maleSexuality,
-                femaleSexuality,
-                everyoneSexuality
+                heteroSexual,
+                homoSexual,
+                biSexual
             };
 
             foreach (Control field in fields)
