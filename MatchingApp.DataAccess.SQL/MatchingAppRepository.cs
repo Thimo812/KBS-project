@@ -315,7 +315,7 @@ namespace MatchingApp.DataAccess.SQL
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         reader.Read();
-                        amount = reader.GetInt16(0);
+                        amount = reader.GetInt32(0);
                     }
                 }
 
@@ -333,6 +333,7 @@ namespace MatchingApp.DataAccess.SQL
                     {
                         command.Parameters.AddWithValue($"Vraag{i + 1}", answers[i]);
                     }
+                    command.ExecuteNonQuery();
                 }
             }
         }
