@@ -1,4 +1,4 @@
-﻿using KBS_project.Enums;
+using KBS_project.Enums;
 using KBS_project.Enums.FilterOptions;
 using System;
 using System.Collections.Generic;
@@ -19,6 +19,8 @@ namespace KBS_project
 
 		public void SaveProfile( Profile profile);
 
+		public bool ValidateUserName(string userName);
+		
 		public void StoreImages(Profile profile);
 
 		public void SaveMatchingQuiz(List<int> answers);

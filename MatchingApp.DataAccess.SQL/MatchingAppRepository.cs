@@ -1,4 +1,4 @@
-﻿using KBS_project;
+using KBS_project;
 using KBS_project.Enums;
 using KBS_project.Enums.FilterOptions;
 using System;
@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-
+using KBS_project.Exceptions;
 
 namespace MatchingApp.DataAccess.SQL
 {
@@ -113,11 +113,10 @@ namespace MatchingApp.DataAccess.SQL
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
-                if (location != 0)
+                if (location != LocationFilter.Global)
                 {
                     if (location == LocationFilter.City) { sql += $"AND Woonplaats = 'Mountaintop' AND Land = 'Nederland' "; } //Moet uiteindelijk van het profiel komen boop
                     if (location == LocationFilter.Country) { sql += $"AND Land = 'Nederland' "; }
-
                 }
                 if (minimumAge != 0)
                 {
@@ -127,33 +126,81 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     sql += $"AND Geboortedatum >= '{AgeToDate(maximumAge)}' ";
                 }
-                if (includedHobbys != null)
+                if (includedHobbys.Count > 0)
                 {
-                    foreach (var inclHobby in includedHobbys)
+                    sql += "AND (";
+
+                    bool isFirstHobby = true;
+
+                    foreach (var inclhobby in includedHobbys)
                     {
-                        sql += $"AND Hobby = '{inclHobby}' ";
+                        if (!isFirstHobby)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Hobby = '{inclhobby}'";
+                        isFirstHobby = false;
                     }
+
+                    sql += ")";
                 }
-                if (excludedHobbys != null)
+                if (excludedHobbys.Count > 0)
                 {
-                    foreach (var exlHobby in excludedHobbys)
+                    sql += "AND NOT (";
+
+                    bool isFirstHobby = true;
+
+                    foreach (var exclHobby in excludedHobbys)
                     {
-                        sql += $"AND NOT Hobby = '{exlHobby}' ";
+                        if (!isFirstHobby)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Hobby = '{exclHobby}'";
+                        isFirstHobby = false;
                     }
+
+                    sql += ")";
                 }
-                if (includedDiets != null)
+                if (includedDiets.Count > 0)
                 {
+                    sql += "AND (";
+
+                    bool isFirstDiet = true;
+
                     foreach (var inclDiet in includedDiets)
                     {
-                        sql += $"AND Dieet = '{inclDiet}' ";
+                        if (!isFirstDiet)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Dieet = '{inclDiet}'";
+                        isFirstDiet = false;
                     }
+
+                    sql += ")";
                 }
-                if (excludedDiets != null)
+                if (excludedDiets.Count > 0)
                 {
-                    foreach (var exlDiet in excludedDiets)
+                    sql += "AND NOT (";
+
+                    bool isFirstDiet = true;
+
+                    foreach (var exclDiet in excludedDiets)
                     {
-                        sql += $"AND NOT Dieet = '{exlDiet}' ";
+                        if (!isFirstDiet)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Dieet = '{exclDiet}'";
+                        isFirstDiet = false;
                     }
+
+                    sql += ")";
                 }
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -194,10 +241,14 @@ namespace MatchingApp.DataAccess.SQL
 				}
 				connection.Close();
             }
+
+            StoreImages(profile);
         }
 
         public void StoreImages(Profile profile)
         {
+            if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
+
             CheckPhotoAlbum(profile);
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -316,7 +367,7 @@ namespace MatchingApp.DataAccess.SQL
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         reader.Read();
-                        amount = reader.GetInt16(0);
+                        amount = reader.GetInt32(0);
                     }
                 }
 
@@ -334,10 +385,11 @@ namespace MatchingApp.DataAccess.SQL
                     {
                         command.Parameters.AddWithValue($"Vraag{i + 1}", answers[i]);
                     }
+                    command.ExecuteNonQuery();
                 }
             }
         }
-        public bool IsValidUsername(string username)
+        public bool ValidateUsername(string username)
         {
             List<Profile> profiles = GetProfiles();
             return profiles.Any(profile => profile.UserName == username);

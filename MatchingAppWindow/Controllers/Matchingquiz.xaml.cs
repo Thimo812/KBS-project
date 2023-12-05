@@ -12,6 +12,8 @@ namespace MatchingAppWindow
 {
     public partial class Matchingquiz : Page
     {
+        public event EventHandler<EventArgs> ExitPage;
+
         private readonly AnswerManager answerManager = new AnswerManager();
         IMatchingAppRepository Repo {  get; }
 
@@ -52,13 +54,6 @@ namespace MatchingAppWindow
 
         private string GetQuestion(RadioButton radioButton)
         {
-            //if (radioButton.Parent is StackPanel stackPanel && stackPanel.Children.Count > 0 &&
-            //    stackPanel.Children[0] is TextBlock textBlock)
-            //{
-            //    return textBlock.Text;
-            //}
-            //return string.Empty;
-
             Dictionary<string, string> questions = new Dictionary<string, string>()
             {
                 { "Question1", "Ben je meer een introvert of extrovert?"},
@@ -78,13 +73,6 @@ namespace MatchingAppWindow
 
             return questions[radioButton.GroupName];
         }
-
-
-
-
-
-
-
 
         private List<RadioButton> FindRadioButtons(DependencyObject parent)
         {
@@ -148,6 +136,8 @@ namespace MatchingAppWindow
                 MainWindow.profile.QuizAnswers = answerList;
                 Repo.SaveMatchingQuiz(answerList);
             }
+
+            ExitPage?.Invoke(this, EventArgs.Empty);
         }
     
 
