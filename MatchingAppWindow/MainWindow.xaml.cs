@@ -41,20 +41,25 @@ namespace MatchingAppWindow
         {
             repository = new MatchingAppRepository();
 
-            profile = repository.GetProfile("Thimo812");
+           // profile = repository.GetProfile("Thimo812");
 
             registerScreen = new(repository);
             matchingQuiz = new(repository);
+            startScreen = new(repository);
 
             InitializeComponent();
 
             startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
             startScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
-
+            
             registerScreen.exitPage += (object sender, EventArgs e) => Content = filterScreen;
-            startScreen.registerButton.Click += SwitchToRegisterScreen;
+            startScreen.loginSuccessful += SwitchToRegisterScreen;
 
-            Content = matchingQuiz;
+            Content = startScreen;
+        }
+        private void SwitchToFilterScreen(object? sender, EventArgs args)
+        {
+            Content = filterScreen;
         }
 
 
@@ -80,7 +85,7 @@ namespace MatchingAppWindow
             }
         }
 
-      
+
 
 
     }

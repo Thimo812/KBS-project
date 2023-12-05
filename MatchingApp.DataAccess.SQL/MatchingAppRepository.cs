@@ -16,7 +16,8 @@ namespace MatchingApp.DataAccess.SQL
 	public class MatchingAppRepository : IMatchingAppRepository
 	{
 		private SqlConnectionStringBuilder builder;
-		public MatchingAppRepository()
+    
+        public MatchingAppRepository()
 		{
 			builder = new SqlConnectionStringBuilder();
 			builder.DataSource = "127.0.0.1";
@@ -335,6 +336,11 @@ namespace MatchingApp.DataAccess.SQL
                     }
                 }
             }
+        }
+        public bool IsValidUsername(string username)
+        {
+            List<Profile> profiles = GetProfiles();
+            return profiles.Any(profile => profile.UserName == username);
         }
     }
 }

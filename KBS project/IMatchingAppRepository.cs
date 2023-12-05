@@ -22,6 +22,7 @@ namespace KBS_project
 		public void StoreImages(Profile profile);
 
 		public void SaveMatchingQuiz(List<int> answers);
+        bool IsValidUsername(string username);
 
-	}
+    }
 }
