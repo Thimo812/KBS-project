@@ -44,7 +44,10 @@ namespace MatchingAppWindow.Views
         {
             InitializeComponent();
 
-            resultBox.ItemsSource = repo.GetProfiles();
+            var profileList = repo.GetProfiles();
+            profileList.Remove(MainWindow.profile.UserName);
+
+            resultBox.ItemsSource = profileList;
 
             profileDetailsFrame.Content = profileDetails;
 
@@ -200,6 +203,8 @@ namespace MatchingAppWindow.Views
             ClearUncheckedAttributes();
 
             List<string> results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
+            
+            results.Remove(MainWindow.profile.UserName);
 
             resultBox.ItemsSource = results;
         }

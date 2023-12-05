@@ -42,7 +42,7 @@ namespace MatchingAppWindow
             InitializeComponent();
 
             startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
-            startScreen.loginButton.Click += SwitchToFilterScreen;
+            startScreen.LoginSuccessful += SwitchToFilterScreen;
 
             registerScreen.ExitPage += SwitchToFilterScreen;
 
@@ -72,7 +72,7 @@ namespace MatchingAppWindow
             }
         }
 
-        public void SwitchToFilterScreen(object sender, EventArgs e)
+        public void SwitchToFilterScreen(object? sender, EventArgs e)
         {
             if (filterScreen == null) filterScreen = new();
             Content = filterScreen;

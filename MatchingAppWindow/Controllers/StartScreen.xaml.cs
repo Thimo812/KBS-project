@@ -21,9 +21,7 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class StartScreen : Page
     {
-        //     private readonly Login login = new Login();
-        private readonly IMatchingAppRepository repository;
-        public event EventHandler loginSuccessful;
+        public event EventHandler<EventArgs> LoginSuccessful;
 
         public StartScreen()
         {
@@ -48,14 +46,12 @@ namespace MatchingAppWindow.Views
 
             if (MainWindow.repo.ValidateUserName(enteredUserName))
             {
-                
-              
-                loginSuccessful?.Invoke(this, EventArgs.Empty);
+                MainWindow.profile = MainWindow.repo.GetProfile(enteredUserName);
+                LoginSuccessful?.Invoke(this, EventArgs.Empty);
             }
             else
             {
                 ShowErrors();
-
             }
         }
 
