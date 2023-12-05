@@ -22,7 +22,7 @@
             <Setter Property="FontFamily" Value="{StaticResource SecondFont}"/>
             <Setter Property="FontSize" Value="15"/>
             <Setter Property="Margin" Value="0,0,60,0"/>
-            <!-- Add more style properties as needed -->
+            
         </Style>
 
         <Style x:Key="GroupBoxStyle" TargetType="GroupBox">

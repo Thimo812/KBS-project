@@ -17,7 +17,8 @@ namespace MatchingApp.DataAccess.SQL
 	public class MatchingAppRepository : IMatchingAppRepository
 	{
 		private SqlConnectionStringBuilder builder;
-		public MatchingAppRepository()
+    
+        public MatchingAppRepository()
 		{
 			builder = new SqlConnectionStringBuilder();
 			builder.DataSource = "127.0.0.1";
@@ -454,32 +455,10 @@ namespace MatchingApp.DataAccess.SQL
                 }
             }
         }
-
         public bool ValidateUserName(string userName)
         {
-            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            {
-                var sql = "SELECT COUNT(*) as amount FROM Profiel WHERE Gebruikersnaam = @userName";
-
-                connection.Open();
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("userName", userName);
-                    command.ExecuteNonQuery();
-
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        reader.Read();
-
-                        if (reader.GetInt32(0) == 0)
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
+            List<Profile> profiles = GetProfiles();
+            return profiles.Any(profile => profile.UserName == userName);
         }
 
         public List<int> GetMatchingQuiz(string userName)

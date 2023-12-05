@@ -84,7 +84,7 @@ namespace KBS_project
             int matchingCount = 0;
             int totalQuestions = 0;
 
-            // Iterate through each saved answer in the AnswerManager
+            // ga door elk antwoord heen wat opgeslagen is
             foreach (var question in otherProfile.Answers.GetQuestions())
             {
                 totalQuestions++;
@@ -94,14 +94,14 @@ namespace KBS_project
                 // antwoord voor de vraag andere profiel
                 var otherProfileAnswer = otherProfile.Answers.GetAnswer(question);
 
-                // Compare answers and increment matchingCount if they are the same
+                // kijk of de antwoorden gelijk zijn zo ja matchingCount ++
                 if (userAnswer != null && otherProfileAnswer != null && userAnswer == otherProfileAnswer)
                 {
                     matchingCount++;
                 }
             }
 
-            // Calculate the matching percentage
+           
             double matchingPercentage = (double)matchingCount / totalQuestions * 100;
 
             return (int)matchingPercentage;
