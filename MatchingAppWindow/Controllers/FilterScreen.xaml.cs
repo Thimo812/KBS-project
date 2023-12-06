@@ -34,8 +34,8 @@ namespace MatchingAppWindow.Views
         private LocationFilter location = LocationFilter.Global;
         private int minimumAge;
         private int maximumAge;
-        private List<string> includedHobbies = new();
-        private List<string> excludedHobbies = new();
+        private List<int> includedHobbies = new();
+        private List<int> excludedHobbies = new();
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
 
@@ -52,14 +52,14 @@ namespace MatchingAppWindow.Views
             profileDetailsFrame.Content = profileDetails;
 
             DataContext = this;
-        }
 
             for (int i = 1; i < repo.GetHobbies().Count; i++)
             {
                 CheckBox checkBox = new CheckBox();
 
+                checkBox.Tag = i;
                 checkBox.Style = this.FindResource("CustomCheckBoxStyle") as Style;
-                checkBox.Content = repo.GetHobbies()[i];
+                checkBox.Content = InterestExtensions.GetString(i);
                 checkBox.Height = 22;
                 checkBox.IsThreeState = true;
                 checkBox.Checked += HobbyChecked;
@@ -83,7 +83,7 @@ namespace MatchingAppWindow.Views
 
                 DietCheckBoxes.Children.Add(checkBox);
             }
-        }
+        }            
 
         //RadioButtons to filter on location
         private void LocationChecked(object sender, RoutedEventArgs e)
@@ -110,7 +110,7 @@ namespace MatchingAppWindow.Views
         {
             CheckBox checkBox = (CheckBox)sender;
             checkBox.Background = Brushes.Green;
-            IncludeHobbys((string)checkBox.Content);
+            IncludeHobbys((int)checkBox.Tag);
             Filter();
         }
 
@@ -118,7 +118,7 @@ namespace MatchingAppWindow.Views
         {
             CheckBox checkBox = (CheckBox)sender;
             checkBox.Background = Brushes.White;
-            ClearUncheckedHobbies((string)checkBox.Content);
+            ClearUncheckedHobbies((int)checkBox.Tag);
             Filter();
         }
 
@@ -126,7 +126,7 @@ namespace MatchingAppWindow.Views
         {
             CheckBox checkBox = (CheckBox)sender;
             checkBox.Background = Brushes.Red;
-            ExcludeHobbys((string)checkBox.Content);
+            ExcludeHobbys((int)checkBox.Tag);
             Filter();
         }
 
@@ -197,19 +197,19 @@ namespace MatchingAppWindow.Views
             resultBox.ItemsSource = results;
         }
 
-        private void ClearUncheckedHobbies(string item)
+        private void ClearUncheckedHobbies(int item)
         {
             includedHobbies.Remove(item);
             excludedHobbies.Remove(item);
         }
 
-        private void IncludeHobbys(string item)
+        private void IncludeHobbys(int item)
         {
             includedHobbies.Add(item);
             excludedHobbies.Remove(item);
         }
 
-        private void ExcludeHobbys(string item)
+        private void ExcludeHobbys(int item)
         {
             excludedHobbies.Add(item);
             includedHobbies.Remove(item);
@@ -231,6 +231,17 @@ namespace MatchingAppWindow.Views
         {
             excludedDiets.Add(item);
             includedDiets.Remove(item);
+        }
+
+        private void resultBox_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            // Get the currently selected item in the ListBox.
+            if (resultBox.SelectedItem != null)
+            {
+                string curItem = resultBox.SelectedItem.ToString();
+                profileDetails.GetProfile(curItem);
+                profileDetails.Visibility = Visibility.Visible;
+            }
         }
     }
 }

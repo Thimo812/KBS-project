@@ -138,7 +138,7 @@ namespace MatchingApp.DataAccess.SQL
         }
 
         public List<string> GetProfiles(Profile profile, LocationFilter location, int minimumAge, int maximumAge, 
-			List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
+			List<int> includedHobbys, List<int> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
         {
             List<string> results = new();
 
@@ -162,12 +162,12 @@ namespace MatchingApp.DataAccess.SQL
 
                 if (includedHobbys.Count > 0)
                 {
-                    sql += $"AND Profiel.Gebruikersnaam IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE Hobby IN ({string.Join(",", includedHobbys.Select(h => $"'{h}'"))})) ";
+                    sql += $"AND Profiel.Gebruikersnaam IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE id IN ({string.Join(",", includedHobbys.Select(h => $"'{h}'"))})) ";
                 }
 
                 if (excludedHobbys.Count > 0)
                 {
-                    sql += $"AND Profiel.Gebruikersnaam NOT IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE Hobby IN ({string.Join(",", excludedHobbys.Select(h => $"'{h}'"))})) ";
+                    sql += $"AND Profiel.Gebruikersnaam NOT IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE id IN ({string.Join(",", excludedHobbys.Select(h => $"'{h}'"))})) ";
                 }
                 if (includedDiets.Count > 0)
                 {
@@ -180,7 +180,7 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     foreach (var exclDiet in excludedDiets)
                     {
-                        sql += $"AND NOT Dieet = '{(int)exclDiet}' ";
+                        sql += $"AND Dieet is NULL OR NOT Dieet = '{(int)exclDiet}'";
                     }
                 }
 
