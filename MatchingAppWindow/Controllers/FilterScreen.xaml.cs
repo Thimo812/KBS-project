@@ -34,8 +34,8 @@ namespace MatchingAppWindow.Views
         private LocationFilter location = LocationFilter.Global;
         private int minimumAge;
         private int maximumAge;
-        private List<Interest> includedHobbies = new();
-        private List<Interest> excludedHobbies = new();
+        private List<string> includedHobbies = new();
+        private List<string> excludedHobbies = new();
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
         private string? resultString;
@@ -55,6 +55,36 @@ namespace MatchingAppWindow.Views
             catch (SqlException)
             {
                 MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
+            }
+
+            for (int i = 1; i < repo.GetHobbies().Count; i++)
+            {
+                CheckBox checkBox = new CheckBox();
+
+                checkBox.Style = this.FindResource("CustomCheckBoxStyle") as Style;
+                checkBox.Content = repo.GetHobbies()[i];
+                checkBox.Height = 22;
+                checkBox.IsThreeState = true;
+                checkBox.Checked += HobbyChecked;
+                checkBox.Unchecked += HobbyUnchecked;
+                checkBox.Indeterminate += HobbyIndeterminate;
+
+                HobbyCheckBoxes.Children.Add(checkBox);
+            }
+
+            for (int i = 1; i < Enum.GetNames(typeof(Diet)).Length; i++)
+            {
+                CheckBox checkBox = new CheckBox();
+
+                checkBox.Style = this.FindResource("CustomCheckBoxStyle") as Style;
+                checkBox.Content = Enum.GetValues(typeof(Diet)).GetValue(i);
+                checkBox.Height = 22;
+                checkBox.IsThreeState = true;
+                checkBox.Checked += DietChecked;
+                checkBox.Unchecked += DietUnchecked;
+                checkBox.Indeterminate += DietIndeterminate;
+
+                DietCheckBoxes.Children.Add(checkBox);
             }
         }
 
@@ -79,11 +109,11 @@ namespace MatchingAppWindow.Views
             Filter();
         }
 
-        private void HobbyClicked(object sender, RoutedEventArgs e)
+        private void HobbyChecked(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = (CheckBox)sender;
             checkBox.Background = Brushes.Green;
-            IncludeHobbys(checkBox.Name);
+            IncludeHobbys((string)checkBox.Content);
             Filter();
         }
 
@@ -91,7 +121,7 @@ namespace MatchingAppWindow.Views
         {
             CheckBox checkBox = (CheckBox)sender;
             checkBox.Background = Brushes.White;
-            ClearUncheckedAttributes(checkBox.Name);
+            ClearUncheckedHobbies((string)checkBox.Content);
             Filter();
         }
 
@@ -99,7 +129,7 @@ namespace MatchingAppWindow.Views
         {
             CheckBox checkBox = (CheckBox)sender;
             checkBox.Background = Brushes.Red;
-            ExcludeHobbys(checkBox.Name);
+            ExcludeHobbys((string)checkBox.Content);
             Filter();
         }
 
@@ -107,7 +137,7 @@ namespace MatchingAppWindow.Views
         {
             CheckBox checkBox = (CheckBox)sender;
             checkBox.Background = Brushes.Green;
-            IncludeDiets(checkBox.Name);
+            IncludeDiets((Diet)checkBox.Content);
             Filter();
         }
 
@@ -115,7 +145,7 @@ namespace MatchingAppWindow.Views
         {
             CheckBox checkBox = (CheckBox)sender;
             checkBox.Background = Brushes.White;
-            ClearUncheckedAttributes(checkBox.Name);
+            ClearUncheckedDiets((Diet)checkBox.Content);
             Filter();
         }
 
@@ -123,12 +153,7 @@ namespace MatchingAppWindow.Views
         {
             CheckBox checkBox = (CheckBox)sender;
             checkBox.Background = Brushes.Red;
-            ExcludeDiets(checkBox.Name);
-            Filter();
-        }
-
-        private void Unchecked(object sender, RoutedEventArgs e)
-        {
+            ExcludeDiets((Diet)checkBox.Content);
             Filter();
         }
 
@@ -182,99 +207,40 @@ namespace MatchingAppWindow.Views
             filteredProfiles.Content = resultString;
         }
 
-        private void ClearUncheckedAttributes(string item)
+        private void ClearUncheckedHobbies(string item)
         {
-            if (item == "Reading")
-            {
-                includedHobbies.Remove(Interest.Reading);
-                excludedHobbies.Remove(Interest.Reading);
-            }
-            if (item == "Cycling")
-            {
-                includedHobbies.Remove(Interest.Cycling);
-                excludedHobbies.Remove(Interest.Cycling);
-            }
-            if (item == "Cooking")
-            {
-                includedHobbies.Remove(Interest.Cooking);
-                excludedHobbies.Remove(Interest.Cooking);
-            }
-            if (item == "Vegetarian")
-            {
-                includedDiets.Remove(Diet.Vegetarian);
-                excludedDiets.Remove(Diet.Vegetarian);
-            }
-            if (item == "Vegan")
-            {
-                includedDiets.Remove(Diet.Vegan);
-                includedDiets.Remove(Diet.Vegan);
-            }
-        }
-
-        private void IncludeDiets(string item)
-        {
-            if (item == "Vegetarian" && !includedDiets.Contains(Diet.Vegetarian))
-            {
-                includedDiets.Add(Diet.Vegetarian);
-                excludedDiets.Remove(Diet.Vegetarian);
-            }
-            if (item == "Vegan" && !includedDiets.Contains(Diet.Vegan))
-            {
-                includedDiets.Add(Diet.Vegan);
-                excludedDiets.Remove(Diet.Vegan);
-            }
-        }
-
-        private void ExcludeDiets(string item)
-        {
-            if (item == "Vegetarian" && !excludedDiets.Contains(Diet.Vegetarian))
-            {
-                excludedDiets.Add(Diet.Vegetarian);
-                includedDiets.Remove(Diet.Vegetarian);
-            }
-            if (item == "Vegan" && !excludedDiets.Contains(Diet.Vegetarian))
-            {
-                excludedDiets.Add(Diet.Vegan);
-                includedDiets.Remove(Diet.Vegan);
-            }
+            includedHobbies.Remove(item);
+            excludedHobbies.Remove(item);
         }
 
         private void IncludeHobbys(string item)
         {
-            if (item == "Reading" && !includedHobbies.Contains(Interest.Reading))
-            {
-                includedHobbies.Add(Interest.Reading);
-                excludedHobbies.Remove(Interest.Reading);
-            }
-            if (item == "Cycling" && !includedHobbies.Contains(Interest.Cycling))
-            {
-                includedHobbies.Add(Interest.Cycling);
-                excludedHobbies.Remove(Interest.Cycling);
-            }
-            if (item == "Cooking" && !includedHobbies.Contains(Interest.Cooking))
-            {
-                includedHobbies.Add(Interest.Cooking);
-                excludedHobbies.Remove(Interest.Cooking);
-            }
+            includedHobbies.Add(item);
+            excludedHobbies.Remove(item);
         }
 
         private void ExcludeHobbys(string item)
         {
-            if (item == "Reading" && !excludedHobbies.Contains(Interest.Reading))
-            {
-                excludedHobbies.Add(Interest.Reading);
-                includedHobbies.Remove(Interest.Reading);
-            }
-            if (item == "Cycling" && !excludedHobbies.Contains(Interest.Cycling))
-            {
-                excludedHobbies.Add(Interest.Cycling);
-                includedHobbies.Remove(Interest.Cycling);
-            }
-            if (item == "Cooking" && !excludedHobbies.Contains(Interest.Cooking))
-            {
-                excludedHobbies.Add(Interest.Cooking);
-                includedHobbies.Remove(Interest.Cooking);
-            }
+            excludedHobbies.Add(item);
+            includedHobbies.Remove(item);
+        }
+
+        private void ClearUncheckedDiets(Diet item)
+        {
+            includedDiets.Remove(item);
+            excludedDiets.Remove(item);
+        }
+
+        private void IncludeDiets(Diet item)
+        {
+            includedDiets.Add(item);
+            excludedDiets.Remove(item);
+        }
+
+        private void ExcludeDiets(Diet item)
+        {
+            excludedDiets.Add(item);
+            includedDiets.Remove(item);
         }
     }
 }

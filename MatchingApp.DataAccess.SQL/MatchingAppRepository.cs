@@ -105,13 +105,14 @@ namespace MatchingApp.DataAccess.SQL
             return profiles;
 		}
 
-		public List<string> GetProfiles(LocationFilter location, int minimumAge, int maximumAge, 
-			List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
-		{
+        public List<string> GetProfiles(LocationFilter location, int minimumAge, int maximumAge,
+    List<string> includedHobbys, List<string> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
+        {
             List<string> results = new();
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
+                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel WHERE 1 = 1 ";
+
                 if (location != LocationFilter.Global)
                 {
                     if (location == LocationFilter.City) { sql += $"AND Woonplaats = 'Mountaintop' AND Land = 'Nederland' "; } //Moet uiteindelijk van het profiel komen boop
@@ -119,40 +120,37 @@ namespace MatchingApp.DataAccess.SQL
                 }
                 if (minimumAge != 0)
                 {
-                    sql += $"AND Geboortedatum <= '{AgeToDate(minimumAge)}' "; 
-				} 
-				if (maximumAge != 0)
+                    sql += $"AND Geboortedatum <= '{AgeToDate(minimumAge)}' ";
+                }
+                if (maximumAge != 0)
                 {
                     sql += $"AND Geboortedatum >= '{AgeToDate(maximumAge)}' ";
                 }
+
                 if (includedHobbys.Count > 0)
                 {
-                    foreach (var inclhobby in includedHobbys)
-                    {
-                        sql += $"AND Hobby = '{inclhobby}' ";
-                    }
+                    sql += $"AND Profiel.Gebruikersnaam IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE Hobby IN ({string.Join(",", includedHobbys.Select(h => $"'{h}'"))})) ";
                 }
+
                 if (excludedHobbys.Count > 0)
                 {
-                    foreach (var exclHobby in excludedHobbys)
-                    {
-                        sql += $"AND NOT Hobby = '{exclHobby}' ";
-                    }
+                    sql += $"AND Profiel.Gebruikersnaam NOT IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE Hobby IN ({string.Join(",", excludedHobbys.Select(h => $"'{h}'"))})) ";
                 }
                 if (includedDiets.Count > 0)
                 {
                     foreach (var inclDiet in includedDiets)
                     {
-                        sql += $"AND Dieet = '{inclDiet}' ";
+                        sql += $"AND Dieet = '{(int)inclDiet}' ";
                     }
                 }
                 if (excludedDiets.Count > 0)
                 {
                     foreach (var exclDiet in excludedDiets)
                     {
-                        sql += $"AND NOT Dieet = '{exclDiet}' ";
+                        sql += $"AND NOT Dieet = '{(int)exclDiet}' ";
                     }
                 }
+
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -169,7 +167,7 @@ namespace MatchingApp.DataAccess.SQL
             return results;
         }
 
-		public void SaveProfile(Profile profile)
+        public void SaveProfile(Profile profile)
 		{
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -318,6 +316,62 @@ namespace MatchingApp.DataAccess.SQL
                 }
             }
             return true;
+        }
+
+        public Dictionary<int, string> GetHobbies()
+        {
+            Dictionary<int, string> hobbies = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT DISTINCT Hobby FROM Hobbies";
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        int i = 0;
+                        while (reader.Read())
+                        {
+                            string name = reader.GetString(0);
+
+                            hobbies.Add(i, name);
+                            i++;
+                        }
+                    }
+                }
+            }
+            return hobbies;
+        }
+
+        public List<Diet> GetDiets()
+        {
+            List<Diet> diets = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT DISTINCT Dieet FROM Profiel";
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if(reader.IsDBNull(0) == false)
+                            {
+                                int diet = reader.GetInt16(reader.GetOrdinal("Dieet"));
+                                diets.Add((Diet)diet);
+                            }
+                        }
+                    }
+                }
+            }
+            return diets;
         }
     }
 }
