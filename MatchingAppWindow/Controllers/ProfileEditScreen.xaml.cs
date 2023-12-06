@@ -1,4 +1,5 @@
 ﻿using KBS_project;
+using KBS_project.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,14 +40,57 @@ namespace MatchingAppWindow.Views
         {
             if (MainWindow.profile != null)
             {
-                MainWindow.profile.Description =BeschrijvingBox.Text;
+                MainWindow.profile.Description = BeschrijvingBox.Text;
                 MainWindow.profile.degree = OpleidingBox.Text;
                 MainWindow.profile.School = SchoolBox.Text;
                 MainWindow.profile.WorkPlace = WerkplekBox.Text;
-                MainWindow.profile.Diet = DieetBox.Text;
+                MainWindow.profile.Diet = GetDiet();
 
                 MainWindow.repository.UpdateProfile(MainWindow.profile);
             }
+        }
+
+        public void SetDiet(Diet diet)
+        {
+            switch(diet)
+            {
+                case Diet.None:
+                    NoDiet.IsChecked = true;
+                    break;
+                case Diet.Vegetarian:
+                    VegieDiet.IsChecked = true;
+                    break;
+                case Diet.Vegan:
+                    VeganDiet.IsChecked = true;
+                    break;
+                case Diet.Keto:
+                    KetoDiet.IsChecked = true;
+                    break;
+                default:
+                    OtherDiet.IsChecked = true;
+                    break;
+            }
+        }
+
+        public Diet GetDiet()
+        {
+            if ((bool)NoDiet.IsChecked)
+            {
+                return Diet.None;
+            }
+            else if ((bool)VegieDiet.IsChecked)
+            {
+                return Diet.Vegetarian;
+            }
+            else if ((bool)VeganDiet.IsChecked)
+            {
+                return Diet.Vegan;
+            }
+            else if ((bool)KetoDiet.IsChecked)
+            {
+                return Diet.Keto;
+            }
+            return Diet.Other;
         }
     }
 }

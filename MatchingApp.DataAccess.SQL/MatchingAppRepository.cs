@@ -1,18 +1,19 @@
-﻿using KBS_project;
+using KBS_project;
 using KBS_project.Enums;
 using KBS_project.Enums.FilterOptions;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using Renci.SshNet;
-using Renci.SshNet.Common;
-using static System.Net.Mime.MediaTypeNames;
+using System.Drawing;
+using KBS_project.Exceptions;
+
 namespace MatchingApp.DataAccess.SQL
 {
-	public class MatchingAppRepository
+	public class MatchingAppRepository : IMatchingAppRepository
 	{
 		private SqlConnectionStringBuilder builder;
 		public MatchingAppRepository()
@@ -25,35 +26,13 @@ namespace MatchingApp.DataAccess.SQL
 			builder.TrustServerCertificate = false;
 		}
 
-		public string AgetoDate(int age)
+		public string AgeToDate(int age)
 		{
             var today = DateTime.Today;
             var byear = today.Year - age;
 			DateTime date = new DateTime(byear, today.Month, today.Day);
-            var datestring = date.ToString("yyyy-MM-dd");
-            return datestring;
-        }
-
-        public bool IsInDatabase(string userName)
-        {
-            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            {
-                var sql = $"SELECT ProfielGebruikersnaam FROM FotoAlbum WHERE Gebruikersnaam = {userName}";
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        if (reader.GetString != null)
-                        {
-                            return true;
-                        }
-                        return false;
-                    }
-                }
-                connection.Close();
-            }
-            return false;
+            var dateString = date.ToString("yyyy-MM-dd");
+            return dateString;
         }
 		public Profile GetProfile(string userName)
 		{
@@ -82,19 +61,31 @@ namespace MatchingApp.DataAccess.SQL
                         string? degree = reader.GetTextReader(9).ReadLine();
                         string? school = reader.GetTextReader(10).ReadLine();
                         string? workplace = reader.GetTextReader(11).ReadLine();
-                        string? diet = reader.GetTextReader(12).ReadLine();
-                        string? vaxed = reader.GetTextReader(13).ReadLine();
+
+                        
+                        
+
+                        bool vaxed;
+                        if (!reader.IsDBNull(13))
+                        {
+                            vaxed = reader.GetBoolean(13);
+                        }
+                        
                         string country = reader.GetString(14);
                         string postalCode = reader.GetString(15);
 
+                        
 
-
-						profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode);
+                        profile = new(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode, new List<string>());
                         profile.Description = description;
                         profile.degree = degree;
                         profile.School = school;
                         profile.WorkPlace = workplace;
-                        profile.Diet = diet;
+                        if (!reader.IsDBNull(12))
+                        {
+                            profile.Diet = (Diet)reader.GetInt16(12);
+                        }
+
 					}
 				}
 				connection.Close();
@@ -102,80 +93,137 @@ namespace MatchingApp.DataAccess.SQL
 			return profile;
 		}
 
-		public List<string> GetProfiles()
+		public List<Profile> GetProfiles()
 		{
-            List<string> results = new();
+            List<Profile> profiles = new List<Profile>();
 
-            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+			using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel";
+                var sql = "SELECT * FROM Profiel";
+
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        while (reader.Read())
+                        while(reader.Read())
                         {
-                            results.Add(reader.GetString(0));
+                            string userName = reader.GetString(0);
+                            string firstName = reader.GetString(1);
+                            string lastName = reader.GetString(2);
+                            string infix = reader.GetString(3);
+                            DateTime birthDate = reader.GetDateTime(4);
+                            SexualPreference pref = (SexualPreference)int.Parse(reader.GetString(5));
+                            Gender gender = (Gender)int.Parse((reader.GetString(6)));
+                            string city = reader.GetString(7);
+                            string country = reader.GetString(14);
+                            string postalCode = reader.GetString(15);
+
+                            profiles.Add(new Profile(userName, firstName, infix, lastName, birthDate, gender, pref, city, country, postalCode, new List<string>()));
                         }
                     }
                 }
                 connection.Close();
             }
-            return results;
-        }
+            return profiles;
+		}
 
-        public List<string> GetProfiles(LocationFilter location, int minimumAge, int maximumAge,
-            List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
-        {
+		public List<string> GetProfiles(LocationFilter location, int minimumAge, int maximumAge, 
+			List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
+		{
             List<string> results = new();
-
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
                 if (location != LocationFilter.Global)
                 {
-                    if (location == LocationFilter.City) { sql += $"AND Woonplaats = 'Mountaintop' AND Land = 'Nederland' "; } //Moet uiteindelijk van het profiel komen
+                    if (location == LocationFilter.City) { sql += $"AND Woonplaats = 'Mountaintop' AND Land = 'Nederland' "; } //Moet uiteindelijk van het profiel komen boop
                     if (location == LocationFilter.Country) { sql += $"AND Land = 'Nederland' "; }
-
                 }
                 if (minimumAge != 0)
                 {
-                    sql += $"AND Geboortedatum <= '{AgetoDate(minimumAge)}' ";
-                }
-                if (maximumAge != 0)
+                    sql += $"AND Geboortedatum <= '{AgeToDate(minimumAge)}' "; 
+				} 
+				if (maximumAge != 0)
                 {
-                    sql += $"AND Geboortedatum >= '{AgetoDate(maximumAge)}' ";
+                    sql += $"AND Geboortedatum >= '{AgeToDate(maximumAge)}' ";
                 }
-                if (includedHobbys != null)
+                if (includedHobbys.Count > 0)
                 {
+                    sql += "AND (";
+
+                    bool isFirstHobby = true;
+
                     foreach (var inclhobby in includedHobbys)
                     {
-                        sql += $"AND Hobby = '{inclhobby}' ";
-                    }
-                }
-                if (excludedHobbys != null)
-                {
-                    foreach (var exlhobby in excludedHobbys)
-                    {
-                        sql += $"AND NOT Hobby = '{exlhobby}' ";
-                    }
-                }
-                if (includedDiets != null)
-                {
-                    foreach (var incldiet in includedDiets)
-                    {
-                        sql += $"AND Dieet = '{incldiet}' ";
-                    }
-                }
-                if (excludedDiets != null)
-                {
-                    foreach (var exldiet in excludedDiets)
-                    {
-                        sql += $"AND NOT Dieet = '{exldiet}' ";
-                    }
-                }
+                        if (!isFirstHobby)
+                        {
+                            sql += " OR ";
+                        }
 
+                        sql += $"Hobby = '{inclhobby}'";
+                        isFirstHobby = false;
+                    }
+
+                    sql += ")";
+                }
+                if (excludedHobbys.Count > 0)
+                {
+                    sql += "AND NOT (";
+
+                    bool isFirstHobby = true;
+
+                    foreach (var exclHobby in excludedHobbys)
+                    {
+                        if (!isFirstHobby)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Hobby = '{exclHobby}'";
+                        isFirstHobby = false;
+                    }
+
+                    sql += ")";
+                }
+                if (includedDiets.Count > 0)
+                {
+                    sql += "AND (";
+
+                    bool isFirstDiet = true;
+
+                    foreach (var inclDiet in includedDiets)
+                    {
+                        if (!isFirstDiet)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Dieet = '{inclDiet}'";
+                        isFirstDiet = false;
+                    }
+
+                    sql += ")";
+                }
+                if (excludedDiets.Count > 0)
+                {
+                    sql += "AND NOT (";
+
+                    bool isFirstDiet = true;
+
+                    foreach (var exclDiet in excludedDiets)
+                    {
+                        if (!isFirstDiet)
+                        {
+                            sql += " OR ";
+                        }
+
+                        sql += $"Dieet = '{exclDiet}'";
+                        isFirstDiet = false;
+                    }
+
+                    sql += ")";
+                }
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -192,7 +240,7 @@ namespace MatchingApp.DataAccess.SQL
             return results;
         }
 
-        public void SaveProfile(Profile profile)
+		public void SaveProfile(Profile profile)
 		{
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -215,6 +263,8 @@ namespace MatchingApp.DataAccess.SQL
 				}
 				connection.Close();
             }
+
+            StoreImages(profile);
         }
 
         public void UpdateProfile(Profile profile) 
@@ -249,67 +299,176 @@ namespace MatchingApp.DataAccess.SQL
                 
         }
 
-        public void StoreFile(string filename)
+        public void StoreImages(Profile profile)
         {
-            if (1!=2)//Als foto album niet er is ga door anders sla over
+            if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
+
+            CheckPhotoAlbum(profile);
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                foreach (var image in profile.Images)
                 {
-                    var sql = $"INSERT INTO FotoAlbum(ProfielGebruikersnaam) VALUES ('gebruikersnaam')";
+                    byte[] imageData = File.ReadAllBytes(image);
+                    var sql = $"INSERT INTO Foto(FotoData, FotoAlbumID) VALUES (@imageData, (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName))";
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        command.ExecuteNonQuery() ;
-                    }
-                    connection.Close();
-                }
-            }
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            {
-                var sql = $"INSERT INTO Foto(ID, FotoTitel, FotoData, FotoAlbumID) VALUES (int, {Path.GetFileName(filename)}, {File.ReadAllBytes(filename)}, int)";
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        Console.WriteLine(reader.GetString);
+                        command.Parameters.AddWithValue("imageData", imageData);
+                        command.Parameters.AddWithValue("userName", profile.UserName);
+                        command.ExecuteNonQuery();
                     }
                 }
                 connection.Close();
             }
         }
-    }
 
-        /*public byte[] RetrieveFile(string filename)
 
+        public List<Image> RetrieveImages(Profile profile)
         {
-            SqlConnection connection = new SqlConnection("Server=(local) ; Initial Catalog = FileStore ; Integrated Security = SSPI");
+            List<Image> images = new List<Image>();
 
-            SqlCommand command = new SqlCommand("SELECT * FROM MyFiles WHERE Filename=@Filename", connection);
-
-            command.Parameters.AddWithValue("@Filename", filename); connection.Open();
-            SqlDataReader reader = command.ExecuteReader(System.Data.CommandBehavior.SequentialAccess);
-            reader.Read();
-            MemoryStream memory = new MemoryStream();
-            long startIndex = 0;
-            const int ChunkSize = 256;
-            while (true)
-
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
 
-                byte[] buffer = new byte[ChunkSize];
-                long retrievedBytes = reader.GetBytes(1, startIndex, buffer, 0, ChunkSize);
-                memory.Write(buffer, 0, (int)retrievedBytes);
-                startIndex += retrievedBytes;
-                if (retrievedBytes != ChunkSize)
-                    break;
+                var sql = $"SELECT FotoData FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @gebruikersnaam)";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("gebruikersnaam", profile.UserName);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            byte[] imageData = (byte[])reader["FotoData"];
+
+                            images.Add(ByteArrayToImage(imageData));
+                        }
+                    }
+                }
             }
 
-            connection.Close();
-            byte[] data = memory.ToArray();
-            memory.Dispose();
-            return data;
-
+            return images;
         }
-    }*/
+
+        static Image ByteArrayToImage(byte[] byteArray)
+        {
+            using (MemoryStream stream = new MemoryStream(byteArray))
+            {
+                return Image.FromStream(stream);
+            }
+        }
+
+        private void CheckPhotoAlbum(Profile profile)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"SELECT COUNT(*) as amount FROM FotoAlbum WHERE ProfielGebruikersnaam = @Gebruikersnaam";
+
+                int amount;
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        amount = (int)reader["amount"];
+                    }
+                }
+
+                if (amount == 0)
+                {
+                    var insertAlbumQuery = $"INSERT INTO FotoAlbum (ProfielGebruikersnaam) VALUES (@Gebruikersnaam)";
+
+                    using (SqlCommand command = new SqlCommand(insertAlbumQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+                connection.Close();
+            }
+        }
+
+        public void SaveMatchingQuiz(List<int> answers)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"SELECT count(*) FROM MatchingQuiz WHERE ";
+                for (int i = 1; i <= 13; i++)
+                {
+                    sql = sql + $"Vraag{i} = @vraag{i} AND ";
+                }
+                sql = sql + "1 = 1";
+
+                int amount;
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    for (int i = 0; i < answers.Count; i++)
+                    {
+                        command.Parameters.AddWithValue($"vraag{i + 1}", answers[i]);
+                    }
+                    command.ExecuteNonQuery();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        amount = reader.GetInt32(0);
+                    }
+                }
+
+                if (amount > 0)
+                {
+                    connection.Close();
+                    return;
+                }
+
+                sql = $"INSERT INTO MatchingQuiz (Vraag1, Vraag2, Vraag3, Vraag4, Vraag5, Vraag6, Vraag7, Vraag8, Vraag9, Vraag10, Vraag11, Vraag12, Vraag13) VALUES (@Vraag1, @Vraag2, @Vraag3, @Vraag4, @Vraag5, @Vraag6, @Vraag7, @Vraag8, @Vraag9, @Vraag10, @Vraag11, @Vraag12, @Vraag13)";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    for (int i = 0; i < answers.Count; i++)
+                    {
+                        command.Parameters.AddWithValue($"Vraag{i + 1}", answers[i]);
+                    }
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public bool ValidateUserName(string userName)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT COUNT(*) as amount FROM Profiel WHERE Gebruikersnaam = @userName";
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+
+                        if (reader.GetInt32(0) == 0)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+    }
 }

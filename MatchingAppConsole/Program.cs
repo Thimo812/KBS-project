@@ -1,5 +1,7 @@
 ﻿using KBS_project;
+using KBS_project.Enums;
 using MatchingApp.DataAccess.SQL;
+<<<<<<< HEAD
 
 
 MatchingAppRepository matchingAppRepository = new MatchingAppRepository();
@@ -10,3 +12,6 @@ matchingAppRepository.UploadPic();
 
 MatchingAppRepository repo = new MatchingAppRepository();
 
+=======
+
+>>>>>>> origin/pre-master

@@ -22,7 +22,11 @@
         <TextBox x:Name="WerkplekBox" Margin="300,169,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
 
         <Label Content="Dieet:" Margin="150,206,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <TextBox x:Name="DieetBox" Margin="300,206,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
+        <RadioButton Content="Geen" Name="NoDiet" GroupName="Diet" Margin="299,214,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Vegetarisch" Name="VegieDiet" GroupName="Diet" Margin="370,214,0,0" HorizontalAlignment="Left" Width="98" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Veganistisch" Name="VeganDiet" GroupName="Diet" Margin="473,214,0,0" HorizontalAlignment="Left" Width="108" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Keto" Name="KetoDiet" GroupName="Diet" Margin="586,214,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Anders" Name="OtherDiet" GroupName="Diet" Margin="652,214,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
 
 
 
@@ -32,8 +36,8 @@
         </Border>
 
         <Button IsEnabled="False" Content="Profiel aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,60,0,0" VerticalAlignment="Top" Width="125"/>
-        <Button Name="PhotoScreenButton" Content="Foto's aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,105,0,0" VerticalAlignment="Top" Width="125" />
-        <Button Name="AccountScreenButton" Content="Account aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,150,0,0" VerticalAlignment="Top" Width="125" />
+        <Button Visibility="Hidden" Name="PhotoScreenButton" Content="Foto's aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,150,0,0" VerticalAlignment="Top" Width="125" />
+        <Button Name="AccountScreenButton" Content="Account aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,105,0,0" VerticalAlignment="Top" Width="125" />
 
     </Grid>
 </Page>

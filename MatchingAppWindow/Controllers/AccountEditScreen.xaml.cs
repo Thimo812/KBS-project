@@ -27,15 +27,6 @@ namespace MatchingAppWindow.Views
             InitializeComponent();
         }
 
-        private void SwitchToPhotoEditScreen(Object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void SwitchToProfileEditScreen(Object sender, RoutedEventArgs e)
-        {
-        }
-
         private void ConfirmChanges(object sender, RoutedEventArgs e)
         {
             if (MainWindow.profile != null)
@@ -45,7 +36,7 @@ namespace MatchingAppWindow.Views
                 MainWindow.profile.City = CityBox.Text;
                 MainWindow.profile.PostalCode = PostalCodeBox.Text;
                 MainWindow.profile.Gender = GetGender();
-                MainWindow.profile.SexualPreference = getSexuality();
+                MainWindow.profile.SexualPreference = GetSexuality();
 
                 MainWindow.repository.UpdateProfile(MainWindow.profile);
             }
@@ -67,18 +58,18 @@ namespace MatchingAppWindow.Views
             }
         }
 
-        public void setPreference(SexualPreference sp)
+        public void SetPreference(SexualPreference sp)
         {
             switch(sp)
             {
-                case SexualPreference.Men:
-                    MaleSexuality.IsChecked = true;
+                case SexualPreference.Hetero:
+                    HeteroSexuality.IsChecked = true;
                     break;
-                case SexualPreference.Women:
-                    FemaleSexuality.IsChecked = true;
+                case SexualPreference.Homoseksueel:
+                    HomoSexuality.IsChecked = true;
                     break;
                 default:
-                    EveryoneSexuality.IsChecked = true;
+                    BiSexuality.IsChecked = true;
                     break;
             }
         }
@@ -100,21 +91,26 @@ namespace MatchingAppWindow.Views
             return Gender.Male;
         }
 
-        public SexualPreference getSexuality()
+        public SexualPreference GetSexuality()
         {
-            if ((bool)MaleSexuality.IsChecked)
+            if ((bool)HeteroSexuality.IsChecked)
             {
-                return SexualPreference.Men;
+                return SexualPreference.Hetero;
             }
-            else if ((bool)FemaleSexuality.IsChecked)
+            else if ((bool)HomoSexuality.IsChecked)
             {
-                return SexualPreference.Women;
+                return SexualPreference.Homoseksueel;
             }
-            else if ((bool)EveryoneSexuality.IsChecked)
+            else if ((bool)BiSexuality.IsChecked)
             {
-                return SexualPreference.All;
+                return SexualPreference.Biseksueel;
             }
-            return SexualPreference.Men;
+            return SexualPreference.Hetero;
+        }
+
+        private void FemaleSexuality_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

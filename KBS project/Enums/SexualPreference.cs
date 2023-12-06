@@ -8,8 +8,8 @@ namespace KBS_project.Enums
 {
     public enum SexualPreference
     {
-        Men,
-        Women,
-        All
+        Hetero,
+        Homoseksueel,
+        Biseksueel
     }
 }

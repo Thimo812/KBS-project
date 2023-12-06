@@ -22,9 +22,9 @@
         <TextBox x:Name="PostalCodeBox" Margin="300,142,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="26" FontSize="15" HorizontalAlignment="Left" Width="138"/>
 
         <Label Content="Seksuele voorkeur:" Margin="150,202,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <RadioButton Content="Vrouwen" Name="FemaleSexuality" GroupName="Sexuality" Margin="300,210,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Content="Mannen" Name="MaleSexuality" GroupName="Sexuality" Margin="395,210,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Content="Iedereen" Name="EveryoneSexuality" GroupName="Sexuality" Margin="487,210,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.474,0.158"/>
+        <RadioButton Content="Hetero" Name="HeteroSexuality" GroupName="Sexuality" Margin="300,210,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Homo" Name="HomoSexuality" GroupName="Sexuality" Margin="395,210,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Bi" Name="BiSexuality" GroupName="Sexuality" Margin="487,210,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.474,0.158"/>
 
 
         <Label Content="Geslacht:" Margin="150,236,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
@@ -32,14 +32,14 @@
         <RadioButton Content="Man" Name="MaleGender" GroupName="Gender" Margin="395,244,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
         <RadioButton Content="Non-binair" Name="NonBinaryGender" GroupName="Gender" Margin="487,244,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
 
-        <Button x:Name="ConfirmButton" Content="Opslaan" Margin="152,370,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276"/>
+        <Button x:Name="ConfirmButton" Content="Opslaan" Margin="152,370,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276" Click="ConfirmChanges"/>
 
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="450" VerticalAlignment="Center" Width="1" Margin="145,0,0,0" RenderTransformOrigin="0.5,0.5">
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="450" VerticalAlignment="Top" Width="1" Margin="145,0,0,0" RenderTransformOrigin="0.5,0.5">
         </Border>
 
-        <Button Name="ProfileEditButton" Content="Profiel aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,60,0,0" VerticalAlignment="Top" Width="125" Click="SwitchToProfileEditScreen"/>
-        <Button Name="PhotoScreenButton" Content="Foto's aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,105,0,0" VerticalAlignment="Top" Width="125" Click="SwitchToPhotoEditScreen"/>
-        <Button IsEnabled="False" Content="Account aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,150,0,0" VerticalAlignment="Top" Width="125"/>
+        <Button Name="ProfileEditButton" Content="Profiel aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,60,0,0" VerticalAlignment="Top" Width="125"/>
+        <Button Visibility="Hidden" Name="PhotoScreenButton" Content="Foto's aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,150,0,0" VerticalAlignment="Top" Width="125"/>
+        <Button IsEnabled="False" Content="Account aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,105,0,0" VerticalAlignment="Top" Width="125"/>
         
     </Grid>
 </Page>
