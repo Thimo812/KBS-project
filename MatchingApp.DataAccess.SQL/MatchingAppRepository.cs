@@ -127,79 +127,31 @@ namespace MatchingApp.DataAccess.SQL
                 }
                 if (includedHobbys.Count > 0)
                 {
-                    sql += "AND (";
-
-                    bool isFirstHobby = true;
-
                     foreach (var inclhobby in includedHobbys)
                     {
-                        if (!isFirstHobby)
-                        {
-                            sql += " OR ";
-                        }
-
-                        sql += $"Hobby = '{inclhobby}'";
-                        isFirstHobby = false;
+                        sql += $"AND Hobby = '{inclhobby}' ";
                     }
-
-                    sql += ")";
                 }
                 if (excludedHobbys.Count > 0)
                 {
-                    sql += "AND NOT (";
-
-                    bool isFirstHobby = true;
-
                     foreach (var exclHobby in excludedHobbys)
                     {
-                        if (!isFirstHobby)
-                        {
-                            sql += " OR ";
-                        }
-
-                        sql += $"Hobby = '{exclHobby}'";
-                        isFirstHobby = false;
+                        sql += $"AND NOT Hobby = '{exclHobby}' ";
                     }
-
-                    sql += ")";
                 }
                 if (includedDiets.Count > 0)
                 {
-                    sql += "AND (";
-
-                    bool isFirstDiet = true;
-
                     foreach (var inclDiet in includedDiets)
                     {
-                        if (!isFirstDiet)
-                        {
-                            sql += " OR ";
-                        }
-
-                        sql += $"Dieet = '{inclDiet}'";
-                        isFirstDiet = false;
+                        sql += $"AND Dieet = '{inclDiet}' ";
                     }
-
-                    sql += ")";
                 }
                 if (excludedDiets.Count > 0)
                 {
-                    sql += "AND NOT (";
-
-                    bool isFirstDiet = true;
-
                     foreach (var exclDiet in excludedDiets)
                     {
-                        if (!isFirstDiet)
-                        {
-                            sql += " OR ";
-                        }
-
-                        sql += $"Dieet = '{exclDiet}'";
-                        isFirstDiet = false;
+                        sql += $"AND NOT Dieet = '{exclDiet}' ";
                     }
-
-                    sql += ")";
                 }
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))

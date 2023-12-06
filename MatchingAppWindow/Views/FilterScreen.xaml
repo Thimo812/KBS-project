@@ -6,8 +6,36 @@
         xmlns:local="clr-namespace:MatchingAppWindow.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    <Page.Resources>
+        <Style x:Key="CustomCheckBoxStyle" TargetType="{x:Type CheckBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <BulletDecorator Background="Transparent">
+                            <BulletDecorator.Bullet>
+                                <Grid Width="16" Height="16">
+                                    <Rectangle x:Name="Border" Width="16" Height="16" Fill="{TemplateBinding Background}" Stroke="Black"/>
+                                    <TextBlock x:Name="Check" Visibility="Hidden" Text="✔" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="Cross" Visibility="Hidden" Text="✘" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                            </BulletDecorator.Bullet>
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,1,0,0" RecognizesAccessKey="True"/>
+                        </BulletDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Check" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="{x:Null}">
+                                    <Setter TargetName="Cross" Property="Visibility" Value="Visible"/>
+                                </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
     <Grid>
-        <Button Name="filterButton" Content=">" HorizontalAlignment="Left" Margin="24,20,0,0" VerticalAlignment="Top" Click="ButtonExpandFilters_Click" RenderTransformOrigin="-5.202,0.503"/>
         <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="20,49,0,0" MaxHeight="500" MaxWidth="300" HorizontalAlignment="Left" Height="352" VerticalAlignment="Top" Width="138">
             <StackPanel Background="LightGray">
 
@@ -40,37 +68,35 @@
                     Content="Hobby"
                     FontWeight="Bold"
                 />
-                <Slider
-                    Name="buttonHobby"
-                    Maximum="1"
-                    Width="50" 
-                    Background="Green" 
-                    HorizontalAlignment="Left" 
-                    Margin="5,0,0,5"
-                    BorderThickness="2"
-                    BorderBrush="Gray" 
-                    ValueChanged="IncOrExcHobby_Click"
-                />
                 <CheckBox 
                     Name="Reading"
+                    Style="{StaticResource CustomCheckBoxStyle}"
                     Content="Lezen" 
-                    Height="22" 
-                    Checked="HobbyChecked"
-                    Unchecked="Unchecked"
+                    Height="22"
+                    IsThreeState="True"
+                    Checked="HobbyClicked"
+                    Unchecked="HobbyUnchecked"
+                    Indeterminate="HobbyIndeterminate"
                 />
                 <CheckBox
                     Name="Cycling"
+                    Style="{StaticResource CustomCheckBoxStyle}"
                     Content="Fietsen" 
                     Height="21"
-                    Checked="HobbyChecked"
-                    Unchecked="Unchecked"
+                    IsThreeState="True"
+                    Checked="HobbyClicked"
+                    Unchecked="HobbyUnchecked"
+                    Indeterminate="HobbyIndeterminate"
                 />
                 <CheckBox 
                     Name="Cooking"
+                    Style="{StaticResource CustomCheckBoxStyle}"
                     Content="Koken" 
                     Height="27"
-                    Checked="HobbyChecked"
-                    Unchecked="Unchecked"
+                    IsThreeState="True"
+                    Checked="HobbyClicked"
+                    Unchecked="HobbyUnchecked"
+                    Indeterminate="HobbyIndeterminate"
                 />
 
                 <!--Filter diets-->
@@ -78,30 +104,25 @@
                     Content="Dieet"
                     FontWeight="Bold"
                 />
-                <Slider
-                    Name="buttonDiet"
-                    Maximum="1"
-                    Width="50" 
-                    Background="Green" 
-                    HorizontalAlignment="Left" 
-                    Margin="5,0,0,5"
-                    BorderThickness="2"
-                    BorderBrush="Gray" 
-                    ValueChanged="IncOrExcDiet_Click"
-                />
                 <CheckBox 
                     Name="Vegetarian"
+                    Style="{StaticResource CustomCheckBoxStyle}"
                     Content="Vegetarisch" 
                     Height="22" 
+                    IsThreeState="True"
                     Checked="DietChecked"
-                    Unchecked="Unchecked"
+                    Unchecked="DietUnchecked"
+                    Indeterminate="DietIndeterminate"
                 />
                 <CheckBox 
                     Name="Vegan"
+                    Style="{StaticResource CustomCheckBoxStyle}"
                     Content="Veganistisch" 
                     Height="21"
+                    IsThreeState="True"
                     Checked="DietChecked"
-                    Unchecked="Unchecked"
+                    Unchecked="DietUnchecked"
+                    Indeterminate="DietIndeterminate"
                 />
 
                 <!--Filter minimum age-->
