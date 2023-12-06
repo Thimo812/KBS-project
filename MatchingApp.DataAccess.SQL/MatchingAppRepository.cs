@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Drawing;
 using KBS_project.Exceptions;
 using System.Data.SqlTypes;
+using Renci.SshNet;
+using System.Diagnostics;
 
 namespace MatchingApp.DataAccess.SQL
 {
@@ -28,7 +30,22 @@ namespace MatchingApp.DataAccess.SQL
 			builder.TrustServerCertificate = false; 
 		}
 
-		public string AgeToDate(int age)
+        private static void CloseTunnel(ForwardedPortLocal tunnel, SshClient client)
+        {
+            // Stop the tunnel
+            tunnel.Stop();
+
+            // Disconnect the SSH client
+            client.Disconnect();
+
+            // Dispose of resources
+            tunnel.Dispose();
+            client.Dispose();
+
+            Console.WriteLine("SSH tunnel closed.");
+        }
+
+        public string AgeToDate(int age)
 		{
             var today = DateTime.Today;
             var byear = today.Year - age;
