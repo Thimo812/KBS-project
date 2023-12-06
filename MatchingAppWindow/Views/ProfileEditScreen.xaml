@@ -1,0 +1,43 @@
+﻿<Page x:Class="MatchingAppWindow.Views.ProfileEditScreen"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MatchingAppWindow.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ProfileEditScreen">
+
+    <Grid Background="White">
+        <Label Content="Beschrijving:" Margin="150,28,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top"/>
+        <TextBox x:Name="BeschrijvingBox" Margin="300,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="64" FontSize="15" HorizontalAlignment="Left" Width="395"/>
+
+        <Label Content="Opleiding:" Margin="150,95,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
+        <TextBox x:Name="OpleidingBox" Margin="300,95,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
+
+        <Label Content="School:" Margin="150,132,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
+        <TextBox x:Name="SchoolBox" Margin="300,132,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
+
+        <Label Content="Werkplek:" Margin="150,169,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
+        <TextBox x:Name="WerkplekBox" Margin="300,169,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
+
+        <Label Content="Dieet:" Margin="150,206,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
+        <RadioButton Content="Geen" Name="NoDiet" GroupName="Diet" Margin="299,214,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Vegetarisch" Name="VegieDiet" GroupName="Diet" Margin="370,214,0,0" HorizontalAlignment="Left" Width="98" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Veganistisch" Name="VeganDiet" GroupName="Diet" Margin="473,214,0,0" HorizontalAlignment="Left" Width="108" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Keto" Name="KetoDiet" GroupName="Diet" Margin="586,214,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Content="Anders" Name="OtherDiet" GroupName="Diet" Margin="652,214,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
+
+
+
+        <Button x:Name="ConfirmButton" Content="Opslaan" Margin="152,370,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276" Click="ConfirmChanges"/>
+
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="450" VerticalAlignment="Center" Width="1" Margin="145,0,0,0" RenderTransformOrigin="0.5,0.5">
+        </Border>
+
+        <Button IsEnabled="False" Content="Profiel aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,60,0,0" VerticalAlignment="Top" Width="125"/>
+        <Button Visibility="Hidden" Name="PhotoScreenButton" Content="Foto's aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,150,0,0" VerticalAlignment="Top" Width="125" />
+        <Button Name="AccountScreenButton" Content="Account aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,105,0,0" VerticalAlignment="Top" Width="125" />
+
+    </Grid>
+</Page>
