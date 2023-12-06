@@ -20,6 +20,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MatchingAppWindow;
+using KBS_project.Enums;
+using System.Security.Policy;
+
 
 namespace MatchingAppWindow
 {
@@ -28,7 +32,7 @@ namespace MatchingAppWindow
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static Profile profile;
+        public static Profile? profile;
         public static MatchingAppRepository repo = new MatchingAppRepository();
 
         private StartScreen startScreen = new();
@@ -36,15 +40,15 @@ namespace MatchingAppWindow
         private Matchingquiz matchingQuiz = new();
         private Navigation navigation = new();
         private FilterScreen filterScreen;
+        private ProfileEditScreen ProfileEditScreen = new();
+        private AccountEditScreen AccountEditScreen = new();
+        private PhotoEditScreen PhotoEditScreen = new();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
-            startScreen.LoginSuccessful += SwitchToFilterScreen;
-
-            registerScreen.ExitPage += SwitchToFilterScreen;
+            InitScreens();
 
             Content = startScreen;
         }
@@ -79,6 +83,68 @@ namespace MatchingAppWindow
             Content = filterScreen;
         }
 
+        public void SwitchToProfileScreen(Object sender, RoutedEventArgs e)
+        {
+            Content = ProfileEditScreen;
+        }
 
+        public void SwitchToAccountScreen(Object sender, RoutedEventArgs e)
+        {
+           Content = AccountEditScreen;
+        }
+
+        public void SwitchToPhotoScreen(Object sender, RoutedEventArgs e)
+        {
+           Content = PhotoEditScreen;
+        }
+
+        public void InitScreens()
+        {
+            ProfileEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
+            ProfileEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
+            
+            AccountEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
+            AccountEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
+
+            PhotoEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
+            PhotoEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
+
+            startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
+            startScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
+
+            registerScreen.ExitPage += (object sender, EventArgs e) => Content = filterScreen;
+            startScreen.registerButton.Click += SwitchToRegisterScreen;
+
+            startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
+            startScreen.LoginSuccessful += SwitchToFilterScreen;
+
+            registerScreen.ExitPage += SwitchToFilterScreen;
+
+            AddProfileDataToScreens();
+        }
+
+        public void AddProfileDataToScreens()
+        {
+            if (profile != null)
+            {
+                ProfileEditScreen.BeschrijvingBox.Text = profile.Description;
+                ProfileEditScreen.OpleidingBox.Text = profile.degree;
+                ProfileEditScreen.SchoolBox.Text = profile.School;
+                ProfileEditScreen.WerkplekBox.Text = profile.WorkPlace;
+                ProfileEditScreen.SetDiet(profile.Diet);
+
+                AccountEditScreen.BirthDatePicker.Text = profile.BirthDate.ToString();
+                AccountEditScreen.CountryBox.Text = profile.Country;
+                AccountEditScreen.CityBox.Text = profile.City;
+                AccountEditScreen.PostalCodeBox.Text = profile.PostalCode;
+                AccountEditScreen.SetGender(profile.Gender);
+                AccountEditScreen.SetPreference(profile.SexualPreference);
+            }
+        }
+
+        public void InsertDummyProfile()
+        {
+            profile = repository.GetProfile("Henk");
+        }
     }
 }

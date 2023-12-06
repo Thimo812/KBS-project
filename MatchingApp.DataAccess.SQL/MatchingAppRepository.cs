@@ -60,7 +60,7 @@ namespace MatchingApp.DataAccess.SQL
 			return profile;
 		}
 
-		public List<string> GetProfiles()
+		public List<Profile> GetProfiles()
 		{
             List<string> profiles = new List<string>();
 
@@ -75,7 +75,7 @@ namespace MatchingApp.DataAccess.SQL
                     
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        while (reader.Read())
+                        while(reader.Read())
                         {
                             profiles.Add(reader.GetString(0));
                         }
@@ -309,6 +309,39 @@ namespace MatchingApp.DataAccess.SQL
                 }
             }
             return results;
+        }
+
+        
+        public void UpdateProfile(Profile profile) 
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "UPDATE profiel SET Gebruikersnaam = @Gebruikersnaam, Naam = @Naam, Achternaam = @Achternaam, Tussenvoegsels = @Tussenvoegsels," +
+                    " Geboortedatum = @Geboortedatum, Seksuele_preferentie = @Sekspref, Geslacht = @Geslacht, Woonplaats = @Woonplaats, Land = @Land, Postcode = @Postcode," +
+                    " Beschrijving = @Beschrijving, Opleiding = @Opleiding, School = @School, Werkplek = @Werkplek, Dieet = @Dieet WHERE Gebruikersnaam = @Gebruikersnaam";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
+                    command.Parameters.AddWithValue("Naam", profile.FirstName);
+                    command.Parameters.AddWithValue("Achternaam", profile.LastName);
+                    command.Parameters.AddWithValue("Tussenvoegsels", profile.Infix);
+                    command.Parameters.AddWithValue("Geboortedatum", $"{profile.BirthDate.Year}-{profile.BirthDate.Month}-{profile.BirthDate.Day}");
+                    command.Parameters.AddWithValue("Sekspref", profile.SexualPreference);
+                    command.Parameters.AddWithValue("Geslacht", profile.Gender);
+                    command.Parameters.AddWithValue("Woonplaats", profile.City);
+                    command.Parameters.AddWithValue("Land", profile.Country);
+                    command.Parameters.AddWithValue("Postcode", profile.PostalCode);
+                    command.Parameters.AddWithValue("Beschrijving", profile.Description);
+                    command.Parameters.AddWithValue("Opleiding", profile.degree);
+                    command.Parameters.AddWithValue("School", profile.School);
+                    command.Parameters.AddWithValue("Werkplek", profile.WorkPlace);
+                    command.Parameters.AddWithValue("Dieet", profile.Diet);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+                
         }
 
         public void StoreImages(Profile profile)
