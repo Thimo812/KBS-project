@@ -37,13 +37,7 @@ namespace MatchingAppWindow
         {
             InitializeComponent();
 
-            Loaded += MainWindow_Loaded;
-            Closed += MainWindow_Closed;
-
-            startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
-            startScreen.LoginSuccessful += SwitchToFilterScreen;
-
-            registerScreen.ExitPage += SwitchToFilterScreen;
+            InitScreens();
 
             Content = startScreen;
         }
@@ -54,23 +48,6 @@ namespace MatchingAppWindow
             Content = registerScreen;
         }
 
-        public static BitmapImage ImageToBitmapImage(Image image)
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                image.Save(stream, ImageFormat.Png);
-                stream.Position = 0;
-
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = stream;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-
-                return bitmapImage;
-            }
-            InitScreens();
-        }
 
         public void SwitchToFilterScreen(object? sender, EventArgs e)
         {
@@ -126,6 +103,9 @@ namespace MatchingAppWindow
 
             startScreen.LoginSuccessful += SwitchToFilterScreen;
             startScreen.LoginSuccessful += AddProfileDataToScreens;
+
+            Loaded += MainWindow_Loaded;
+            Closed += MainWindow_Closed;
 
             registerScreen.ExitPage += SwitchToFilterScreen;
 
