@@ -16,16 +16,24 @@ using System.Windows.Shapes;
 namespace MatchingAppWindow.Views
 {
     /// <summary>
-    /// Interaction logic for Navigation.xaml
+    /// Interaction logic for PhotoEditScreen.xaml
     /// </summary>
-    public partial class Navigation : Page
+    public partial class PhotoEditScreen : Page
     {
-        public Navigation()
+        public PhotoEditScreen()
         {
             InitializeComponent();
-
-            DataContext = this;
-            Visibility = Visibility.Visible;
         }
+
+        private void SwitchToAccountEditScreen(object sender, RoutedEventArgs e)
+        {
+            Content = new PhotoEditScreen();
+        }
+
+        private void SwitchToProfileEditScreen(object sender, RoutedEventArgs e)
+        {
+            Content = new ProfileEditScreen();
+        }
+
     }
 }

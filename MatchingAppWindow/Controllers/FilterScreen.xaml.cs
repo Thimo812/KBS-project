@@ -38,24 +38,21 @@ namespace MatchingAppWindow.Views
         private List<string> excludedHobbies = new();
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
-        private string? resultString;
+
+        private ProfileDetails profileDetails = new();
 
         public FilterScreen()
         {
             InitializeComponent();
-            try
-            {
-                //Showing all profiles from the database on the screen
-                foreach (Profile profile in repo.GetProfiles())
-                {
-                    resultString += profile.UserName + "\n";
-                    filteredProfiles.Content = resultString;
-                }
-            }
-            catch (SqlException)
-            {
-                MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
-            }
+
+            var profileList = repo.GetProfiles(MainWindow.profile);
+
+            resultBox.ItemsSource = profileList;
+
+            profileDetailsFrame.Content = profileDetails;
+
+            DataContext = this;
+        }
 
             for (int i = 1; i < repo.GetHobbies().Count; i++)
             {
@@ -195,16 +192,9 @@ namespace MatchingAppWindow.Views
         {
             //ClearUncheckedAttributes();
 
-            List<string> results = repo.GetProfiles(location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
+            List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
-            resultString = string.Empty;
-
-            foreach (string result in results)
-            {
-                resultString += result + "\n";
-            }
-
-            filteredProfiles.Content = resultString;
+            resultBox.ItemsSource = results;
         }
 
         private void ClearUncheckedHobbies(string item)
