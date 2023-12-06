@@ -38,7 +38,7 @@ namespace MatchingAppWindow.Views
                 MainWindow.profile.Gender = GetGender();
                 MainWindow.profile.SexualPreference = GetSexuality();
 
-                MainWindow.repository.UpdateProfile(MainWindow.profile);
+                MainWindow.repo.UpdateProfile(MainWindow.profile);
             }
         }
 

@@ -1,28 +1,8 @@
-using KBS_project.Enums;
 using KBS_project;
 using MatchingApp.DataAccess.SQL;
 using MatchingAppWindow.Views;
-using Microsoft.VisualBasic;
-using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using MatchingAppWindow;
-using KBS_project.Enums;
-using System.Security.Policy;
 
 
 namespace MatchingAppWindow
@@ -40,40 +20,15 @@ namespace MatchingAppWindow
         private Matchingquiz matchingQuiz = new();
         private Navigation navigation = new();
         private FilterScreen filterScreen;
-        private ProfileEditScreen ProfileEditScreen = new();
-        private AccountEditScreen AccountEditScreen = new();
-        private PhotoEditScreen PhotoEditScreen = new();
+        private ProfileEditScreen profileEditScreen = new();
+        private AccountEditScreen accountEditScreen = new();
+        private PhotoEditScreen photoEditScreen = new();
 
         public MainWindow()
         {
             InitializeComponent();
 
             InitScreens();
-
-            Content = startScreen;
-        }
-
-
-        private void SwitchToRegisterScreen(Object? sender, EventArgs args)
-        {
-            Content = registerScreen;
-        }
-
-        public static BitmapImage ImageToBitmapImage(Image image)
-        {
-            using (MemoryStream stream = new MemoryStream())
-            {
-                image.Save(stream, ImageFormat.Png);
-                stream.Position = 0;
-
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = stream;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-
-                return bitmapImage;
-            }
         }
 
         public void SwitchToFilterScreen(object? sender, EventArgs e)
@@ -83,68 +38,50 @@ namespace MatchingAppWindow
             Content = filterScreen;
         }
 
-        public void SwitchToProfileScreen(Object sender, RoutedEventArgs e)
-        {
-            Content = ProfileEditScreen;
-        }
-
-        public void SwitchToAccountScreen(Object sender, RoutedEventArgs e)
-        {
-           Content = AccountEditScreen;
-        }
-
-        public void SwitchToPhotoScreen(Object sender, RoutedEventArgs e)
-        {
-           Content = PhotoEditScreen;
-        }
-
         public void InitScreens()
         {
-            ProfileEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
-            ProfileEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
+            profileEditScreen.PhotoScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = photoEditScreen;
+            profileEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = accountEditScreen;
             
-            AccountEditScreen.PhotoScreenButton.Click += SwitchToPhotoScreen;
-            AccountEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
+            accountEditScreen.PhotoScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = photoEditScreen;
+            accountEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => Content = profileEditScreen;
 
-            PhotoEditScreen.ProfileEditButton.Click += SwitchToProfileScreen;
-            PhotoEditScreen.AccountScreenButton.Click += SwitchToAccountScreen;
+            photoEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => Content = profileEditScreen;
+            photoEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = accountEditScreen;
 
-            startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
-            startScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = filterScreen;
+            registerScreen.ExitPage += (object? sender, EventArgs e) => Content = filterScreen;
+            startScreen.registerButton.Click += (Object sender, RoutedEventArgs e) => Content = registerScreen;
 
-            registerScreen.ExitPage += (object sender, EventArgs e) => Content = filterScreen;
-            startScreen.registerButton.Click += SwitchToRegisterScreen;
-
-            startScreen.registerButton.Click += (object sender, RoutedEventArgs e) => Content = registerScreen;
             startScreen.LoginSuccessful += SwitchToFilterScreen;
+            startScreen.LoginSuccessful += AddProfileDataToScreens;
 
             registerScreen.ExitPage += SwitchToFilterScreen;
 
-            AddProfileDataToScreens();
+            Content = startScreen;
         }
 
         public void AddProfileDataToScreens()
         {
             if (profile != null)
             {
-                ProfileEditScreen.BeschrijvingBox.Text = profile.Description;
-                ProfileEditScreen.OpleidingBox.Text = profile.degree;
-                ProfileEditScreen.SchoolBox.Text = profile.School;
-                ProfileEditScreen.WerkplekBox.Text = profile.WorkPlace;
-                ProfileEditScreen.SetDiet(profile.Diet);
+                profileEditScreen.BeschrijvingBox.Text = profile.Description;
+                profileEditScreen.OpleidingBox.Text = profile.Degree;
+                profileEditScreen.SchoolBox.Text = profile.School;
+                profileEditScreen.WerkplekBox.Text = profile.WorkPlace;
+                profileEditScreen.SetDiet(profile.Diet);
 
-                AccountEditScreen.BirthDatePicker.Text = profile.BirthDate.ToString();
-                AccountEditScreen.CountryBox.Text = profile.Country;
-                AccountEditScreen.CityBox.Text = profile.City;
-                AccountEditScreen.PostalCodeBox.Text = profile.PostalCode;
-                AccountEditScreen.SetGender(profile.Gender);
-                AccountEditScreen.SetPreference(profile.SexualPreference);
+                accountEditScreen.BirthDatePicker.Text = profile.BirthDate.ToString();
+                accountEditScreen.CountryBox.Text = profile.Country;
+                accountEditScreen.CityBox.Text = profile.City;
+                accountEditScreen.PostalCodeBox.Text = profile.PostalCode;
+                accountEditScreen.SetGender(profile.Gender);
+                accountEditScreen.SetPreference(profile.SexualPreference);
             }
         }
 
-        public void InsertDummyProfile()
+        public void AddProfileDataToScreens(object? sender, EventArgs e)
         {
-            profile = repository.GetProfile("Henk");
+            AddProfileDataToScreens();
         }
     }
 }

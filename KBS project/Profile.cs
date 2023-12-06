@@ -107,6 +107,42 @@ namespace KBS_project
             return (int)matchingPercentage;
         }
 
+		public PreferredGender GetPreferredGender()
+		{
+			switch (SexualPreference)
+			{
+				case SexualPreference.Biseksueel:
+					return PreferredGender.Both;
+				case SexualPreference.Hetero:
+
+					switch (Gender)
+					{
+						case Gender.Male:
+							return PreferredGender.Women;
+						case Gender.Female:
+							return PreferredGender.Men;
+						case Gender.NonBinary:
+							return PreferredGender.Both;
+					}
+					break;
+
+				case SexualPreference.Homoseksueel:
+
+					switch (Gender)
+					{
+						case Gender.Male:
+							return PreferredGender.Men;
+						case Gender.Female:
+							return PreferredGender.Women;
+						case Gender.NonBinary:
+							return PreferredGender.NonBinary;
+
+					}
+					break;
+            }
+			throw new NullReferenceException();
+		}
+
         public override string ToString()
 		{
 			return

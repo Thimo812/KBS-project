@@ -41,16 +41,16 @@ namespace MatchingAppWindow.Views
             if (MainWindow.profile != null)
             {
                 MainWindow.profile.Description = BeschrijvingBox.Text;
-                MainWindow.profile.degree = OpleidingBox.Text;
+                MainWindow.profile.Degree = OpleidingBox.Text;
                 MainWindow.profile.School = SchoolBox.Text;
                 MainWindow.profile.WorkPlace = WerkplekBox.Text;
                 MainWindow.profile.Diet = GetDiet();
 
-                MainWindow.repository.UpdateProfile(MainWindow.profile);
+                MainWindow.repo.UpdateProfile(MainWindow.profile);
             }
         }
 
-        public void SetDiet(Diet diet)
+        public void SetDiet(Diet? diet)
         {
             switch(diet)
             {

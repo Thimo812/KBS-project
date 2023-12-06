@@ -60,7 +60,7 @@ namespace MatchingApp.DataAccess.SQL
 			return profile;
 		}
 
-		public List<Profile> GetProfiles()
+		public List<string> GetProfiles()
 		{
             List<string> profiles = new List<string>();
 
@@ -86,10 +86,45 @@ namespace MatchingApp.DataAccess.SQL
             return profiles;
 		}
 
-		public List<string> GetProfiles(LocationFilter location, int minimumAge, int maximumAge, 
+        public List<string> GetProfiles(Profile profile)
+        {
+            List<string> profiles = new List<string>();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT * FROM Profiel WHERE Gebruikersnaam != @userName";
+
+                if (!profile.GetPreferredGender().Equals(PreferredGender.Both))
+                {
+                    sql += " AND Geslacht = @gender";
+                }
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", profile.UserName);
+                    command.Parameters.AddWithValue("gender", (Gender)profile.GetPreferredGender());
+
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            profiles.Add(reader.GetString(0));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return profiles;
+        }
+
+        public List<string> GetProfiles(Profile profile, LocationFilter location, int minimumAge, int maximumAge, 
 			List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
-		{
+        {
             List<string> results = new();
+
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
@@ -182,9 +217,20 @@ namespace MatchingApp.DataAccess.SQL
 
                     sql += ")";
                 }
+
+                if (profile.GetPreferredGender() != PreferredGender.Both)
+                {
+                    sql += $" AND (Geslacht = '{(int)profile.GetPreferredGender()}')";
+                }
+
+                sql += $"AND Profiel.Gebruikersnaam != '{profile.UserName}' ";
+
+
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
+                    command.ExecuteNonQuery();
+
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -333,7 +379,7 @@ namespace MatchingApp.DataAccess.SQL
                     command.Parameters.AddWithValue("Land", profile.Country);
                     command.Parameters.AddWithValue("Postcode", profile.PostalCode);
                     command.Parameters.AddWithValue("Beschrijving", profile.Description);
-                    command.Parameters.AddWithValue("Opleiding", profile.degree);
+                    command.Parameters.AddWithValue("Opleiding", profile.Degree);
                     command.Parameters.AddWithValue("School", profile.School);
                     command.Parameters.AddWithValue("Werkplek", profile.WorkPlace);
                     command.Parameters.AddWithValue("Dieet", profile.Diet);
