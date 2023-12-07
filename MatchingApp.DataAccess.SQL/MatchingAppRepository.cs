@@ -148,8 +148,8 @@ namespace MatchingApp.DataAccess.SQL
 
                 if (location != LocationFilter.Global)
                 {
-                    if (location == LocationFilter.City) { sql += $"AND Woonplaats = 'Mountaintop' AND Land = 'Nederland' "; } //Moet uiteindelijk van het profiel komen boop
-                    if (location == LocationFilter.Country) { sql += $"AND Land = 'Nederland' "; }
+                    if (location == LocationFilter.City) { sql += $"AND Woonplaats = '{profile.City}' AND Land = '{profile.Country}' "; }
+                    if (location == LocationFilter.Country) { sql += $"AND Land = '{profile.Country}' "; }
                 }
                 if (minimumAge != 0)
                 {

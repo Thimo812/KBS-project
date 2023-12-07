@@ -64,16 +64,27 @@
                 />
 
                 <!--Filter hobby's-->
-                <Label 
-                    Content="Hobby"
-                    FontWeight="Bold"
+                <Button Name="ExtendOrCollapseHobbies"
+                        Content="Hobby ▲"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Height="20"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Left"
+                        Click="ExtendOrCollapseHobbies_Click" Width="62"
+                        
                 />
+                <!--<Label--> 
+                    <!--Content="Hobby"
+                    FontWeight="Bold"
+                />-->
                 <StackPanel Name="HobbyCheckBoxes"/>
 
                 <!--Filter diets-->
                 <Label 
                     Content="Dieet"
                     FontWeight="Bold"
+                    HorizontalAlignment="Left"
                 />
                 <StackPanel Name="DietCheckBoxes"/>
 

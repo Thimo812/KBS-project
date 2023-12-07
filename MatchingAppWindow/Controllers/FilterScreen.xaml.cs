@@ -108,6 +108,20 @@ namespace MatchingAppWindow.Views
             Filter();
         }
 
+        private void ExtendOrCollapseHobbies_Click(object sender, RoutedEventArgs e)
+        {
+            if ((string)ExtendOrCollapseHobbies.Content == "Hobby ▲")
+            {
+                ExtendOrCollapseHobbies.Content = "Hobby ▼";
+                HobbyCheckBoxes.Visibility = Visibility.Collapsed;
+            }
+            else if((string)ExtendOrCollapseHobbies.Content == "Hobby ▼")
+            {
+                ExtendOrCollapseHobbies.Content = "Hobby ▲";
+                HobbyCheckBoxes.Visibility = Visibility.Visible;
+            }
+        }
+
         private void HobbyChecked(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = (CheckBox)sender;
@@ -192,11 +206,10 @@ namespace MatchingAppWindow.Views
         //Save the filteroptions and show the matching profiles
         private void Filter()
         {
-            //ClearUncheckedAttributes();
-
             List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
             resultBox.ItemsSource = results;
+            
         }
 
         private void ClearUncheckedHobbies(int item)
