@@ -19,6 +19,7 @@ using MatchingApp.DataAccess.SQL;
 using System.Security.Policy;
 using System.Data.SqlClient;
 using System.Windows.Controls.Primitives;
+using System.Net;
 
 namespace MatchingAppWindow.Views
 {
@@ -33,8 +34,8 @@ namespace MatchingAppWindow.Views
         private LocationFilter location = LocationFilter.Global;
         private int minimumAge;
         private int maximumAge;
-        private List<Interest> includedHobbies = new();
-        private List<Interest> excludedHobbies = new();
+        private List<int> includedHobbies = new();
+        private List<int> excludedHobbies = new();
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
 
@@ -53,61 +54,38 @@ namespace MatchingAppWindow.Views
             nav.Content = navigation;
 
             DataContext = this;
-        }
 
-        //Button to extend or collapse the filteroptions
-        private void ButtonExpandFilters_Click(object sender, RoutedEventArgs e)
-        {
-            if (filterPanel.Visibility == Visibility.Collapsed)
+            for (int i = 1; i < repo.GetHobbies().Count; i++)
             {
-                filterPanel.Visibility = Visibility.Visible;
-                filterButton.Content = ">";
-            }
-            else
-            {
-                filterPanel.Visibility = Visibility.Collapsed;
-                filterButton.Content = "v";
-            }
-        }
+                CheckBox checkBox = new CheckBox();
 
-        private void IncOrExcHobby_Click(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            Slider button = (Slider)sender;
-            if (button.Value == 1)
-            {
-                ExcludeHobbys();
-                includedHobbies.Clear();
-                button.Background = Brushes.Red;
-            }
-            else if (button.Value == 0)
-            {
-                IncludeHobbys();
-                excludedHobbies.Clear();
-                button.Background = Brushes.Green;
+                checkBox.Tag = i;
+                checkBox.Style = this.FindResource("CustomCheckBoxStyle") as Style;
+                checkBox.Content = InterestExtensions.GetString(i);
+                checkBox.Height = 22;
+                checkBox.IsThreeState = true;
+                checkBox.Checked += HobbyChecked;
+                checkBox.Unchecked += HobbyUnchecked;
+                checkBox.Indeterminate += HobbyIndeterminate;
+
+                HobbyCheckBoxes.Children.Add(checkBox);
             }
 
-            Filter();
-        }
-
-        //Button to include or exclude diets
-        private void IncOrExcDiet_Click(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            Slider button = (Slider)sender;
-            if (button.Value == 1)
+            for (int i = 1; i < Enum.GetNames(typeof(Diet)).Length; i++)
             {
-                ExcludeDiets();
-                includedDiets.Clear();
-                button.Background = Brushes.Red;
-            }
-            else if (button.Value == 0)
-            {
-                IncludeDiets();
-                excludedDiets.Clear();
-                button.Background = Brushes.Green;
-            }
+                CheckBox checkBox = new CheckBox();
 
-            Filter();
-        }
+                checkBox.Style = this.FindResource("CustomCheckBoxStyle") as Style;
+                checkBox.Content = Enum.GetValues(typeof(Diet)).GetValue(i);
+                checkBox.Height = 22;
+                checkBox.IsThreeState = true;
+                checkBox.Checked += DietChecked;
+                checkBox.Unchecked += DietUnchecked;
+                checkBox.Indeterminate += DietIndeterminate;
+
+                DietCheckBoxes.Children.Add(checkBox);
+            }
+        }            
 
         //RadioButtons to filter on location
         private void LocationChecked(object sender, RoutedEventArgs e)
@@ -130,38 +108,51 @@ namespace MatchingAppWindow.Views
             Filter();
         }
 
-        //CheckBoxes to filter on hobbies
         private void HobbyChecked(object sender, RoutedEventArgs e)
         {
-            if (buttonHobby.Value == 0)
-            {
-                IncludeHobbys();
-            }
-            else if (buttonHobby.Value == 1)
-            {
-                ExcludeHobbys();
-            }
-
+            CheckBox checkBox = (CheckBox)sender;
+            checkBox.Background = Brushes.Green;
+            IncludeHobbys((int)checkBox.Tag);
             Filter();
         }
 
-        //CheckBoxes to filter on diet
+        private void HobbyUnchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            checkBox.Background = Brushes.White;
+            ClearUncheckedHobbies((int)checkBox.Tag);
+            Filter();
+        }
+
+        private void HobbyIndeterminate(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            checkBox.Background = Brushes.Red;
+            ExcludeHobbys((int)checkBox.Tag);
+            Filter();
+        }
+
         private void DietChecked(object sender, RoutedEventArgs e)
         {
-            if (buttonDiet.Value == 0)
-            {
-                IncludeDiets();
-            }
-            else if (buttonDiet.Value == 1)
-            {
-                ExcludeDiets();
-            }
-
+            CheckBox checkBox = (CheckBox)sender;
+            checkBox.Background = Brushes.Green;
+            IncludeDiets((Diet)checkBox.Content);
             Filter();
         }
 
-        private void Unchecked(object sender, RoutedEventArgs e)
+        private void DietUnchecked(object sender, RoutedEventArgs e)
         {
+            CheckBox checkBox = (CheckBox)sender;
+            checkBox.Background = Brushes.White;
+            ClearUncheckedDiets((Diet)checkBox.Content);
+            Filter();
+        }
+
+        private void DietIndeterminate(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            checkBox.Background = Brushes.Red;
+            ExcludeDiets((Diet)checkBox.Content);
             Filter();
         }
 
@@ -201,96 +192,47 @@ namespace MatchingAppWindow.Views
         //Save the filteroptions and show the matching profiles
         private void Filter()
         {
-            ClearUncheckedAttributes();
+            //ClearUncheckedAttributes();
 
             List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
             resultBox.ItemsSource = results;
         }
 
-        public void ClearUncheckedAttributes()
+        private void ClearUncheckedHobbies(int item)
         {
-            if (Reading.IsChecked == false)
-            {
-                includedHobbies.Remove(Interest.Lezen);
-                excludedHobbies.Remove(Interest.Lezen);
-            }
-            if (Cycling.IsChecked == false)
-            {
-                includedHobbies.Remove(Interest.Fietsen);
-                excludedHobbies.Remove(Interest.Fietsen);
-            }
-            if (Cooking.IsChecked == false)
-            {
-                includedHobbies.Remove(Interest.Koken_en_bakken);
-                excludedHobbies.Remove(Interest.Koken_en_bakken);
-            }
-            if (Vegetarian.IsChecked == false)
-            {
-                includedDiets.Remove(Diet.Vegetarian);
-                excludedDiets.Remove(Diet.Vegetarian);
-            }
-            if (Vegan.IsChecked == false)
-            {
-                includedDiets.Remove(Diet.Vegan);
-                includedDiets.Remove(Diet.Vegan);
-            }
+            includedHobbies.Remove(item);
+            excludedHobbies.Remove(item);
         }
 
-        private void IncludeDiets()
+        private void IncludeHobbys(int item)
         {
-            if (Vegetarian.IsChecked == true && !includedDiets.Contains(Diet.Vegetarian))
-            {
-                includedDiets.Add(Diet.Vegetarian);
-            }
-            if (Vegan.IsChecked == true && !includedDiets.Contains(Diet.Vegan))
-            {
-                includedDiets.Add(Diet.Vegan);
-            }
+            includedHobbies.Add(item);
+            excludedHobbies.Remove(item);
         }
 
-        private void ExcludeDiets()
+        private void ExcludeHobbys(int item)
         {
-            if (Vegetarian.IsChecked == true && !excludedDiets.Contains(Diet.Vegetarian))
-            {
-                excludedDiets.Add(Diet.Vegetarian);
-            }
-            if (Vegan.IsChecked == true && !excludedDiets.Contains(Diet.Vegan))
-            {
-                excludedDiets.Add(Diet.Vegan);
-            }
+            excludedHobbies.Add(item);
+            includedHobbies.Remove(item);
         }
 
-        private void IncludeHobbys()
+        private void ClearUncheckedDiets(Diet item)
         {
-            if (Reading.IsChecked == true && !includedHobbies.Contains(Interest.Lezen))
-            {
-                includedHobbies.Add(Interest.Lezen);
-            }
-            if (Cycling.IsChecked == true && !includedHobbies.Contains(Interest.Fietsen))
-            {
-                includedHobbies.Add(Interest.Fietsen);
-            }
-            if (Cooking.IsChecked == true && !includedHobbies.Contains(Interest.Koken_en_bakken))
-            {
-                includedHobbies.Add(Interest.Koken_en_bakken);
-            }
+            includedDiets.Remove(item);
+            excludedDiets.Remove(item);
         }
 
-        private void ExcludeHobbys()
+        private void IncludeDiets(Diet item)
         {
-            if (Reading.IsChecked == true && !excludedHobbies.Contains(Interest.Lezen))
-            {
-                excludedHobbies.Add(Interest.Lezen);
-            }
-            if (Cycling.IsChecked == true && !excludedHobbies.Contains(Interest.Fietsen))
-            {
-                excludedHobbies.Add(Interest.Fietsen);
-            }
-            if (Cooking.IsChecked == true && !excludedHobbies.Contains(Interest.Koken_en_bakken))
-            {
-                excludedHobbies.Add(Interest.Koken_en_bakken);
-            }
+            includedDiets.Add(item);
+            excludedDiets.Remove(item);
+        }
+
+        private void ExcludeDiets(Diet item)
+        {
+            excludedDiets.Add(item);
+            includedDiets.Remove(item);
         }
 
         private void resultBox_SelectedIndexChanged(object sender, System.EventArgs e)

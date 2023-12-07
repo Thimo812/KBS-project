@@ -138,13 +138,14 @@ namespace MatchingApp.DataAccess.SQL
         }
 
         public List<string> GetProfiles(Profile profile, LocationFilter location, int minimumAge, int maximumAge, 
-			List<Interest> includedHobbys, List<Interest> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
+			List<int> includedHobbys, List<int> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
         {
             List<string> results = new();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel LEFT JOIN Hobbies ON Profiel.Gebruikersnaam=Hobbies.ProfielGebruikersnaam WHERE 1 = 1 ";
+                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel WHERE 1 = 1 ";
+
                 if (location != LocationFilter.Global)
                 {
                     if (location == LocationFilter.City) { sql += $"AND Woonplaats = 'Mountaintop' AND Land = 'Nederland' "; } //Moet uiteindelijk van het profiel komen boop
@@ -152,87 +153,35 @@ namespace MatchingApp.DataAccess.SQL
                 }
                 if (minimumAge != 0)
                 {
-                    sql += $"AND Geboortedatum <= '{AgeToDate(minimumAge)}' "; 
-				} 
-				if (maximumAge != 0)
+                    sql += $"AND Geboortedatum <= '{AgeToDate(minimumAge)}' ";
+                }
+                if (maximumAge != 0)
                 {
                     sql += $"AND Geboortedatum >= '{AgeToDate(maximumAge)}' ";
                 }
+
                 if (includedHobbys.Count > 0)
                 {
-                    sql += "AND (";
-
-                    bool isFirstHobby = true;
-
-                    foreach (var inclhobby in includedHobbys)
-                    {
-                        if (!isFirstHobby)
-                        {
-                            sql += " OR ";
-                        }
-
-                        sql += $"Hobby = '{inclhobby}'";
-                        isFirstHobby = false;
-                    }
-
-                    sql += ")";
+                    sql += $"AND Profiel.Gebruikersnaam IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE id IN ({string.Join(",", includedHobbys.Select(h => $"'{h}'"))})) ";
                 }
+
                 if (excludedHobbys.Count > 0)
                 {
-                    sql += "AND NOT (";
-
-                    bool isFirstHobby = true;
-
-                    foreach (var exclHobby in excludedHobbys)
-                    {
-                        if (!isFirstHobby)
-                        {
-                            sql += " OR ";
-                        }
-
-                        sql += $"Hobby = '{exclHobby}'";
-                        isFirstHobby = false;
-                    }
-
-                    sql += ")";
+                    sql += $"AND Profiel.Gebruikersnaam NOT IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE id IN ({string.Join(",", excludedHobbys.Select(h => $"'{h}'"))})) ";
                 }
                 if (includedDiets.Count > 0)
                 {
-                    sql += "AND (";
-
-                    bool isFirstDiet = true;
-
                     foreach (var inclDiet in includedDiets)
                     {
-                        if (!isFirstDiet)
-                        {
-                            sql += " OR ";
-                        }
-
-                        sql += $"Dieet = '{inclDiet}'";
-                        isFirstDiet = false;
+                        sql += $"AND Dieet = '{(int)inclDiet}' ";
                     }
-
-                    sql += ")";
                 }
                 if (excludedDiets.Count > 0)
                 {
-                    sql += "AND NOT (";
-
-                    bool isFirstDiet = true;
-
                     foreach (var exclDiet in excludedDiets)
                     {
-                        if (!isFirstDiet)
-                        {
-                            sql += " OR ";
-                        }
-
-                        sql += $"Dieet = '{exclDiet}'";
-                        isFirstDiet = false;
+                        sql += $"AND (Dieet is NULL OR NOT Dieet = '{(int)exclDiet}')";
                     }
-
-                    sql += ")";
                 }
 
                 if (profile.GetPreferredGender() != PreferredGender.Both)
@@ -590,6 +539,62 @@ namespace MatchingApp.DataAccess.SQL
                 }
             }
             return answers;
+        }
+
+        public Dictionary<int, string> GetHobbies()
+        {
+            Dictionary<int, string> hobbies = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT DISTINCT Hobby FROM Hobbies";
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        int i = 0;
+                        while (reader.Read())
+                        {
+                            string name = reader.GetString(0);
+
+                            hobbies.Add(i, name);
+                            i++;
+                        }
+                    }
+                }
+            }
+            return hobbies;
+        }
+
+        public List<Diet> GetDiets()
+        {
+            List<Diet> diets = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT DISTINCT Dieet FROM Profiel";
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if(reader.IsDBNull(0) == false)
+                            {
+                                int diet = reader.GetInt16(reader.GetOrdinal("Dieet"));
+                                diets.Add((Diet)diet);
+                            }
+                        }
+                    }
+                }
+            }
+            return diets;
         }
     }
 }
