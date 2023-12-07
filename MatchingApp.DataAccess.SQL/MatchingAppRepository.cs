@@ -180,7 +180,7 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     foreach (var exclDiet in excludedDiets)
                     {
-                        sql += $"AND Dieet is NULL OR NOT Dieet = '{(int)exclDiet}'";
+                        sql += $"AND (Dieet is NULL OR NOT Dieet = '{(int)exclDiet}')";
                     }
                 }
 
