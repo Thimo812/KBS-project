@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:MatchingAppWindow.Views"
+      xmlns:local="clr-namespace:MatchingAppWindow.Views" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ProfileEditScreen">
@@ -30,14 +30,43 @@
 
 
 
-        <Button x:Name="ConfirmButton" Content="Opslaan" Margin="152,370,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="276" Click="ConfirmChanges"/>
+        <Button x:Name="ConfirmButton" Content="Opslaan" Margin="166,404,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="262" Click="ConfirmChanges"/>
 
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="450" VerticalAlignment="Center" Width="1" Margin="145,0,0,0" RenderTransformOrigin="0.5,0.5">
         </Border>
 
+        <ListBox x:Name="hobbyPanel" ItemsSource="{Binding Interests, Mode=TwoWay}" Margin="166,277,0,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="261" Height="99" VerticalAlignment="Top" SelectionChanged="InterestSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel MaxWidth="261"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border CornerRadius="10" Background="Gray" Margin="1,1,1,1">
+                        <Label Content="{Binding}"  />
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <ListBox x:Name="availableHobbyList" ItemsSource="{Binding AvailableInterests, Mode=TwoWay}" Margin="489,277,0,0" HorizontalAlignment="Left" Width="262" Height="99" VerticalAlignment="Top" SelectionChanged="AvailableInterestSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel MaxWidth="261"/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border CornerRadius="10" Background="Gray" Margin="1,1,1,1">
+                        <Label Content="{Binding}"  />
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
         <Button IsEnabled="False" Content="Profiel aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,60,0,0" VerticalAlignment="Top" Width="125"/>
         <Button Visibility="Hidden" Name="PhotoScreenButton" Content="Foto's aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,150,0,0" VerticalAlignment="Top" Width="125" />
         <Button Name="AccountScreenButton" Content="Account aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,105,0,0" VerticalAlignment="Top" Width="125" />
-
     </Grid>
 </Page>

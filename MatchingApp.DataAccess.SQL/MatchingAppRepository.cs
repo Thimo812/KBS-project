@@ -353,7 +353,42 @@ namespace MatchingApp.DataAccess.SQL
                 }
                 connection.Close();
             }
-                
+
+            UpdateHobbies(profile);  
+        }
+
+        public void UpdateHobbies(Profile profile)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "DELETE FROM Hobbies WHERE ProfielGebruikersnaam = @userName";
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", profile.UserName);
+
+                    command.ExecuteNonQuery();
+                }
+
+                sql = "INSERT INTO Hobbies (ID, Hobby, ProfielGebruikersnaam) VALUES (@ID, @Hobby, @userName)";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    foreach(var item in profile.Interests)
+                    {
+                        command.Parameters.AddWithValue("ID", item);
+                        command.Parameters.AddWithValue("Hobby", nameof(item));
+                        command.Parameters.AddWithValue("userName", profile.UserName);
+
+                        command.ExecuteNonQuery();
+
+                        command.Parameters.Clear();
+
+                    }
+                }
+            }
         }
 
         public void StoreImages(Profile profile)

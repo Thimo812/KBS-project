@@ -2,7 +2,9 @@
 using KBS_project.Enums;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,9 +25,58 @@ namespace MatchingAppWindow.Views
     public partial class ProfileEditScreen : Page
     {
 
+        public ObservableCollection<Interest> Interests { get; set; } = new();
+
+        public ObservableCollection<Interest> AvailableInterests {  get; set; } = new();
+
         public ProfileEditScreen()
         {
             InitializeComponent();
+
+            DataContext = this;
+        }
+
+        public void InitializePage()
+        {
+            foreach (var item in MainWindow.profile.Interests)
+            {
+                Interests.Add(item);
+            }
+
+            for (int i = 0;  i < InterestExtensions.count; i++)
+            {
+                if (!Interests.Contains((Interest)i))
+                {
+                    AvailableInterests.Add((Interest)i);
+                }
+            }
+        }
+
+        public void InterestSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (hobbyPanel.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            var selectedInterest = Interests[hobbyPanel.SelectedIndex];
+
+            AvailableInterests.Add(selectedInterest);
+            Interests.Remove(selectedInterest);
+
+        }
+
+        public void AvailableInterestSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (availableHobbyList.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            var selectedInterest = AvailableInterests[availableHobbyList.SelectedIndex];
+
+            Interests.Add(selectedInterest);
+            AvailableInterests.Remove(selectedInterest);
         }
 
         private void SwitchToPhotoEditScreen(object sender, RoutedEventArgs e)
@@ -45,6 +96,7 @@ namespace MatchingAppWindow.Views
                 MainWindow.profile.School = SchoolBox.Text;
                 MainWindow.profile.WorkPlace = WerkplekBox.Text;
                 MainWindow.profile.Diet = GetDiet();
+                MainWindow.profile.Interests = Interests.ToList();
 
                 MainWindow.repo.UpdateProfile(MainWindow.profile);
             }
