@@ -4,7 +4,5 @@ using MatchingApp.DataAccess.SQL;
 
 var repo = new MatchingAppRepository();
 
-Console.WriteLine(InterestExtensions.GetString(5));
-
 
 

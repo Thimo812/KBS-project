@@ -2,7 +2,9 @@
 using KBS_project.Enums;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,9 +25,37 @@ namespace MatchingAppWindow.Views
     public partial class ProfileEditScreen : Page
     {
 
+        public ObservableCollection<Interest> Interests { get; set; } = new();
+
+        public ObservableCollection<Interest> AvailableInterests {  get; set; } = new();
+
         public ProfileEditScreen()
         {
             InitializeComponent();
+
+            DataContext = this;
+        }
+
+        public void InitializePage()
+        {
+            foreach (var item in MainWindow.profile.Interests)
+            {
+                Interests.Add(item);
+            }
+
+            for (int i = 0;  i < InterestExtensions.count; i++)
+            {
+                if (!Interests.Contains((Interest)i))
+                {
+                    AvailableInterests.Add((Interest)i);
+                }
+            }
+        }
+
+        public void InterestSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AvailableInterests.Add(Interests[hobbyPanel.SelectedIndex]);
+            Interests.RemoveAt(hobbyPanel.SelectedIndex);
         }
 
         private void SwitchToPhotoEditScreen(object sender, RoutedEventArgs e)

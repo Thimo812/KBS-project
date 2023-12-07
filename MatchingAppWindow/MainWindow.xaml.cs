@@ -62,7 +62,7 @@ namespace MatchingAppWindow
 
             tunnel = new ForwardedPortLocal("127.0.0.1", (uint)localPort, "127.0.0.1", (uint)remotePort);
             sshClient.AddForwardedPort(tunnel);
-            tunnel.Start();
+               tunnel.Start();
         }
 
         private void MainWindow_Closed(object sender, EventArgs e)
@@ -92,7 +92,8 @@ namespace MatchingAppWindow
             registerScreen.ExitPage += (object? sender, EventArgs e) => Content = filterScreen;
             startScreen.registerButton.Click += (Object sender, RoutedEventArgs e) => Content = registerScreen;
 
-            startScreen.LoginSuccessful += SwitchToFilterScreen;
+            startScreen.LoginSuccessful += (Object sender, EventArgs e) => Content = profileEditScreen;
+            //startScreen.LoginSuccessful += SwitchToFilterScreen;
             startScreen.LoginSuccessful += AddProfileDataToScreens;
 
             Loaded += MainWindow_Loaded;
@@ -112,6 +113,7 @@ namespace MatchingAppWindow
                 profileEditScreen.SchoolBox.Text = profile.School;
                 profileEditScreen.WerkplekBox.Text = profile.WorkPlace;
                 profileEditScreen.SetDiet(profile.Diet);
+                profileEditScreen.InitializePage();
 
                 accountEditScreen.BirthDatePicker.Text = profile.BirthDate.ToString();
                 accountEditScreen.CountryBox.Text = profile.Country;

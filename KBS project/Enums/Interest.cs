@@ -54,6 +54,8 @@ namespace KBS_project.Enums
 
 public static class InterestExtensions
 {
+    public static int count = Enum.GetNames(typeof(Interest)).Length;
+
     public static string GetString(int index)
     {
         Interest interest = (Interest)index;
