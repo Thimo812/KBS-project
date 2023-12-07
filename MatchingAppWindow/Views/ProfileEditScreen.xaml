@@ -35,10 +35,10 @@
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="450" VerticalAlignment="Center" Width="1" Margin="145,0,0,0" RenderTransformOrigin="0.5,0.5">
         </Border>
 
-        <ListBox x:Name="hobbyPanel" ItemsSource="{Binding Interests, Mode=TwoWay}" Margin="166,277,0,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="261" Height="99" VerticalAlignment="Top" SelectionChanged="InterestSelectionChanged">
+        <ListBox x:Name="hobbyPanel" ItemsSource="{Binding Interests, Mode=TwoWay}" Margin="166,277,0,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="261" Height="99" VerticalAlignment="Top" SelectionChanged="InterestSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel/>
+                    <WrapPanel MaxWidth="261"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>
@@ -50,10 +50,10 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ListBox x:Name="availableHobbyList" ItemsSource="{Binding AvailableInterests, Mode=TwoWay}" Margin="489,277,0,0" HorizontalAlignment="Left" Width="262" Height="99" VerticalAlignment="Top">
+        <ListBox x:Name="availableHobbyList" ItemsSource="{Binding AvailableInterests, Mode=TwoWay}" Margin="489,277,0,0" HorizontalAlignment="Left" Width="262" Height="99" VerticalAlignment="Top" SelectionChanged="AvailableInterestSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel/>
+                    <WrapPanel MaxWidth="261"/>
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
             <ListBox.ItemTemplate>

@@ -54,8 +54,29 @@ namespace MatchingAppWindow.Views
 
         public void InterestSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            AvailableInterests.Add(Interests[hobbyPanel.SelectedIndex]);
-            Interests.RemoveAt(hobbyPanel.SelectedIndex);
+            if (hobbyPanel.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            var selectedInterest = Interests[hobbyPanel.SelectedIndex];
+
+            AvailableInterests.Add(selectedInterest);
+            Interests.Remove(selectedInterest);
+
+        }
+
+        public void AvailableInterestSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (availableHobbyList.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            var selectedInterest = AvailableInterests[availableHobbyList.SelectedIndex];
+
+            Interests.Add(selectedInterest);
+            AvailableInterests.Remove(selectedInterest);
         }
 
         private void SwitchToPhotoEditScreen(object sender, RoutedEventArgs e)
@@ -75,6 +96,7 @@ namespace MatchingAppWindow.Views
                 MainWindow.profile.School = SchoolBox.Text;
                 MainWindow.profile.WorkPlace = WerkplekBox.Text;
                 MainWindow.profile.Diet = GetDiet();
+                MainWindow.profile.Interests = Interests.ToList();
 
                 MainWindow.repo.UpdateProfile(MainWindow.profile);
             }
