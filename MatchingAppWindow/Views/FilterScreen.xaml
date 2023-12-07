@@ -162,6 +162,7 @@
         </ListBox>
 
         <Frame x:Name="profileDetailsFrame" Margin="550,0,0,0"/>
+        <Frame x:Name="nav" Margin="20,0,250,400" Background="Gray"/>
         <Button x:Name="matchingQuizButton" Content="Maak de test" HorizontalAlignment="Left" Margin="461,20,0,0" VerticalAlignment="Top" Width="84"/>
     </Grid>
 </Page>

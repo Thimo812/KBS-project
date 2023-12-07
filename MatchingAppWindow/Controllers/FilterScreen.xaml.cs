@@ -39,7 +39,7 @@ namespace MatchingAppWindow.Views
         private List<Diet> excludedDiets = new();
 
         private ProfileDetails profileDetails = new();
-
+        private Navigation navigation = new();
         public FilterScreen()
         {
             InitializeComponent();
@@ -49,6 +49,8 @@ namespace MatchingAppWindow.Views
             resultBox.ItemsSource = profileList;
 
             profileDetailsFrame.Content = profileDetails;
+
+            nav.Content = navigation;
 
             DataContext = this;
         }

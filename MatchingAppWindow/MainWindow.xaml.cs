@@ -27,7 +27,6 @@ namespace MatchingAppWindow
         private StartScreen startScreen = new();
         private RegisterScreen registerScreen = new();
         private Matchingquiz matchingQuiz = new();
-        private Navigation navigation = new();
         private FilterScreen filterScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
@@ -100,6 +99,7 @@ namespace MatchingAppWindow
 
             registerScreen.ExitPage += (object? sender, EventArgs e) => Content = filterScreen;
             startScreen.registerButton.Click += (Object sender, RoutedEventArgs e) => Content = registerScreen;
+
 
             startScreen.LoginSuccessful += SwitchToFilterScreen;
             startScreen.LoginSuccessful += AddProfileDataToScreens;
