@@ -37,16 +37,7 @@ namespace MatchingAppWindow
             InitializeComponent();
 
             InitScreens();
-
-            Content = startScreen;
         }
-
-
-        private void SwitchToRegisterScreen(Object? sender, EventArgs args)
-        {
-            Content = registerScreen;
-        }
-
 
         public void SwitchToFilterScreen(object? sender, EventArgs e)
         {
