@@ -106,13 +106,13 @@ namespace MatchingAppWindow.Views
         {
             switch(diet)
             {
-                case Diet.None:
+                case Diet.Geen:
                     NoDiet.IsChecked = true;
                     break;
-                case Diet.Vegetarian:
+                case Diet.Vegetarisch:
                     VegieDiet.IsChecked = true;
                     break;
-                case Diet.Vegan:
+                case Diet.Veganistisch:
                     VeganDiet.IsChecked = true;
                     break;
                 case Diet.Keto:
@@ -128,21 +128,21 @@ namespace MatchingAppWindow.Views
         {
             if ((bool)NoDiet.IsChecked)
             {
-                return Diet.None;
+                return Diet.Geen;
             }
             else if ((bool)VegieDiet.IsChecked)
             {
-                return Diet.Vegetarian;
+                return Diet.Vegetarisch;
             }
             else if ((bool)VeganDiet.IsChecked)
             {
-                return Diet.Vegan;
+                return Diet.Veganistisch;
             }
             else if ((bool)KetoDiet.IsChecked)
             {
                 return Diet.Keto;
             }
-            return Diet.Other;
+            return Diet.Anders;
         }
     }
 }
