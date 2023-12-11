@@ -92,6 +92,7 @@ namespace MatchingAppWindow
             registerScreen.ExitPage += (object? sender, EventArgs e) => Content = filterScreen;
             startScreen.registerButton.Click += (Object sender, RoutedEventArgs e) => Content = registerScreen;
 
+            matchingQuiz.ExitPage += SwitchToFilterScreen;
 
             startScreen.LoginSuccessful += SwitchToFilterScreen;
             startScreen.LoginSuccessful += AddProfileDataToScreens;
