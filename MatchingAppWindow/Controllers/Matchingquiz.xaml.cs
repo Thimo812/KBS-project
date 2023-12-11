@@ -125,7 +125,8 @@ namespace MatchingAppWindow
 
             if (unansweredQuestions.Count > 0)
             {
-                MessageBox.Show($"Please answer the following questions:\n\n{string.Join("\n", unansweredQuestions)}");
+                ShowErrors();
+               // MessageBox.Show($"Please answer the following questions:\n\n{string.Join("\n", unansweredQuestions)}");
             }
             else
             {
@@ -137,8 +138,13 @@ namespace MatchingAppWindow
 
             ExitPage?.Invoke(this, EventArgs.Empty);
         }
-    
 
+        private void ShowErrors()
+        {
+            
+
+            errorMessage.Visibility = Visibility.Visible;
+        }
 
 
         private bool IsAnyRadioButtonChecked(GroupBox groupBox)
