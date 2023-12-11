@@ -136,7 +136,8 @@ namespace MatchingAppWindow
                 MainWindow.repo.SaveMatchingQuiz(answerList);
             }
 
-            ExitPage?.Invoke(this, EventArgs.Empty);
+            ExitQuiz();
+            
         }
 
         private void ShowErrors()
@@ -192,7 +193,10 @@ namespace MatchingAppWindow
             }
             throw new IndexOutOfRangeException();
         }
-
+        public void ExitQuiz()
+        {
+            ExitPage?.Invoke(this, EventArgs.Empty);
+        }
 
     }
 }
