@@ -171,10 +171,22 @@ namespace MatchingApp.DataAccess.SQL
                 }
                 if (includedDiets.Count > 0)
                 {
+                    sql += $"AND (";
+
+                    bool isFirst = true;
                     foreach (var inclDiet in includedDiets)
                     {
-                        sql += $"AND Dieet = '{(int)inclDiet}' ";
+                        if (isFirst)
+                        {
+                            sql += $"Dieet = '{(int)inclDiet}'";
+                            isFirst = false;
+                        }
+                        else
+                        {
+                            sql += $"OR Dieet = '{(int)inclDiet}'";
+                        }
                     }
+                    sql += ")";
                 }
                 if (excludedDiets.Count > 0)
                 {
