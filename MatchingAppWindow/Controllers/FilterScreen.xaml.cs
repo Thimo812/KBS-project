@@ -51,6 +51,8 @@ namespace MatchingAppWindow.Views
 
             profileDetailsFrame.Content = profileDetails;
 
+            loginButton.Content = MainWindow.profile.UserName;
+
             nav.Content = navigation;
 
             DataContext = this;

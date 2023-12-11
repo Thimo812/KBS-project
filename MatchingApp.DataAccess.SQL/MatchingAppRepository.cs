@@ -500,8 +500,10 @@ namespace MatchingApp.DataAccess.SQL
             }
         }
 
-        public void SaveMatchingQuiz(List<int> answers)
+        public void SaveMatchingQuiz(List<int> answers, Profile profile)
         {
+            int quizID;
+
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = $"SELECT count(*) FROM MatchingQuiz WHERE ";
@@ -545,8 +547,33 @@ namespace MatchingApp.DataAccess.SQL
                     }
                     command.ExecuteNonQuery();
                 }
+
+                sql = "SELECT MAX(ID) FROM MatchingQuiz";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        quizID = reader.GetInt32(0);
+                    }
+                }
+
+                sql = "UPDATE Profiel SET QuizID = @quizID WHERE Gebruikersnaam = @userName";
+
+                using (SqlCommand command = new SqlCommand (sql, connection))
+                {
+                    command.Parameters.AddWithValue("quizID", quizID);
+                    command.Parameters.AddWithValue("userName", profile.UserName);
+
+                    command.ExecuteNonQuery();
+                }
+
             }
         }
+
         public bool ValidateUserName(string userName)
         {
             List<string> profiles = GetProfiles();
