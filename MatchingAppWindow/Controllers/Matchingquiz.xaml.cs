@@ -133,7 +133,7 @@ namespace MatchingAppWindow
                 var answerList = savedAnswers.Select(x => GetButtonIndex(x)).ToList();
 
                 MainWindow.profile.QuizAnswers = answerList;
-                MainWindow.repo.SaveMatchingQuiz(answerList);
+                MainWindow.repo.SaveMatchingQuiz(answerList, MainWindow.profile);
             }
 
             ExitQuiz();

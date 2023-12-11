@@ -8,10 +8,10 @@ namespace KBS_project.Enums
 {
     public enum Diet
     {
-        None,
-        Vegetarian,
-        Vegan,
+        Geen,
+        Vegetarisch,
+        Veganistisch,
         Keto,
-        Other
+        Anders
     }
 }
