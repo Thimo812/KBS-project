@@ -43,6 +43,7 @@ namespace MatchingAppWindow
         {
             if (filterScreen == null) filterScreen = new();
             filterScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => Content = matchingQuiz;
+            filterScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = profileEditScreen;
             Content = filterScreen;
         }
 

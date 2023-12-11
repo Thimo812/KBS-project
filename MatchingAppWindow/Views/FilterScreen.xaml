@@ -24,10 +24,10 @@
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="Check" Property="Visibility" Value="Visible"/>
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="{x:Null}">
-                                    <Setter TargetName="Cross" Property="Visibility" Value="Visible"/>
-                                </Trigger>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+                                <Setter TargetName="Cross" Property="Visibility" Value="Visible"/>
+                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -74,8 +74,8 @@
                         Click="ExtendOrCollapseHobbies_Click" Width="62"
                         
                 />
-                <!--<Label--> 
-                    <!--Content="Hobby"
+                <!--<Label-->
+                <!--Content="Hobby"
                     FontWeight="Bold"
                 />-->
                 <StackPanel Name="HobbyCheckBoxes"/>
@@ -147,6 +147,7 @@
 
         <Frame x:Name="profileDetailsFrame" Margin="550,0,0,0"/>
         <Frame x:Name="nav" Margin="20,0,250,400" Background="Gray"/>
-        <Button x:Name="matchingQuizButton" Content="Maak de test" HorizontalAlignment="Left" Margin="461,20,0,0" VerticalAlignment="Top" Width="84"/>
+        <Button x:Name="matchingQuizButton" Content="Maak de test" HorizontalAlignment="Left" Margin="400,15,0,0" VerticalAlignment="Top" Width="84"/>
+        <Button Name="loginButton" Content="Username" HorizontalAlignment="Right" Margin="0,0,250,400" Width="60" />
     </Grid>
 </Page>
