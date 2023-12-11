@@ -134,9 +134,10 @@ namespace MatchingAppWindow
 
                 MainWindow.profile.QuizAnswers = answerList;
                 MainWindow.repo.SaveMatchingQuiz(answerList, MainWindow.profile);
+                ExitQuiz();
             }
 
-            ExitQuiz();
+            
             
         }
 
