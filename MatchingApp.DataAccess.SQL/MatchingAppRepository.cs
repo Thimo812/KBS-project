@@ -602,7 +602,7 @@ namespace MatchingApp.DataAccess.SQL
                         {
                             try
                             {
-                                answers.Add(reader.GetInt32(i));
+                                answers.Add(reader.GetInt16(i));
                             }
                             catch (InvalidOperationException)
                             {
