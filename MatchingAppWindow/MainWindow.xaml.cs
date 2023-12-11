@@ -37,6 +37,7 @@ namespace MatchingAppWindow
             InitializeComponent();
 
             InitScreens();
+
         }
 
         public void SwitchToFilterScreen(object? sender, EventArgs e)
@@ -100,6 +101,7 @@ namespace MatchingAppWindow
             Closed += MainWindow_Closed;
 
             registerScreen.ExitPage += SwitchToFilterScreen;
+            matchingQuiz.ExitPage += (sender, e) => SwitchToFilterScreen(sender, e);
 
             Content = startScreen;
         }
