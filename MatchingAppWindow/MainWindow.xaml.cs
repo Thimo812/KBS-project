@@ -27,7 +27,7 @@ namespace MatchingAppWindow
         private StartScreen startScreen = new();
         private RegisterScreen registerScreen = new();
         private Matchingquiz matchingQuiz = new();
-        private FilterScreen filterScreen;
+        private ProfileScreen profileScreen;
         private LikesMachesScreen likesMachesScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
@@ -41,12 +41,12 @@ namespace MatchingAppWindow
 
         }
 
-        public void SwitchToFilterScreen(object? sender, EventArgs e)
+        public void SwitchToProfileScreen(object? sender, EventArgs e)
         {
-            if (filterScreen == null) filterScreen = new();
-            filterScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => Content = matchingQuiz;
-            filterScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = profileEditScreen;
-            Main.Content = filterScreen;
+            if (profileScreen == null) profileScreen = new();
+            profileScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => Content = matchingQuiz;
+            profileScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = profileEditScreen;
+            Main.Content = profileScreen;
         }
 
         public void SwitchToLikesMachesScreen(object? sender, EventArgs e)
@@ -99,19 +99,19 @@ namespace MatchingAppWindow
             photoEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => Main.Content = profileEditScreen;
             photoEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => Main.Content = accountEditScreen;
 
-            registerScreen.ExitPage += (object? sender, EventArgs e) => Main.Content = filterScreen;
+            registerScreen.ExitPage += (object? sender, EventArgs e) => Main.Content = profileScreen;
             startScreen.registerButton.Click += (Object sender, RoutedEventArgs e) => Main.Content = registerScreen;
 
-            matchingQuiz.ExitPage += SwitchToFilterScreen;
+            matchingQuiz.ExitPage += SwitchToProfileScreen;
 
-            startScreen.LoginSuccessful += SwitchToLikesMachesScreen;
+            startScreen.LoginSuccessful += SwitchToProfileScreen;
             startScreen.LoginSuccessful += AddProfileDataToScreens;
 
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
 
-            registerScreen.ExitPage += SwitchToFilterScreen;
-            matchingQuiz.ExitPage += (sender, e) => SwitchToFilterScreen(sender, e);
+            registerScreen.ExitPage += SwitchToProfileScreen;
+            matchingQuiz.ExitPage += (sender, e) => SwitchToProfileScreen(sender, e);
 
             Main.Content = startScreen;
         }

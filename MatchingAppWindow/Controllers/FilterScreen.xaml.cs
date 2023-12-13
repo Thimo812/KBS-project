@@ -26,7 +26,7 @@ namespace MatchingAppWindow.Views
     /// <summary>
     /// Interaction logic for FilterScreen.xaml
     /// </summary>
-    public partial class FilterScreen : Page
+    public partial class ProfileScreen : Page
     {
 
         //Creating all attributes
@@ -41,7 +41,7 @@ namespace MatchingAppWindow.Views
 
         private ProfileDetails profileDetails = new();
         private Navigation navigation = new();
-        public FilterScreen()
+        public ProfileScreen()
         {
             InitializeComponent();
 
