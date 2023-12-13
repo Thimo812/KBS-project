@@ -25,7 +25,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="DarkBlue"/>
+                                <Setter Property="Background" Value="LightGray"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -41,7 +41,7 @@
         </Grid.ColumnDefinitions>
         <Rectangle Fill="Gray" Grid.Column="0"/>
         <StackPanel Grid.Column="0">
-            <Image Source="/Views/Images/AccountIcon.png" Margin="20"/>
+            <Image x:Name="profileButton" Source="/Views/AccountIcon.png" Margin="20"/>
             <Button Content="Profielen" Style="{StaticResource navButtonStyle}" FontSize="15"/>
         </StackPanel>
 

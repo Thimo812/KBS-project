@@ -4,6 +4,8 @@
              xmlns:local="clr-namespace:MatchingAppWindow"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
+        <ResourceDictionary>
+            <BitmapImage x:Key="AccountImage" UriSource="Images/AccountIcon.png"/>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
