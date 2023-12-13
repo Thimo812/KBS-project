@@ -28,6 +28,7 @@ namespace MatchingAppWindow
         private RegisterScreen registerScreen = new();
         private Matchingquiz matchingQuiz = new();
         private FilterScreen filterScreen;
+        private LikesMachesScreen likesMachesScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
         private PhotoEditScreen photoEditScreen = new();
@@ -47,6 +48,13 @@ namespace MatchingAppWindow
             filterScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = profileEditScreen;
             Content = filterScreen;
         }
+
+        public void SwitchToLikesMachesScreen(object? sender, EventArgs e)
+        {
+            if (likesMachesScreen == null) likesMachesScreen = new();
+            Content = likesMachesScreen;
+        }
+
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -95,7 +103,7 @@ namespace MatchingAppWindow
 
             matchingQuiz.ExitPage += SwitchToFilterScreen;
 
-            startScreen.LoginSuccessful += SwitchToFilterScreen;
+            startScreen.LoginSuccessful += SwitchToLikesMachesScreen;
             startScreen.LoginSuccessful += AddProfileDataToScreens;
 
             Loaded += MainWindow_Loaded;

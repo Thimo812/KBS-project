@@ -37,7 +37,7 @@
 
     <Grid>
         <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="20,10,0,0" MaxHeight="500" MaxWidth="300" HorizontalAlignment="Left" Height="391" VerticalAlignment="Top" Width="138">
-            <StackPanel Name="stackFilterOptions" Background="LightGray" Height="407">
+            <StackPanel Name="stackFilterOptions" Background="LightGray" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="61"/>

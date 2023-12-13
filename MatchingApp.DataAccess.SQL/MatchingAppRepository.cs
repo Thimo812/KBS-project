@@ -30,21 +30,6 @@ namespace MatchingApp.DataAccess.SQL
 			builder.TrustServerCertificate = false; 
 		}
 
-        private static void CloseTunnel(ForwardedPortLocal tunnel, SshClient client)
-        {
-            // Stop the tunnel
-            tunnel.Stop();
-
-            // Disconnect the SSH client
-            client.Disconnect();
-
-            // Dispose of resources
-            tunnel.Dispose();
-            client.Dispose();
-
-            Console.WriteLine("SSH tunnel closed.");
-        }
-
         public string AgeToDate(int age)
 		{
             var today = DateTime.Today;
