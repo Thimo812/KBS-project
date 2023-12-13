@@ -55,6 +55,7 @@ namespace MatchingAppWindow
             Content = likesMachesScreen;
         }
 
+        //dit is voor merge shit
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
