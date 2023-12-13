@@ -27,6 +27,16 @@ namespace MatchingAppWindow.Views
             InitializeComponent();
         }
 
+        public void InitializePage()
+        {
+            BirthDatePicker.Text = MainWindow.profile.BirthDate.ToString();
+            CountryBox.Text = MainWindow.profile.Country;
+            CityBox.Text = MainWindow.profile.City;
+            PostalCodeBox.Text = MainWindow.profile.PostalCode;
+            SetGender(MainWindow.profile.Gender);
+            SetPreference(MainWindow.profile.SexualPreference);
+        }
+
         private void ConfirmChanges(object sender, RoutedEventArgs e)
         {
             if (MainWindow.profile != null)
