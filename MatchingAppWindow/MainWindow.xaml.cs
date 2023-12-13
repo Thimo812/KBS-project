@@ -53,6 +53,7 @@ namespace MatchingAppWindow
         {
             profile = null;
             filterScreen = null;
+            startScreen.userNameField.Text = string.Empty;
             Content = startScreen;
         }
 
