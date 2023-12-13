@@ -1,0 +1,164 @@
+﻿<Page x:Class="MatchingAppWindow.Views.LikesMachesScreen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MatchingAppWindow.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Page.Resources>
+        <Style x:Key="CustomCheckBoxStyle" TargetType="{x:Type CheckBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <BulletDecorator Background="Transparent">
+                            <BulletDecorator.Bullet>
+                                <Grid Width="16" Height="16">
+                                    <Rectangle x:Name="Border" Width="16" Height="16" Fill="{TemplateBinding Background}" Stroke="Black"/>
+                                    <TextBlock x:Name="Check" Visibility="Hidden" Text="✔" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="Cross" Visibility="Hidden" Text="✘" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Grid>
+                            </BulletDecorator.Bullet>
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,1,0,0" RecognizesAccessKey="True"/>
+                        </BulletDecorator>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Check" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+                                <Setter TargetName="Cross" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="20,10,0,0" MaxHeight="500" MaxWidth="300" HorizontalAlignment="Left" Height="391" VerticalAlignment="Top" Width="138">
+            <StackPanel Name="stackFilterOptions" Background="LightGray" Height="407">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="61"/>
+                        <ColumnDefinition Width="61"/>
+                    </Grid.ColumnDefinitions>
+                    <Button
+                        Content="Likes"
+                        FontWeight="Bold"
+                        Grid.Column="0"
+                    />
+                    <Button
+                        Content="Matches"
+                        FontWeight="Bold"
+                        Grid.Column="1"
+                    />
+                </Grid>
+
+                <!--Filter location-->
+                <Label 
+                    Content="Locatie"
+                    FontWeight="Bold" Height="26"
+                />
+                <RadioButton 
+                    Name="Global"
+                    Content="Globaal" 
+                    Height="20" 
+                    Checked="LocationChecked"
+                />
+                <RadioButton 
+                    Name="Country"
+                    Content="Zelfde land" 
+                    Height="20"
+                    Checked="LocationChecked"
+                />
+                <RadioButton 
+                    Name="City"
+                    Content="Zelfde woonplaats" 
+                    Height="27"
+                    Checked="LocationChecked"
+                />
+
+                <!--Filter hobby's-->
+                <Button Name="ExtendOrCollapseHobbies"
+                        Content="Hobby ▲"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Height="20"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Left"
+                        Click="ExtendOrCollapseHobbies_Click" Width="62"
+                        
+                />
+                <!--<Label-->
+                <!--Content="Hobby"
+                    FontWeight="Bold"
+                />-->
+                <StackPanel Name="HobbyCheckBoxes"/>
+
+                <!--Filter diets-->
+                <Label 
+                    Content="Dieet"
+                    FontWeight="Bold"
+                    HorizontalAlignment="Left"
+                />
+                <StackPanel Name="DietCheckBoxes"/>
+
+                <!--Filter minimum age-->
+                <Label 
+                    Content="Minimale leeftijd"
+                    FontWeight="Bold"
+                />
+                <TextBox
+                    Name="MinAge"
+                    Text="18" 
+                />
+                <Button
+                    Name="saveMinAgeButton"
+                    Content="opslaan"
+                    Background="CornflowerBlue" 
+                    Click="ChangeAgeButton" 
+                    
+                />
+                <!--Filter maximum age-->
+                <Label
+                    Content="Maximale leeftijd"
+                    FontWeight="Bold"
+                />
+                <TextBox
+                    Name="MaxAge"    
+                    Text="200"
+                />
+                <Button
+                    Name="saveMaxAgeButton"
+                    Content="opslaan"
+                    Background="CornflowerBlue" 
+                    Click="ChangeAgeButton" 
+                />
+            </StackPanel>
+        </ScrollViewer>
+
+
+        <ListBox Name="resultBox" Margin="160,10,10,50" BorderThickness="5,5,5,5" SelectionChanged="resultBox_SelectedIndexChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="50" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" MinWidth="180" />
+                            <ColumnDefinition Width="2*" MinWidth="100"/>
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*" />
+                            <RowDefinition Height="2*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0">Gebruikersnaam:</TextBlock>
+                        <TextBlock Grid.Row="1" Text="{Binding}" FontSize="25" ></TextBlock>
+                        <TextBlock Grid.Column="1" Grid.Row="1" >Info</TextBlock>
+                        <TextBlock Grid.Column="2" Grid.Row="1" >Info</TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Page>
