@@ -27,7 +27,7 @@ namespace MatchingAppWindow
         private StartScreen startScreen = new();
         private RegisterScreen registerScreen = new();
         private Matchingquiz matchingQuiz = new();
-        private FilterScreen filterScreen;
+        private FilterScreen? filterScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
         private PhotoEditScreen photoEditScreen = new();
@@ -45,7 +45,15 @@ namespace MatchingAppWindow
             if (filterScreen == null) filterScreen = new();
             filterScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => Content = matchingQuiz;
             filterScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = profileEditScreen;
+            filterScreen.logoutButton.Click += LogoutButton_Click;
             Content = filterScreen;
+        }
+
+        public void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            profile = null;
+            filterScreen = null;
+            Content = startScreen;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
