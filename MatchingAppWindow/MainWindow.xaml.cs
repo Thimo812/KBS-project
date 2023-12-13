@@ -27,7 +27,7 @@ namespace MatchingAppWindow
         private StartScreen startScreen = new();
         private RegisterScreen registerScreen = new();
         private Matchingquiz matchingQuiz = new();
-        private FilterScreen filterScreen;
+        private ProfileScreen filterScreen;
         private LikesMachesScreen likesMachesScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
@@ -49,7 +49,15 @@ namespace MatchingAppWindow
             Main.Content = filterScreen;
         }
 
-        public void SwitchToLikesMachesScreen(object? sender, EventArgs e)
+        public void SwitchToFilterScreen(object? sender, EventArgs e)
+        {
+            if (filterScreen == null) filterScreen = new();
+            filterScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => Content = matchingQuiz;
+            filterScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = profileEditScreen;
+            Content = filterScreen;
+        }
+
+            public void SwitchToLikesMachesScreen(object? sender, EventArgs e)
         {
             if (likesMachesScreen == null) likesMachesScreen = new();
             Content = likesMachesScreen;
@@ -104,8 +112,14 @@ namespace MatchingAppWindow
 
             matchingQuiz.ExitPage += SwitchToFilterScreen;
 
+<<<<<<< Updated upstream
             startScreen.LoginSuccessful += SwitchToLikesMachesScreen;
             startScreen.LoginSuccessful += AddProfileDataToScreens;
+=======
+            startScreen.LoginSuccessful += SwitchToFilterScreen;
+/*            startScreen.LoginSuccessful += AddProfileDataToScreens;*/
+            startScreen.registerButton.Click += (sender, e) => Content = registerScreen;
+>>>>>>> Stashed changes
 
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
