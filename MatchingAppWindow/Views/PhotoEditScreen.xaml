@@ -5,22 +5,27 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MatchingAppWindow.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="PhotoEditScreen">
+      d:DesignHeight="450" d:DesignWidth="700"
+      Title="PhotoEditScreen"
+      Background="White">
 
-    <Grid Background="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="135"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ListBox Grid.Row="0" ItemsSource="{Binding Images, Mode=TwoWay}">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
 
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="450" VerticalAlignment="Center" Width="1" Margin="145,0,0,0" RenderTransformOrigin="0.5,0.5">
-        </Border>
-
-        <Button Name="ProfileEditButton" Content="Profiel aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,60,0,0" VerticalAlignment="Top" Width="125" Click="SwitchToProfileEditScreen"/>
-        <Button IsEnabled="False" Content="Foto's aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,105,0,0" VerticalAlignment="Top" Width="125"/>
-        <Button Name="AccountScreenButton" Content="Account aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,150,0,0" VerticalAlignment="Top" Width="125" Click="SwitchToAccountEditScreen"/>
-
-        <Button x:Name="UploadButton" Content="Uploaden" Margin="152,20,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250"/>
-        <Button x:Name="SaveButton" Content="Opslaan" Margin="422,20,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="250"/>
-        
-        <Grid Background="LightGray"  HorizontalAlignment="Left" Height="379" Margin="152,61,0,0" VerticalAlignment="Top" Width="638"/>
-
-        </Grid>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding}" Height="125" Width="125"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
 </Page>

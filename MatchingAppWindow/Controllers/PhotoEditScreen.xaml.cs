@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,20 +21,23 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class PhotoEditScreen : Page
     {
+        public ObservableCollection<BitmapImage> Images { get; set; }
+
         public PhotoEditScreen()
         {
             InitializeComponent();
+
+            DataContext = this;
+
+            Images = new();
         }
 
-        private void SwitchToAccountEditScreen(object sender, RoutedEventArgs e)
+        public void InitializePage()
         {
-            Content = new PhotoEditScreen();
+            foreach (byte[] imageData in MainWindow.profile.Images)
+            {
+                Images.Add(ImageConverter.ImageDataToBitmap(imageData));
+            }
         }
-
-        private void SwitchToProfileEditScreen(object sender, RoutedEventArgs e)
-        {
-            Content = new ProfileEditScreen();
-        }
-
     }
 }

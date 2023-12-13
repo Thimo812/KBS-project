@@ -47,24 +47,18 @@ namespace MatchingAppWindow.Views
         {
             profileEditScreen.InitializePage();
             accountEditScreen.InitializePage();
+            photoEditScreen.InitializePage();
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
 
             profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
 
-            editProfileButton.Click += (s, e) =>
-            {
-                contentFrame.Content = profileEditScreen;
-                editProfileButton.Visibility = Visibility.Hidden;
-                editAccountButton.Visibility = Visibility.Hidden;
-            };
-
-            editAccountButton.Click += (s, e) =>
-            {
-                contentFrame.Content = accountEditScreen;
-                editProfileButton.Visibility = Visibility.Hidden;
-                editAccountButton.Visibility = Visibility.Hidden;
-            };
+            editProfileButton.Click += ToggleProfileButtons;
+            editProfileButton.Click += (sender, e) => contentFrame.Content = profileEditScreen;
+            editAccountButton.Click += ToggleProfileButtons;
+            editAccountButton.Click += (sender, e) => contentFrame.Content = accountEditScreen;
+            editPhotosButton.Click += ToggleProfileButtons;
+            editPhotosButton.Click += (sender, e) => contentFrame.Content = photoEditScreen;
 
             matchingQuiz.ExitPage += (sender, e) => contentFrame.Content = profileEditScreen;
 
@@ -87,11 +81,13 @@ namespace MatchingAppWindow.Views
             {
                 editProfileButton.Visibility = Visibility.Visible;
                 editAccountButton.Visibility = Visibility.Visible;
+                editPhotosButton.Visibility = Visibility.Visible;
             }
             else if (editProfileButton.Visibility == Visibility.Visible)
             {
                 editProfileButton.Visibility = Visibility.Hidden;
                 editAccountButton.Visibility = Visibility.Hidden;
+                editPhotosButton.Visibility = Visibility.Hidden;
             }
         }
     }
