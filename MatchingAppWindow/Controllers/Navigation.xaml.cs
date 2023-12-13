@@ -50,6 +50,8 @@ namespace MatchingAppWindow.Views
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
 
+            profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
+
             editProfileButton.Click += (s, e) =>
             {
                 contentFrame.Content = profileEditScreen;
@@ -64,9 +66,7 @@ namespace MatchingAppWindow.Views
                 editAccountButton.Visibility = Visibility.Hidden;
             };
 
-            matchingQuiz.ExitPage += SwitchToProfileScreen;
-
-            matchingQuiz.ExitPage += (sender, e) => SwitchToProfileScreen(sender, e);
+            matchingQuiz.ExitPage += (sender, e) => contentFrame.Content = profileEditScreen;
 
             SwitchToProfileScreen(this, EventArgs.Empty);
         }
