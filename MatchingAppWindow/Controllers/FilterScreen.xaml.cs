@@ -26,7 +26,7 @@ namespace MatchingAppWindow.Views
     /// <summary>
     /// Interaction logic for FilterScreen.xaml
     /// </summary>
-    public partial class ProfileScreen : Page
+    public partial class FilterScreen : Page
     {
 
         //Creating all attributes
@@ -40,7 +40,8 @@ namespace MatchingAppWindow.Views
         private List<Diet> excludedDiets = new();
 
         private ProfileDetails profileDetails = new();
-        public ProfileScreen()
+        private Navigation navigation = new();
+        public FilterScreen()
         {
             InitializeComponent();
 
@@ -51,6 +52,8 @@ namespace MatchingAppWindow.Views
             profileDetailsFrame.Content = profileDetails;
 
             loginButton.Content = MainWindow.profile.UserName;
+
+            nav.Content = navigation;
 
             DataContext = this;
 

@@ -42,7 +42,7 @@ namespace MatchingAppWindow.Views
             errorMessage.Visibility = Visibility.Visible;
         }
 
-        private void TryLogin(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
             string enteredUserName = userNameField.Text;
 
@@ -56,14 +56,6 @@ namespace MatchingAppWindow.Views
                 ShowErrors();
             }
         }
-
-        private void NameFieldKeyPressed(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                TryLogin(this, new RoutedEventArgs());
-            }
-        }        
 
     }
 }
