@@ -46,7 +46,7 @@ namespace MatchingAppWindow
             if (filterScreen == null) filterScreen = new();
             filterScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => Content = matchingQuiz;
             filterScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = profileEditScreen;
-            Content = filterScreen;
+            Main.Content = filterScreen;
         }
 
         public void SwitchToLikesMachesScreen(object? sender, EventArgs e)
@@ -90,17 +90,17 @@ namespace MatchingAppWindow
         }
         public void InitScreens()
         {
-            profileEditScreen.PhotoScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = photoEditScreen;
-            profileEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = accountEditScreen;
+            profileEditScreen.PhotoScreenButton.Click += (Object sender, RoutedEventArgs e) => Main.Content = photoEditScreen;
+            profileEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => Main.Content = accountEditScreen;
             
-            accountEditScreen.PhotoScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = photoEditScreen;
-            accountEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => Content = profileEditScreen;
+            accountEditScreen.PhotoScreenButton.Click += (Object sender, RoutedEventArgs e) => Main.Content = photoEditScreen;
+            accountEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => Main.Content = profileEditScreen;
 
-            photoEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => Content = profileEditScreen;
-            photoEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = accountEditScreen;
+            photoEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => Main.Content = profileEditScreen;
+            photoEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => Main.Content = accountEditScreen;
 
-            registerScreen.ExitPage += (object? sender, EventArgs e) => Content = filterScreen;
-            startScreen.registerButton.Click += (Object sender, RoutedEventArgs e) => Content = registerScreen;
+            registerScreen.ExitPage += (object? sender, EventArgs e) => Main.Content = filterScreen;
+            startScreen.registerButton.Click += (Object sender, RoutedEventArgs e) => Main.Content = registerScreen;
 
             matchingQuiz.ExitPage += SwitchToFilterScreen;
 
@@ -113,7 +113,7 @@ namespace MatchingAppWindow
             registerScreen.ExitPage += SwitchToFilterScreen;
             matchingQuiz.ExitPage += (sender, e) => SwitchToFilterScreen(sender, e);
 
-            Content = startScreen;
+            Main.Content = startScreen;
         }
 
         public void AddProfileDataToScreens()
