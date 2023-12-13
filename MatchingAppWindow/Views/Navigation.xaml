@@ -8,12 +8,43 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Navigation"
       Background="White">
+    
+    <Page.Resources>
+        <Style TargetType="Button" x:Key="navButtonStyle">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="DarkBlue"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Rectangle Fill="Gray"/>
+        <Rectangle Fill="Gray" Grid.Column="0"/>
+        <StackPanel Grid.Column="0">
+            <Image Source="/Views/Images/AccountIcon.png" Margin="20"/>
+            <Button Content="Profielen" Style="{StaticResource navButtonStyle}" FontSize="15"/>
+        </StackPanel>
+
         <Frame x:Name="contentFrame" Grid.Column="1" NavigationUIVisibility="Hidden"/>
     </Grid>
 </Page>
