@@ -25,27 +25,14 @@ namespace MatchingAppWindow
         private static ForwardedPortLocal tunnel;
 
         private StartScreen startScreen = new();
+        private Navigation navigation = new();
         private RegisterScreen registerScreen = new();
-        private Matchingquiz matchingQuiz = new();
-        private FilterScreen filterScreen;
-        private ProfileEditScreen profileEditScreen = new();
-        private AccountEditScreen accountEditScreen = new();
-        private PhotoEditScreen photoEditScreen = new();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            InitScreens();
-
-        }
-
-        public void SwitchToFilterScreen(object? sender, EventArgs e)
-        {
-            if (filterScreen == null) filterScreen = new();
-            filterScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => Content = matchingQuiz;
-            filterScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = profileEditScreen;
-            Content = filterScreen;
+            InitScreen();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -79,57 +66,23 @@ namespace MatchingAppWindow
                 sshClient.Dispose();
             }
         }
-        public void InitScreens()
+
+        private void InitScreen()
         {
-            profileEditScreen.PhotoScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = photoEditScreen;
-            profileEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = accountEditScreen;
-            
-            accountEditScreen.PhotoScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = photoEditScreen;
-            accountEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => Content = profileEditScreen;
+            startScreen.LoginSuccessful += (sender, e) =>
+            {
+                navigation.InitScreens();
+                Content = navigation;
+            };
 
-            photoEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => Content = profileEditScreen;
-            photoEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => Content = accountEditScreen;
+            registerScreen.loginButton.Click += (sender, e) => Content = startScreen;
 
-            registerScreen.ExitPage += (object? sender, EventArgs e) => Content = filterScreen;
-            startScreen.registerButton.Click += (Object sender, RoutedEventArgs e) => Content = registerScreen;
-
-            matchingQuiz.ExitPage += SwitchToFilterScreen;
-
-            startScreen.LoginSuccessful += SwitchToFilterScreen;
-            startScreen.LoginSuccessful += AddProfileDataToScreens;
+            startScreen.registerButton.Click += (sender, e) => Content = registerScreen;
 
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
 
-            registerScreen.ExitPage += SwitchToFilterScreen;
-            matchingQuiz.ExitPage += (sender, e) => SwitchToFilterScreen(sender, e);
-
             Content = startScreen;
-        }
-
-        public void AddProfileDataToScreens()
-        {
-            if (profile != null)
-            {
-                profileEditScreen.BeschrijvingBox.Text = profile.Description;
-                profileEditScreen.OpleidingBox.Text = profile.Degree;
-                profileEditScreen.SchoolBox.Text = profile.School;
-                profileEditScreen.WerkplekBox.Text = profile.WorkPlace;
-                profileEditScreen.SetDiet(profile.Diet);
-                profileEditScreen.InitializePage();
-
-                accountEditScreen.BirthDatePicker.Text = profile.BirthDate.ToString();
-                accountEditScreen.CountryBox.Text = profile.Country;
-                accountEditScreen.CityBox.Text = profile.City;
-                accountEditScreen.PostalCodeBox.Text = profile.PostalCode;
-                accountEditScreen.SetGender(profile.Gender);
-                accountEditScreen.SetPreference(profile.SexualPreference);
-            }
-        }
-
-        public void AddProfileDataToScreens(object? sender, EventArgs e)
-        {
-            AddProfileDataToScreens();
         }
     }
 }
