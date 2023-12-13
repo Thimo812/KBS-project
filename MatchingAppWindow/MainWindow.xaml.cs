@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Renci.SshNet;
+using System.ComponentModel;
 
 namespace MatchingAppWindow
 {
@@ -33,14 +34,8 @@ namespace MatchingAppWindow
             InitializeComponent();
 
             InitScreen();
-        }
 
-        public void LogoutButton_Click(object sender, RoutedEventArgs e)
-        {
-            profile = null;
-            filterScreen = null;
-            startScreen.userNameField.Text = string.Empty;
-            Content = startScreen;
+            Logout();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -90,6 +85,19 @@ namespace MatchingAppWindow
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
 
+            Content = startScreen;
+        }
+
+        private void Logout()
+        {
+            navigation.logoutButton.MouseDown += LogoutButton_Click;
+        }
+
+        private void LogoutButton_Click(object? sender, RoutedEventArgs e)
+        {
+            profile = null;
+            navigation.ProfileScreen = null;
+            startScreen.userNameField.Text = string.Empty;
             Content = startScreen;
         }
     }
