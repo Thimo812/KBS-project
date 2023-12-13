@@ -24,10 +24,10 @@ using System.Net;
 namespace MatchingAppWindow.Views
 {
     /// <summary>
-    /// Interaction logic for LikesMachesScreen.xaml
+    /// Interaction logic for LikesMatchesScreen.xaml
     /// </summary>
 
-    public partial class LikesMachesScreen : Page
+    public partial class LikesMatchesScreen : Page
     {
         MatchingAppRepository repo = new MatchingAppRepository();
         private LocationFilter location = LocationFilter.Global;
@@ -40,7 +40,7 @@ namespace MatchingAppWindow.Views
 
         private ProfileDetails profileDetails = new();
         private Navigation navigation = new();
-        public LikesMachesScreen()
+        public LikesMatchesScreen()
         {
             InitializeComponent();
 

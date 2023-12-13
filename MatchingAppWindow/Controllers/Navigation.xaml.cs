@@ -24,6 +24,7 @@ namespace MatchingAppWindow.Views
     {
         private Matchingquiz matchingQuiz = new();
         private ProfileScreen profileScreen;
+        private LikesMatchesScreen matchScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
         private PhotoEditScreen photoEditScreen = new();
@@ -38,9 +39,13 @@ namespace MatchingAppWindow.Views
         public void SwitchToProfileScreen(object? sender, EventArgs e)
         {
             if (profileScreen == null) profileScreen = new();
-            profileScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => contentFrame.Content = matchingQuiz;
-            profileScreen.loginButton.Click += (object sender, RoutedEventArgs e) => contentFrame.Content = profileEditScreen;
             contentFrame.Content = profileScreen;
+        }
+
+        public void SwitchToLikesMatchesScreen(object? sender, EventArgs e)
+        {
+            if (matchScreen == null) matchScreen = new();
+            contentFrame.Content = matchScreen;
         }
 
         public void InitScreens()

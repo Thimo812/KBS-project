@@ -35,13 +35,6 @@ namespace MatchingAppWindow
             InitScreen();
         }
 
-        public void SwitchToLikesMachesScreen(object? sender, EventArgs e)
-        {
-            if (likesMachesScreen == null) likesMachesScreen = new();
-            Content = likesMachesScreen;
-        }
-
-
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // SSH-verbinding instellen
