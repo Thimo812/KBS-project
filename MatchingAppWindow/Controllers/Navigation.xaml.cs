@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KBS_project;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,12 +22,77 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class Navigation : Page
     {
+        private Matchingquiz matchingQuiz = new();
+        private ProfileScreen profileScreen;
+        private ProfileEditScreen profileEditScreen = new();
+        private AccountEditScreen accountEditScreen = new();
+        private PhotoEditScreen photoEditScreen = new();
+
         public Navigation()
         {
             InitializeComponent();
 
             DataContext = this;
-            Visibility = Visibility.Visible;
+        }
+
+        public void SwitchToProfileScreen(object? sender, EventArgs e)
+        {
+            if (profileScreen == null) profileScreen = new();
+            profileScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => contentFrame.Content = matchingQuiz;
+            profileScreen.loginButton.Click += (object sender, RoutedEventArgs e) => contentFrame.Content = profileEditScreen;
+            contentFrame.Content = profileScreen;
+        }
+
+        public void InitScreens()
+        {
+            profileEditScreen.InitializePage();
+            accountEditScreen.InitializePage();
+
+            profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
+
+            profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
+
+            editProfileButton.Click += (s, e) =>
+            {
+                contentFrame.Content = profileEditScreen;
+                editProfileButton.Visibility = Visibility.Hidden;
+                editAccountButton.Visibility = Visibility.Hidden;
+            };
+
+            editAccountButton.Click += (s, e) =>
+            {
+                contentFrame.Content = accountEditScreen;
+                editProfileButton.Visibility = Visibility.Hidden;
+                editAccountButton.Visibility = Visibility.Hidden;
+            };
+
+            matchingQuiz.ExitPage += (sender, e) => contentFrame.Content = profileEditScreen;
+
+            SwitchToProfileScreen(this, EventArgs.Empty);
+        }
+
+        private void ProfileButtonFocus(object? sender, MouseEventArgs e)
+        {
+            profileButton.Source = new BitmapImage(new Uri("/Views/AccountIconFocus.png", UriKind.Relative));
+        }
+
+        private void ProfileButtonFocusLost(object? sender, MouseEventArgs e)
+        {
+            profileButton.Source = new BitmapImage(new Uri("/Views/AccountIcon.png", UriKind.Relative));
+        }
+
+        private void ToggleProfileButtons(object? sender, RoutedEventArgs e)
+        {
+            if (editProfileButton.Visibility == Visibility.Hidden)
+            {
+                editProfileButton.Visibility = Visibility.Visible;
+                editAccountButton.Visibility = Visibility.Visible;
+            }
+            else if (editProfileButton.Visibility == Visibility.Visible)
+            {
+                editProfileButton.Visibility = Visibility.Hidden;
+                editAccountButton.Visibility = Visibility.Hidden;
+            }
         }
     }
 }

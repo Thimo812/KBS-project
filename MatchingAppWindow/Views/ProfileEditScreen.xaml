@@ -68,5 +68,6 @@
         <Button IsEnabled="False" Content="Profiel aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,60,0,0" VerticalAlignment="Top" Width="125"/>
         <Button Visibility="Hidden" Name="PhotoScreenButton" Content="Foto's aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,150,0,0" VerticalAlignment="Top" Width="125" />
         <Button Name="AccountScreenButton" Content="Account aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,105,0,0" VerticalAlignment="Top" Width="125" />
+        <Button x:Name="matchingQuizButton" Content="Maak de matching quiz!" HorizontalAlignment="Left" Margin="448,402,0,0" VerticalAlignment="Top" Height="38" Width="188" FontSize="15"/>
     </Grid>
 </Page>
