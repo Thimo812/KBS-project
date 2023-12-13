@@ -45,14 +45,24 @@ namespace MatchingAppWindow.Views
 
         public void InitScreens()
         {
-            profileEditScreen.PhotoScreenButton.Click += (Object sender, RoutedEventArgs e) => contentFrame.Content = photoEditScreen;
-            profileEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => contentFrame.Content = accountEditScreen;
+            profileEditScreen.InitializePage();
+            accountEditScreen.InitializePage();
 
-            accountEditScreen.PhotoScreenButton.Click += (Object sender, RoutedEventArgs e) => contentFrame.Content = photoEditScreen;
-            accountEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => contentFrame.Content = profileEditScreen;
+            profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
 
-            photoEditScreen.ProfileEditButton.Click += (Object sender, RoutedEventArgs e) => contentFrame.Content = profileEditScreen;
-            photoEditScreen.AccountScreenButton.Click += (Object sender, RoutedEventArgs e) => contentFrame.Content = accountEditScreen;
+            editProfileButton.Click += (s, e) =>
+            {
+                contentFrame.Content = profileEditScreen;
+                editProfileButton.Visibility = Visibility.Hidden;
+                editAccountButton.Visibility = Visibility.Hidden;
+            };
+
+            editAccountButton.Click += (s, e) =>
+            {
+                contentFrame.Content = accountEditScreen;
+                editProfileButton.Visibility = Visibility.Hidden;
+                editAccountButton.Visibility = Visibility.Hidden;
+            };
 
             matchingQuiz.ExitPage += SwitchToProfileScreen;
 
@@ -61,29 +71,28 @@ namespace MatchingAppWindow.Views
             SwitchToProfileScreen(this, EventArgs.Empty);
         }
 
-        public void AddProfileDataToScreens()
+        private void ProfileButtonFocus(object? sender, MouseEventArgs e)
         {
-            if (MainWindow.profile != null)
-            {
-                profileEditScreen.BeschrijvingBox.Text = MainWindow.profile.Description;
-                profileEditScreen.OpleidingBox.Text = MainWindow.profile.Degree;
-                profileEditScreen.SchoolBox.Text = MainWindow.profile.School;
-                profileEditScreen.WerkplekBox.Text = MainWindow.profile.WorkPlace;
-                profileEditScreen.SetDiet(MainWindow.profile.Diet);
-                profileEditScreen.InitializePage();
-
-                accountEditScreen.BirthDatePicker.Text = MainWindow.profile.BirthDate.ToString();
-                accountEditScreen.CountryBox.Text = MainWindow.profile.Country;
-                accountEditScreen.CityBox.Text = MainWindow.profile.City;
-                accountEditScreen.PostalCodeBox.Text = MainWindow.profile.PostalCode;
-                accountEditScreen.SetGender(MainWindow.profile.Gender);
-                accountEditScreen.SetPreference(MainWindow.profile.SexualPreference);
-            }
+            profileButton.Source = new BitmapImage(new Uri("/Views/AccountIconFocus.png", UriKind.Relative));
         }
 
-        public void AddProfileDataToScreens(object? sender, EventArgs e)
+        private void ProfileButtonFocusLost(object? sender, MouseEventArgs e)
         {
-            AddProfileDataToScreens();
+            profileButton.Source = new BitmapImage(new Uri("/Views/AccountIcon.png", UriKind.Relative));
+        }
+
+        private void ToggleProfileButtons(object? sender, RoutedEventArgs e)
+        {
+            if (editProfileButton.Visibility == Visibility.Hidden)
+            {
+                editProfileButton.Visibility = Visibility.Visible;
+                editAccountButton.Visibility = Visibility.Visible;
+            }
+            else if (editProfileButton.Visibility == Visibility.Visible)
+            {
+                editProfileButton.Visibility = Visibility.Hidden;
+                editAccountButton.Visibility = Visibility.Hidden;
+            }
         }
     }
 }
