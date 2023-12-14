@@ -333,7 +333,7 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
                     command.Parameters.AddWithValue("Naam", profile.FirstName);
-                    command.Parameters.AddWithValue("Achternaam", profile.LastName);
+                    command.Parameters.AddWithValue("Achternaam", profile.LastName); 
                     command.Parameters.AddWithValue("Tussenvoegsels", profile.Infix);
                     command.Parameters.AddWithValue("Geboortedatum", $"{profile.BirthDate.Year}-{profile.BirthDate.Month}-{profile.BirthDate.Day}");
                     command.Parameters.AddWithValue("Sekspref", profile.SexualPreference);
@@ -341,17 +341,18 @@ namespace MatchingApp.DataAccess.SQL
                     command.Parameters.AddWithValue("Woonplaats", profile.City);
                     command.Parameters.AddWithValue("Land", profile.Country);
                     command.Parameters.AddWithValue("Postcode", profile.PostalCode);
-                    command.Parameters.AddWithValue("Beschrijving", profile.Description);
-                    command.Parameters.AddWithValue("Opleiding", profile.Degree);
-                    command.Parameters.AddWithValue("School", profile.School);
-                    command.Parameters.AddWithValue("Werkplek", profile.WorkPlace);
-                    command.Parameters.AddWithValue("Dieet", profile.Diet);
+                    command.Parameters.AddWithValue("Beschrijving", profile.Description == null ? String.Empty : profile.Description);
+                    command.Parameters.AddWithValue("Opleiding", profile.Degree == null ? String.Empty : profile.Degree);
+                    command.Parameters.AddWithValue("School", profile.School == null ? String.Empty : profile.School);
+                    command.Parameters.AddWithValue("Werkplek", profile.WorkPlace == null ? String.Empty : profile.WorkPlace);
+                    command.Parameters.AddWithValue("Dieet", profile.Diet == null ? String.Empty : profile.Diet);
                     command.ExecuteNonQuery();
                 }
                 connection.Close();
             }
 
             UpdateHobbies(profile);  
+            UpdateImages(profile);
         }
 
         public void UpdateHobbies(Profile profile)
@@ -386,6 +387,28 @@ namespace MatchingApp.DataAccess.SQL
                     }
                 }
             }
+        }
+
+        public void UpdateImages(Profile profile)
+        {
+            if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
+
+            CheckPhotoAlbum(profile);
+
+            using(SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "DELETE FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName)";
+
+                connection.Open();
+                using(SqlCommand command = new SqlCommand(sql,connection))
+                {
+                    command.Parameters.AddWithValue("userName", profile.UserName);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+
+            StoreImages(profile);
         }
 
         public void StoreImages(Profile profile)

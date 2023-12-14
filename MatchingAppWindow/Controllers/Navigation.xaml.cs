@@ -26,7 +26,6 @@ namespace MatchingAppWindow.Views
         private ProfileScreen profileScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
-        private PhotoEditScreen photoEditScreen = new();
 
         public Navigation()
         {
@@ -47,7 +46,9 @@ namespace MatchingAppWindow.Views
         {
             profileEditScreen.InitializePage();
             accountEditScreen.InitializePage();
-            photoEditScreen.InitializePage();
+
+            profileEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
+            accountEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
 
@@ -57,8 +58,6 @@ namespace MatchingAppWindow.Views
             editProfileButton.Click += (sender, e) => contentFrame.Content = profileEditScreen;
             editAccountButton.Click += ToggleProfileButtons;
             editAccountButton.Click += (sender, e) => contentFrame.Content = accountEditScreen;
-            editPhotosButton.Click += ToggleProfileButtons;
-            editPhotosButton.Click += (sender, e) => contentFrame.Content = photoEditScreen;
 
             matchingQuiz.ExitPage += (sender, e) => contentFrame.Content = profileEditScreen;
 
@@ -81,13 +80,11 @@ namespace MatchingAppWindow.Views
             {
                 editProfileButton.Visibility = Visibility.Visible;
                 editAccountButton.Visibility = Visibility.Visible;
-                editPhotosButton.Visibility = Visibility.Visible;
             }
             else if (editProfileButton.Visibility == Visibility.Visible)
             {
                 editProfileButton.Visibility = Visibility.Hidden;
                 editAccountButton.Visibility = Visibility.Hidden;
-                editPhotosButton.Visibility = Visibility.Hidden;
             }
         }
     }

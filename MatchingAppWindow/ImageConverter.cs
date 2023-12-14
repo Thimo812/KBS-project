@@ -28,5 +28,21 @@ namespace MatchingAppWindow
         {
             return File.ReadAllBytes(path);
         }
+
+        public static byte[] BitmapImageToData(BitmapImage bitmapImage)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                BitmapEncoder encoder = new BmpBitmapEncoder();
+
+                encoder.Frames.Add(BitmapFrame.Create(bitmapImage));
+
+                encoder.Save(stream);
+
+                byte[] imageData = stream.ToArray();
+
+                return imageData;
+            }
+        }
     }
 }

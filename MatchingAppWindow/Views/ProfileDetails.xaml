@@ -33,7 +33,7 @@
                 </Button.Background>
             </Button>
 
-            <Button x:Name="nextImage" Content="&gt;" Grid.Column="2" Height="30" BorderBrush="Transparent" FontSize="15" Click="NextImage">
+            <Button x:Name="nextImage" Content="&gt;" Grid.Column="2" Height="30" BorderBrush="Transparent" FontSize="15" Click="NextImage" HorizontalAlignment="Left" Margin="0,74,0,75" Width="20">
                 <Button.Background>
                     <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
                 </Button.Background>

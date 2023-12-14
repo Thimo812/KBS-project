@@ -4,38 +4,41 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MatchingAppWindow.Views" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="ProfileEditScreen">
+      mc:Ignorable="d" d:DesignWidth="800"
+      Title="ProfileEditScreen" Height="595">
 
     <Grid Background="White">
-        <Label Content="Beschrijving:" Margin="150,28,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top"/>
-        <TextBox x:Name="BeschrijvingBox" Margin="300,28,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="64" FontSize="15" HorizontalAlignment="Left" Width="395"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="135"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
-        <Label Content="Opleiding:" Margin="150,95,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <TextBox x:Name="OpleidingBox" Margin="300,95,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
+        
 
-        <Label Content="School:" Margin="150,132,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <TextBox x:Name="SchoolBox" Margin="300,132,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
+        <Label Grid.Row="1" Content="Beschrijving:" Margin="102,10,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top"/>
+        <TextBox Grid.Row="1" x:Name="BeschrijvingBox" Margin="252,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="64" FontSize="15" HorizontalAlignment="Left" Width="395"/>
 
-        <Label Content="Werkplek:" Margin="150,169,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <TextBox x:Name="WerkplekBox" Margin="300,169,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
+        <Label Grid.Row="1" Content="Opleiding:" Margin="102,77,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
+        <TextBox Grid.Row="1" x:Name="OpleidingBox" Margin="252,77,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
 
-        <Label Content="Dieet:" Margin="150,206,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <RadioButton Content="Geen" Name="NoDiet" GroupName="Diet" Margin="299,214,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Content="Vegetarisch" Name="VegieDiet" GroupName="Diet" Margin="370,214,0,0" HorizontalAlignment="Left" Width="98" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Content="Veganistisch" Name="VeganDiet" GroupName="Diet" Margin="473,214,0,0" HorizontalAlignment="Left" Width="108" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Content="Keto" Name="KetoDiet" GroupName="Diet" Margin="586,214,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Content="Anders" Name="OtherDiet" GroupName="Diet" Margin="652,214,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <Label Grid.Row="1" Content="School:" Margin="102,114,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="31" VerticalAlignment="Top"/>
+        <TextBox Grid.Row="1" x:Name="SchoolBox" Margin="252,114,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="31" VerticalAlignment="Top"/>
+
+        <Label Grid.Row="1" Content="Werkplek:" Margin="102,151,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
+        <TextBox Grid.Row="1" x:Name="WerkplekBox" Margin="252,151,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
+
+        <Label Grid.Row="1" Content="Dieet:" Margin="102,187,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
+        <RadioButton Grid.Row="1" Content="Geen" Name="NoDiet" GroupName="Diet" Margin="251,195,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Grid.Row="1" Content="Vegetarisch" Name="VegieDiet" GroupName="Diet" Margin="322,195,0,0" HorizontalAlignment="Left" Width="98" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Grid.Row="1" Content="Veganistisch" Name="VeganDiet" GroupName="Diet" Margin="425,195,0,0" HorizontalAlignment="Left" Width="108" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Grid.Row="1" Content="Keto" Name="KetoDiet" GroupName="Diet" Margin="538,195,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <RadioButton Grid.Row="1" Content="Anders" Name="OtherDiet" GroupName="Diet" Margin="604,195,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
 
 
 
-        <Button x:Name="ConfirmButton" Content="Opslaan" Margin="166,404,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="262" Click="ConfirmChanges"/>
+        <Button x:Name="ConfirmButton" Content="Opslaan" Margin="143,387,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="262" Click="ConfirmChanges" Grid.Row="1"/>
 
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="450" VerticalAlignment="Center" Width="1" Margin="145,0,0,0" RenderTransformOrigin="0.5,0.5">
-        </Border>
-
-        <ListBox x:Name="hobbyPanel" ItemsSource="{Binding Interests, Mode=TwoWay}" Margin="166,277,0,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="261" Height="99" VerticalAlignment="Top" SelectionChanged="InterestSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+        <ListBox x:Name="hobbyPanel" ItemsSource="{Binding Interests, Mode=TwoWay}" Margin="77,238,0,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="261" Height="100" VerticalAlignment="Top" SelectionChanged="InterestSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Row="1">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel MaxWidth="261"/>
@@ -50,7 +53,7 @@
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <ListBox x:Name="availableHobbyList" ItemsSource="{Binding AvailableInterests, Mode=TwoWay}" Margin="489,277,0,0" HorizontalAlignment="Left" Width="262" Height="99" VerticalAlignment="Top" SelectionChanged="AvailableInterestSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+        <ListBox x:Name="availableHobbyList" ItemsSource="{Binding AvailableInterests, Mode=TwoWay}" Margin="400,239,0,0" HorizontalAlignment="Left" Width="262" Height="99" VerticalAlignment="Top" SelectionChanged="AvailableInterestSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Row="1">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel MaxWidth="261"/>
@@ -64,10 +67,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
-        <Button IsEnabled="False" Content="Profiel aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,60,0,0" VerticalAlignment="Top" Width="125"/>
         <Button Visibility="Hidden" Name="PhotoScreenButton" Content="Foto's aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,150,0,0" VerticalAlignment="Top" Width="125" />
-        <Button Name="AccountScreenButton" Content="Account aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,105,0,0" VerticalAlignment="Top" Width="125" />
-        <Button x:Name="matchingQuizButton" Content="Maak de matching quiz!" HorizontalAlignment="Left" Margin="448,402,0,0" VerticalAlignment="Top" Height="38" Width="188" FontSize="15"/>
+        <Button x:Name="matchingQuizButton" Content="Maak de matching quiz!" HorizontalAlignment="Left" Margin="425,385,0,0" VerticalAlignment="Top" Height="38" Width="188" FontSize="15" Grid.Row="1"/>
     </Grid>
 </Page>

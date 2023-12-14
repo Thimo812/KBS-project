@@ -33,6 +33,7 @@ namespace MatchingAppWindow.Views
             InitializeComponent();
 
             DataContext = this;
+
             Visibility = Visibility.Collapsed;
         }
 
@@ -59,10 +60,14 @@ namespace MatchingAppWindow.Views
             try
             {
                 profileImage.Source = ImageConverter.ImageDataToBitmap(selectedProfile.Images[0]);
+                previousImage.Visibility = Visibility.Visible;
+                nextImage.Visibility = Visibility.Visible;
             }
             catch (ArgumentOutOfRangeException)
             {
                 profileImage.Source = null;
+                previousImage.Visibility = Visibility.Hidden;
+                nextImage.Visibility = Visibility.Hidden;
             }
 
             nameLabel.Content = $"{selectedProfile.FirstName} {selectedProfile.LastName}, {selectedProfile.Age()}";

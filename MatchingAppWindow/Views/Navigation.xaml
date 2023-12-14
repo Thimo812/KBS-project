@@ -53,9 +53,8 @@
         <Frame x:Name="contentFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2"/>
 
         <StackPanel Grid.Column="1">
-            <Button x:Name="editProfileButton" Content="Profiel" Margin="5,15,5,0" Visibility="Hidden"/>
-            <Button x:Name="editAccountButton" Content="Account" Margin="5,5,5,0" Visibility="Hidden"/>
-            <Button x:Name="editPhotosButton" Content="Foto's" Margin="5,5,5,0" Visibility="Hidden"/>
+            <Button x:Name="editProfileButton" Content="Profiel" Margin="5,27,5,0" Visibility="Hidden"/>
+            <Button x:Name="editAccountButton" Content="Account" Margin="5,6,5,0" Visibility="Hidden"/>
         </StackPanel>
     </Grid>
 </Page>
