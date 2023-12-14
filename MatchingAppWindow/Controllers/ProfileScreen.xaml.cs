@@ -26,7 +26,7 @@ namespace MatchingAppWindow.Views
     /// <summary>
     /// Interaction logic for FilterScreen.xaml
     /// </summary>
-    public partial class FilterScreen : Page
+    public partial class ProfileScreen : Page
     {
 
         //Creating all attributes
@@ -40,8 +40,7 @@ namespace MatchingAppWindow.Views
         private List<Diet> excludedDiets = new();
 
         private ProfileDetails profileDetails = new();
-        private Navigation navigation = new();
-        public FilterScreen()
+        public ProfileScreen()
         {
             InitializeComponent();
 
@@ -53,11 +52,11 @@ namespace MatchingAppWindow.Views
 
             loginButton.Content = MainWindow.profile.UserName;
 
-            nav.Content = navigation;
-
             DataContext = this;
 
-            for (int i = 1; i < repo.GetHobbies().Count; i++)
+            int hobbyCount = repo.GetHobbies().Count;
+
+            for (int i = 1; i < hobbyCount; i++)
             {
                 CheckBox checkBox = new CheckBox();
 
@@ -256,7 +255,7 @@ namespace MatchingAppWindow.Views
             if (resultBox.SelectedItem != null)
             {
                 string curItem = resultBox.SelectedItem.ToString();
-                profileDetails.GetProfile(curItem);
+                profileDetails.SetProfile(curItem);
                 profileDetails.Visibility = Visibility.Visible;
             }
         }

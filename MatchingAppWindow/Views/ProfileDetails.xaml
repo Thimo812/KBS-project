@@ -9,14 +9,39 @@
       Title="ProfileDetails"
       Background="White">
 
-    <Grid d:Name="Grid" Background="LightGray" Margin="5,50,5,50">
+    <Grid d:Name="Grid" Background="LightGray">
         <Grid.RowDefinitions>
+            <RowDefinition Height="250*"/>
             <RowDefinition Height="50*"/>
-            <RowDefinition Height="30*"/>
             <RowDefinition Height="80*"/>
-            <RowDefinition Height="32*"/>
+            <RowDefinition Height="100*"/>
             <RowDefinition Height="150*"/>
         </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+
+            <Image x:Name="profileImage" Grid.ColumnSpan="3"/>
+
+            <Button x:Name="previousImage" Content="&lt;" Grid.Column="0" Height="30" BorderBrush="Transparent" FontSize="15" Click="PreviousImage">
+                <Button.Background>
+                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                </Button.Background>
+            </Button>
+
+            <Button x:Name="nextImage" Content="&gt;" Grid.Column="2" Height="30" BorderBrush="Transparent" FontSize="15" Click="NextImage" HorizontalAlignment="Left" Margin="0,74,0,75" Width="20">
+                <Button.Background>
+                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                </Button.Background>
+            </Button>
+
+        </Grid>
+            
+        
         <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center" BorderThickness="2" BorderBrush="DarkGray" Background="White"/>
         <TextBlock x:Name="descriptionBlock" Grid.Row="2" Text="" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="5"/>
         <ItemsControl x:Name="interestBlock" Grid.Row="3" BorderThickness="2" BorderBrush="DarkGray" Background="White">

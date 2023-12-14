@@ -68,8 +68,8 @@
         <DatePicker x:Name="birthDatePicker" Margin="260,336,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" HorizontalAlignment="Left" Width="142" Height="32" BorderThickness="2,2,2,2" BorderBrush="#FFA3AEB9" Background="White" Grid.Column="1"/>
 
         <Button x:Name="CreateAccountButton" Content="Account aanmaken" Margin="0,383,0,0" Click="RegisterAccount" FontSize="15" HorizontalAlignment="Center" Width="264" Background="White" Grid.Column="1" Height="34" VerticalAlignment="Top"/>
+        <Button x:Name="loginButton" Content="Of log in" Margin="537,383,0,0" FontSize="15" BorderBrush="Transparent" Background="Transparent" Grid.Column="1"  HorizontalAlignment="Left" Width="98" Height="34" VerticalAlignment="Top"/>
 
-        <Label x:Name="errorMessage" Content="Voer alle verplichte velden in" Grid.ColumnSpan="2" Margin="0,383,39,0" Foreground="Red" FontWeight="Bold" FontSize="15" HorizontalAlignment="Right" Width="224" Height="30" VerticalAlignment="Top" Visibility="Hidden" />
-
+        <Label x:Name="errorMessage" Content="Voer alle verplichte velden in" Margin="0,417,0,0" Foreground="Red" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" Width="224" Height="30" VerticalAlignment="Top" Visibility="Hidden" Grid.Column="1" />
     </Grid>
 </Page>

@@ -1,7 +1,11 @@
 ﻿using KBS_project;
 using KBS_project.Enums;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,21 +26,95 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class AccountEditScreen : Page
     {
+        public ObservableCollection<BitmapImage> Images { get; set; } = new();
         public AccountEditScreen()
         {
             InitializeComponent();
+
+            DataContext = this;
+
+            imageBox.SelectionChanged += UpdateDeletePhotoButton;
+            Images.CollectionChanged += UpdateAddPhotoButton;
+        }
+
+        public void InitializePage()
+        {
+            BirthDatePicker.Text = MainWindow.profile.BirthDate.ToString();
+            CountryBox.Text = MainWindow.profile.Country;
+            CityBox.Text = MainWindow.profile.City;
+            PostalCodeBox.Text = MainWindow.profile.PostalCode;
+            SetGender(MainWindow.profile.Gender);
+            SetPreference(MainWindow.profile.SexualPreference);
+
+            foreach (byte[] imageData in MainWindow.profile.Images)
+            {
+                Images.Add(ImageConverter.ImageDataToBitmap(imageData));
+            }
+        }
+
+        private void AddPhoto(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image files|*.jpg;*.png";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                BitmapImage bitmapImage = new BitmapImage(new Uri(openFileDialog.FileName));
+
+                Images.Add(bitmapImage);
+
+            }
+        }
+
+        private void DeletePhoto(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Images.RemoveAt(imageBox.SelectedIndex);
+                imageBox.SelectedItem = null;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return;
+            }
+        }
+
+        private void UpdateDeletePhotoButton(object sender, SelectionChangedEventArgs e)
+        {
+            if (imageBox.SelectedItem != null)
+            {
+                deletePhotoButton.IsEnabled = true;
+            }
+            else
+            {
+                deletePhotoButton.IsEnabled = false;
+            }
+        }
+
+        private void UpdateAddPhotoButton(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (Images.Count >= 5)
+            {
+                addPhotoButton.IsEnabled = false;
+            }
+            else
+            {
+                addPhotoButton.IsEnabled = true;
+            }
         }
 
         private void ConfirmChanges(object sender, RoutedEventArgs e)
         {
             if (MainWindow.profile != null)
             {
+                List<byte[]> imageData = Images.Select(x => ImageConverter.BitmapImageToData(x)).ToList();
+
                 MainWindow.profile.BirthDate = BirthDatePicker.DisplayDate;
                 MainWindow.profile.Country = CountryBox.Text;
                 MainWindow.profile.City = CityBox.Text;
                 MainWindow.profile.PostalCode = PostalCodeBox.Text;
                 MainWindow.profile.Gender = GetGender();
                 MainWindow.profile.SexualPreference = GetSexuality();
+                MainWindow.profile.Images = imageData;
 
                 MainWindow.repo.UpdateProfile(MainWindow.profile);
             }

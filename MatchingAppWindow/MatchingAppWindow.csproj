@@ -8,8 +8,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\AccountIcon.png" />
+    <None Remove="Views\AccountIconFocus.png" />
+    <None Remove="Views\DeleteIcon.png" />
+    <None Remove="Views\PlusIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\KBS project\MatchingAppCore.csproj" />
     <ProjectReference Include="..\MatchingApp.DataAccess.SQL\MatchingApp.DataAccess.SQL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\AccountIcon.png" />
+    <Resource Include="Views\AccountIconFocus.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Views\DeleteIcon.png" />
+    <Resource Include="Views\PlusIcon.png" />
   </ItemGroup>
 
 </Project>
