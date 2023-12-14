@@ -37,14 +37,6 @@ namespace MatchingAppWindow
             InitScreen();
         }
 
-        private void SwitchToFilterScreen()
-        {
-            if (filterScreen == null) filterScreen = new();
-            filterScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => Content = matchingQuiz;
-            filterScreen.loginButton.Click += (object sender, RoutedEventArgs e) => Content = profileEditScreen;
-            Main.Content = filterScreen;
-        }
-
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // SSH-verbinding instellen
