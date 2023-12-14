@@ -11,6 +11,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Renci.SshNet;
+using System.Collections.Generic;
+using System.IO;
 
 namespace MatchingAppWindow
 {
@@ -33,6 +35,19 @@ namespace MatchingAppWindow
             InitializeComponent();
 
             InitScreen();
+        }
+
+        private void DisplayImages(byte[] imageData)
+        {
+            BitmapImage bitmapImage = new();
+            using (MemoryStream stream = new MemoryStream(imageData))
+            {
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = stream;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+            }
+            testIMG.Source = bitmapImage;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -76,6 +91,7 @@ namespace MatchingAppWindow
             };
 
             registerScreen.loginButton.Click += (sender, e) => Content = startScreen;
+            registerScreen.ExitPage += (sender, e) => Content = navigation;
 
             startScreen.registerButton.Click += (sender, e) => Content = registerScreen;
 

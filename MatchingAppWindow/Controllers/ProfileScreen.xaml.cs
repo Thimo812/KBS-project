@@ -52,7 +52,9 @@ namespace MatchingAppWindow.Views
 
             DataContext = this;
 
-            for (int i = 1; i < repo.GetHobbies().Count; i++)
+            int hobbyCount = repo.GetHobbies().Count;
+
+            for (int i = 1; i < hobbyCount; i++)
             {
                 CheckBox checkBox = new CheckBox();
 
@@ -251,7 +253,7 @@ namespace MatchingAppWindow.Views
             if (resultBox.SelectedItem != null)
             {
                 string curItem = resultBox.SelectedItem.ToString();
-                profileDetails.GetProfile(curItem);
+                profileDetails.SetProfile(curItem);
                 profileDetails.Visibility = Visibility.Visible;
             }
         }
