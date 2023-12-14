@@ -31,14 +31,12 @@ namespace MatchingApp.DataAccess.SQL
 		}
 
         public string AgeToDate(int age)
-		{
+        {
             var today = DateTime.Today;
             var byear = today.Year - age;
-			DateTime date = new DateTime(byear, today.Month, today.Day);
-            var dateString = date.ToString("yyyy-MM-dd");
-            return dateString;
+            return new DateTime(byear, today.Month, today.Day).ToString("yyyy-MM-dd");
         }
-		public Profile GetProfile(string userName)
+        public Profile GetProfile(string userName)
 		{
 			Profile profile;
 
@@ -673,27 +671,65 @@ namespace MatchingApp.DataAccess.SQL
 
         private void LikeProfile(string liker, string liked)
         {
-/*            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            {
-                var sql = $"UPDATE * FROM Profiel WHERE Gebruikersnaam = @Username";
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("Username", userName);
-                    command.ExecuteNonQuery();
+            bool isThere, isGebruiker1Liked, isGebruiker2Liked;
 
-                    using (SqlDataReader reader = command.ExecuteReader())
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                // Check if the like record already exists
+                var sqlCheckExistence = $"SELECT COUNT(*) FROM MatchingDB.dbo.[Like] WHERE (Gebruiker1 = @liker OR Gebruiker1 = @liked) AND (Gebruiker2 = @liker OR Gebruiker2 = @liked)";
+                using (SqlCommand commandExistence = new SqlCommand(sqlCheckExistence, connection))
+                {
+                    commandExistence.Parameters.AddWithValue("liker", liker);
+                    commandExistence.Parameters.AddWithValue("liked", liked);
+                    isThere = (int)commandExistence.ExecuteScalar() > 0;
+                }
+
+                // Retrieve like status
+                var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker2 FROM MatchingDB.dbo.[Like] WHERE Gebruiker1 = @liker OR Gebruiker2 = @liker OR Gebruiker1 = @liked OR Gebruiker2 = @liked";
+                using (SqlCommand commandLikes = new SqlCommand(sqlCheckLikes, connection))
+                {
+                    commandLikes.Parameters.AddWithValue("liker", liker);
+                    commandLikes.Parameters.AddWithValue("liked", liked);
+
+                    using (SqlDataReader readerLikes = commandLikes.ExecuteReader())
                     {
-                        reader.Read();
-                        profile = ProfileFromQuery(reader);
+                        readerLikes.Read();
+                        isGebruiker1Liked = !readerLikes.IsDBNull(0) && readerLikes.GetString(0) == liker;
+                        isGebruiker2Liked = !readerLikes.IsDBNull(1) && readerLikes.GetString(1) == liker;
                     }
                 }
+
+                // Insert like record if not exists
+                if (!isThere)
+                {
+                    var sqlInsertLike = $"INSERT INTO [Like] (Gebruiker1, Gebruiker1Liked, Gebruiker2, Gebruiker2Liked) VALUES (@liker, 'true', @liked, 'false');";
+                    using (SqlCommand commandInsertLike = new SqlCommand(sqlInsertLike, connection))
+                    {
+                        commandInsertLike.Parameters.AddWithValue("liker", liker);
+                        commandInsertLike.Parameters.AddWithValue("liked", liked);
+                        commandInsertLike.ExecuteNonQuery();
+                    }
+                }
+
+                // Update like status
+                var sqlUpdateLike = isGebruiker1Liked ? $"UPDATE [Like] SET Gebruiker1Liked = true WHERE Gebruiker1 = @liker AND Gebruiker2 = @liked;"
+                                                      : $"UPDATE [Like] SET Gebruiker2Liked = true WHERE Gebruiker2 = @liker AND Gebruiker1 = @liked;";
+
+                using (SqlCommand commandUpdateLike = new SqlCommand(sqlUpdateLike, connection))
+                {
+                    commandUpdateLike.Parameters.AddWithValue("liker", liker);
+                    commandUpdateLike.Parameters.AddWithValue("liked", liked);
+                    commandUpdateLike.ExecuteNonQuery();
+                }
+
                 connection.Close();
             }
-            return profile;*/
         }
 
-        private void UnlinkeProfile(string liker, string liked)
+
+        private void UnlikeProfile(string liker, string liked)
         {
 
         }

@@ -257,9 +257,5 @@ namespace MatchingAppWindow.Views
             }
         }
 
-        private void LikeProfile(string liker, string liked)
-        {
-
-        }
     }
 }
