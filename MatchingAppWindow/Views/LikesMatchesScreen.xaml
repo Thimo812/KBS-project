@@ -5,39 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MatchingAppWindow.Views"
         mc:Ignorable="d"
-        Title="TangoTogether" Height="450" Width="800">
-    <Page.Resources>
-        <Style x:Key="CustomCheckBoxStyle" TargetType="{x:Type CheckBox}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type CheckBox}">
-                        <BulletDecorator Background="Transparent">
-                            <BulletDecorator.Bullet>
-                                <Grid Width="16" Height="16">
-                                    <Rectangle x:Name="Border" Width="16" Height="16" Fill="{TemplateBinding Background}" Stroke="Black"/>
-                                    <TextBlock x:Name="Check" Visibility="Hidden" Text="✔" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    <TextBlock x:Name="Cross" Visibility="Hidden" Text="✘" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                </Grid>
-                            </BulletDecorator.Bullet>
-                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,1,0,0" RecognizesAccessKey="True"/>
-                        </BulletDecorator>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Check" Property="Visibility" Value="Visible"/>
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="{x:Null}">
-                                <Setter TargetName="Cross" Property="Visibility" Value="Visible"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Page.Resources>
+        Title="TangoTogether" d:DesignHeight="450" d:DesignWidth="800">
+<Page.Resources>
+    <Style x:Key="CustomCheckBoxStyle" TargetType="{x:Type CheckBox}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <BulletDecorator Background="Transparent">
+                        <BulletDecorator.Bullet>
+                            <Grid Width="16" Height="16">
+                                <Rectangle x:Name="Border" Width="16" Height="16" Fill="{TemplateBinding Background}" Stroke="Black"/>
+                                <TextBlock x:Name="Check" Visibility="Hidden" Text="✔" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="Cross" Visibility="Hidden" Text="✘" FontWeight="Bold" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </BulletDecorator.Bullet>
+                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Top" Margin="4,1,0,0" RecognizesAccessKey="True"/>
+                    </BulletDecorator>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Check" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="Cross" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</Page.Resources>
 
-    <Grid>
-        <ScrollViewer Name="filterPanel" VerticalScrollBarVisibility="Visible" Margin="20,10,0,0" MaxHeight="500" MaxWidth="300" HorizontalAlignment="Left" Height="391" VerticalAlignment="Top" Width="138">
-            <StackPanel Name="stackFilterOptions" Background="LightGray" >
+<Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition MaxWidth="150" />
+        <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+    <ScrollViewer Grid.Column="0" Name="filterPanel" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Border Background="LightGray">
+            <StackPanel Name="stackFilterOptions" Margin="5" >
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="61"/>
@@ -135,11 +140,13 @@
                     Background="CornflowerBlue" 
                     Click="ChangeAgeButton" 
                 />
+
             </StackPanel>
-        </ScrollViewer>
+        </Border>
+    </ScrollViewer>
 
-
-        <ListBox Name="resultBox" Margin="160,10,10,50" BorderThickness="5,5,5,5" SelectionChanged="resultBox_SelectedIndexChanged">
+    <Grid Grid.Column="1">
+        <ListBox  Name="resultBox" BorderThickness="5,5,5,5" SelectionChanged="resultBox_SelectedIndexChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Height="50" >
@@ -160,5 +167,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Frame Grid.Column="1" x:Name="profileDetailsFrame" HorizontalAlignment="Right" MinWidth="300" />
     </Grid>
+</Grid>
 </Page>

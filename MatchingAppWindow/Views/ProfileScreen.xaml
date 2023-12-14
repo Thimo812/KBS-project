@@ -152,7 +152,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Frame  x:Name="profileDetailsFrame" />
+            <Frame Grid.Column="1" x:Name="profileDetailsFrame" HorizontalAlignment="Right" MinWidth="300" />
         </Grid>
     </Grid>
 </Page>

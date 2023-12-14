@@ -646,5 +646,61 @@ namespace MatchingApp.DataAccess.SQL
             }
             return diets;
         }
+
+        public Profile GetLikeStatus(string userName)
+        {
+            Profile profile;
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"SELECT * FROM Profiel WHERE Gebruikersnaam = @Username";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Username", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        profile = ProfileFromQuery(reader);
+                    }
+                }
+                connection.Close();
+            }
+            return profile;
+        }
+
+        private void LikeProfile(string liker, string liked)
+        {
+/*            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"UPDATE * FROM Profiel WHERE Gebruikersnaam = @Username";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Username", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        profile = ProfileFromQuery(reader);
+                    }
+                }
+                connection.Close();
+            }
+            return profile;*/
+        }
+
+        private void UnlinkeProfile(string liker, string liked)
+        {
+
+        }
+
+        private void CheckLikeStatus(string liker, string liked)
+        {
+
+        }
     }
 }

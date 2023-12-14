@@ -40,6 +40,7 @@ namespace MatchingAppWindow.Views
 
         private ProfileDetails profileDetails = new();
         private Navigation navigation = new();
+
         public LikesMatchesScreen()
         {
             InitializeComponent();
@@ -47,6 +48,8 @@ namespace MatchingAppWindow.Views
             var profileList = repo.GetProfiles(MainWindow.profile);
 
             resultBox.ItemsSource = profileList;
+
+            profileDetailsFrame.Content = profileDetails;
 
             DataContext = this;
 
@@ -249,9 +252,14 @@ namespace MatchingAppWindow.Views
             if (resultBox.SelectedItem != null)
             {
                 string curItem = resultBox.SelectedItem.ToString();
-                profileDetails.GetProfile(curItem);
+                profileDetails.SetProfile(curItem);
                 profileDetails.Visibility = Visibility.Visible;
             }
+        }
+
+        private void LikeProfile(string liker, string liked)
+        {
+
         }
     }
 }

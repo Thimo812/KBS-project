@@ -55,6 +55,7 @@ namespace MatchingAppWindow.Views
             photoEditScreen.InitializePage();
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
+            matchesButton.Click += (s, e) => contentFrame.Content = matchScreen;
 
             profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
 
@@ -67,6 +68,7 @@ namespace MatchingAppWindow.Views
 
             matchingQuiz.ExitPage += (sender, e) => contentFrame.Content = profileEditScreen;
 
+            SwitchToLikesMatchesScreen(this, EventArgs.Empty);
             SwitchToProfileScreen(this, EventArgs.Empty);
         }
 
