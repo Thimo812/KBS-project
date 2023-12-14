@@ -28,6 +28,7 @@ namespace MatchingAppWindow.Views
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
         private PhotoEditScreen photoEditScreen = new();
+        private ChatScreen chatScreen = new();
 
         public Navigation()
         {
@@ -48,6 +49,7 @@ namespace MatchingAppWindow.Views
             accountEditScreen.InitializePage();
 
             profilesButton.Click += (s, e) => contentFrame.Content = ProfileScreen;
+            messagesButton.Click += (s, e) => contentFrame.Content = chatScreen;
 
             profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
 
