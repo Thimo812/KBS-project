@@ -48,7 +48,7 @@ namespace MatchingAppWindow.Views
 
             resultBox.ItemsSource = profileList;
 
-
+            profileDetailsFrame.Content = profileDetails;
 
             DataContext = this;
 

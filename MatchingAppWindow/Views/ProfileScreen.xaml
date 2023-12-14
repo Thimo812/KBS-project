@@ -42,7 +42,9 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0" Name="filterPanel" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <StackPanel Name="stackFilterOptions" Background="LightGray" >
+            <Border Background="LightGray">
+            <StackPanel Name="stackFilterOptions" Margin="5" >
+                
                 <!--Filter location-->
                 <Label 
                     Content="Locatie"
@@ -123,30 +125,34 @@
                     Background="CornflowerBlue" 
                     Click="ChangeAgeButton" 
                 />
+               
             </StackPanel>
+            </Border>
         </ScrollViewer>
 
-
-        <ListBox Grid.Column="1" Name="resultBox" BorderThickness="5,5,5,5" SelectionChanged="resultBox_SelectedIndexChanged">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Height="50" >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*" MinWidth="180" />
-                            <ColumnDefinition Width="2*" MinWidth="100"/>
-                            <ColumnDefinition Width="2*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*" />
-                            <RowDefinition Height="2*" />
-                        </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0">Gebruikersnaam:</TextBlock>
-                        <TextBlock Grid.Row="1" Text="{Binding}" FontSize="25" ></TextBlock>
-                        <TextBlock Grid.Column="1" Grid.Row="1" >Info</TextBlock>
-                        <TextBlock Grid.Column="2" Grid.Row="1" >Info</TextBlock>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid Grid.Column="1">
+            <ListBox  Name="resultBox" BorderThickness="5,5,5,5" SelectionChanged="resultBox_SelectedIndexChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Height="50" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" MinWidth="180" />
+                                <ColumnDefinition Width="2*" MinWidth="100"/>
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="2*" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0">Gebruikersnaam:</TextBlock>
+                            <TextBlock Grid.Row="1" Text="{Binding}" FontSize="25" ></TextBlock>
+                            <TextBlock Grid.Column="1" Grid.Row="1" >Info</TextBlock>
+                            <TextBlock Grid.Column="2" Grid.Row="1" >Info</TextBlock>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Frame  x:Name="profileDetailsFrame" />
+        </Grid>
     </Grid>
 </Page>
