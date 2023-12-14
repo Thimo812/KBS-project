@@ -573,6 +573,24 @@ namespace MatchingApp.DataAccess.SQL
 
             }
         }
+        
+        public void NewMessageRequest(string sender, string receiver)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "INSERT INTO MessageRequests (Sender, Receiver, Status) " +
+                        "VALUES (@Sender, @Receiver, @Status)";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Sender", sender);
+                    command.Parameters.AddWithValue("Receiver", receiver);
+                    command.Parameters.AddWithValue("Status", 0);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
 
         public bool ValidateUserName(string userName)
         {

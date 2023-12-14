@@ -62,5 +62,10 @@ namespace MatchingAppWindow.Views
             interestBlock.ItemsSource = selectedProfile.Interests;
             detailList.ItemsSource = GetProfileDetails();
         }
+
+        public void NewChatRequest(object sender, RoutedEventArgs e)
+        {
+            MainWindow.repo.NewMessageRequest(MainWindow.profile.UserName, selectedProfile.UserName);
+        }
     }
 }
