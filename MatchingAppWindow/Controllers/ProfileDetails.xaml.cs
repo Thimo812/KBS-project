@@ -65,7 +65,7 @@ namespace MatchingAppWindow.Views
 
         public void NewChatRequest(object sender, RoutedEventArgs e)
         {
-            MainWindow.repo.NewMessageRequest(MainWindow.profile.UserName, selectedProfile.UserName);
+            MainWindow.repo.CreateMessageRequest(MainWindow.profile.UserName, selectedProfile.UserName);
         }
     }
 }
