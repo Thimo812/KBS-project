@@ -670,12 +670,12 @@ namespace MatchingApp.DataAccess.SQL
             return diets;
         }
 
-        public byte[] GetImageDataFromUserName(string userName)
-        {
-            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            {
-                //var sql = "SELECT FotoData FROM Foto WHERE"
-            }
-        }
+        //public byte[] GetImageDataFromUserName(string userName)
+        //{
+        //    using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+        //    {
+        //        var sql = "SELECT FotoData FROM Foto WHERE"
+        //    }
+        //}
     }
 }
