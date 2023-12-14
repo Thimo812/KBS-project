@@ -674,7 +674,7 @@ namespace MatchingApp.DataAccess.SQL
         {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT FotoData FROM Foto WHERE"
+                //var sql = "SELECT FotoData FROM Foto WHERE"
             }
         }
     }
