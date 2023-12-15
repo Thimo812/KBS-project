@@ -13,6 +13,7 @@ namespace MatchingAppWindow
     {
         public static BitmapImage ImageDataToBitmap(byte[] imageData)
         {
+            if (imageData == null) return null;
             BitmapImage bitmapImage = new();
             using (MemoryStream stream = new MemoryStream(imageData))
             {

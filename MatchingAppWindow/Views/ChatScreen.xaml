@@ -9,13 +9,36 @@
       Title="ChatBox"
       Background="White">
 
+    <Page.Resources>
+        <DataTemplate x:Key="senderTemplate">
+            <WrapPanel HorizontalAlignment="Right" Margin="5,0,10,5">
+                <Label Content="{Binding DateString}" FontSize="12"/>
+                <Border CornerRadius="10" Background="Pink">
+                    <Label Content="{Binding Content}" FontSize="18"/>
+                </Border>
+            </WrapPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="receiverTemplate">
+            <WrapPanel HorizontalAlignment="Left" Margin="5,0,10,5">
+                <Border CornerRadius="10" Background="LightGray">
+                    <Label Content="{Binding Content}" FontSize="18"/>
+                </Border>
+                <Label Content="{Binding DateString}" FontSize="12"/>
+            </WrapPanel>
+        </DataTemplate>
+
+        <local:MessageDataTemplateSelector x:Key="templateSelector" SenderTemplate="{StaticResource senderTemplate}" ReceiverTemplate="{StaticResource receiverTemplate}"/>
+        
+    </Page.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Column="0" ItemsSource="{Binding ChatList}">
+        <ListBox x:Name="contactList" Grid.Column="0" ItemsSource="{Binding Contacts}" SelectionChanged="SelectContact">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel/>
@@ -27,12 +50,35 @@
                     <WrapPanel>
                         <Border CornerRadius="50">
                             <Grid ClipToBounds="True">
-                                <Image/>
+                                <Image Source="{Binding ProfileImage}" Height="70" Width="70"/>
                             </Grid>
                         </Border>
+                        <Label Content="{Binding UserName}" VerticalAlignment="Center" FontSize="15"/>
                     </WrapPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <Grid x:Name="chatWindow" Grid.Column="1" Visibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="70"/>
+            </Grid.ColumnDefinitions>
+
+            <ItemsControl x:Name="messageControl" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Messages}" ItemTemplateSelector="{StaticResource templateSelector}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+
+            <TextBox x:Name="messageBox" Grid.Row="1" Grid.Column="0" TextChanged="UpdateSendButton" PreviewKeyDown="SendMessage"/>
+            <Button x:Name="sendButton" Grid.Row="1" Grid.Column="1" Content="Verstuur" Click="SendMessage" IsEnabled="False"/>
+        </Grid>
     </Grid>
 </Page>

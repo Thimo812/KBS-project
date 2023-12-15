@@ -26,6 +26,7 @@ namespace MatchingAppWindow.Views
         private ProfileScreen profileScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
+        private ChatScreen chatScreen = new();
 
         public Navigation()
         {
@@ -46,11 +47,13 @@ namespace MatchingAppWindow.Views
         {
             profileEditScreen.InitializePage();
             accountEditScreen.InitializePage();
+            chatScreen.InitializePage();
 
             profileEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
             accountEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
+            messageButton.Click += (s, e) => contentFrame.Content = chatScreen;
 
             profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
 
