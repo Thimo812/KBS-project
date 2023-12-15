@@ -84,28 +84,17 @@ namespace MatchingAppWindow.Views
 
                 DietCheckBoxes.Children.Add(checkBox);
             }
-        }            
+        }
 
-        //RadioButtons to filter on location
         private void LocationChecked(object sender, RoutedEventArgs e)
         {
-            RadioButton senderLoc = (RadioButton)sender;
-
-            if (senderLoc.Name == "Global")
+            if (sender is RadioButton senderLoc)
             {
-                location = LocationFilter.Global;
+                location = Enum.TryParse<LocationFilter>(senderLoc.Name, out var filter) ? filter : LocationFilter.Global;
+                Filter();
             }
-            if (senderLoc.Name == "Country")
-            {
-                location = LocationFilter.Country;
-            }
-            if (senderLoc.Name == "City")
-            {
-                location = LocationFilter.City;
-            }
-
-            Filter();
         }
+
 
         private void ExtendOrCollapseHobbies_Click(object sender, RoutedEventArgs e)
         {

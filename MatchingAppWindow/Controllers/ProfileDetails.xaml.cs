@@ -38,22 +38,21 @@ namespace MatchingAppWindow.Views
 
         public List<string> GetProfileDetails()
         {
-            var result = new List<string>();
-
-            result.Add($"Woonplaats: {selectedProfile.City}");
-            if (selectedProfile.School != null) result.Add($"School: {selectedProfile.School}");
-            if (selectedProfile.Degree != null) result.Add($"Opleiding: {selectedProfile.Degree}");
-            if (selectedProfile.WorkPlace != null) result.Add($"Werkplaats: {selectedProfile.WorkPlace}");
-            if (selectedProfile.Diet != null) result.Add($"Dieet: {selectedProfile.Diet}");
-            if (selectedProfile.Vaccinated != null) result.Add($"Is {((bool)selectedProfile.Vaccinated ? string.Empty : "niet")} gevaccineerd");
-
-            return result;
+            return new List<string>
+            {
+                $"Woonplaats: {selectedProfile.City}",
+                selectedProfile.School != null ? $"School: {selectedProfile.School}" : null,
+                selectedProfile.Degree != null ? $"Opleiding: {selectedProfile.Degree}" : null,
+                selectedProfile.WorkPlace != null ? $"Werkplaats: {selectedProfile.WorkPlace}" : null,
+                selectedProfile.Diet != null ? $"Dieet: {selectedProfile.Diet}" : null,
+                selectedProfile.Vaccinated != null ? $"Is {((bool)selectedProfile.Vaccinated ? string.Empty : "niet")} gevaccineerd" : null
+            }.Where(detail => detail != null).ToList();
         }
+
 
         public void SetProfile(string profileName)
         {
             currentImage = 0;
-
             selectedProfile = MainWindow.repo.GetProfile(profileName);
 
             try
@@ -76,7 +75,6 @@ namespace MatchingAppWindow.Views
             if (currentImage == 0) return;
 
             currentImage--;
-
             profileImage.Source = ImageConverter.ImageDataToBitmap(selectedProfile.Images[currentImage]);
         }
 
@@ -85,7 +83,6 @@ namespace MatchingAppWindow.Views
             if (currentImage == selectedProfile.Images.Count - 1) return;
 
             currentImage++;
-
             profileImage.Source = ImageConverter.ImageDataToBitmap(selectedProfile.Images[currentImage]);
         }
     }
