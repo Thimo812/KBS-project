@@ -9,22 +9,13 @@
       Title="ChatScreen">
 
     <Grid>
-        <ListBox Margin="20,20,500,20" BorderThickness="5">
-            <ListBoxItem BorderThickness="2" BorderBrush="LightGray">
-                <Label Content="Username"/>
-            </ListBoxItem>
-            <ListBoxItem BorderThickness="2" BorderBrush="LightGray">
-                <Label Content="Username"/>
-            </ListBoxItem>
-            <ListBoxItem BorderThickness="2" BorderBrush="LightGray">
-                <Label Content="Username"/>
-            </ListBoxItem>
+        <ListBox Name="UserList" Margin="20,20,500,20" BorderThickness="5" SelectionChanged="UserListSelectionChanged">
         </ListBox>
 
-        <Label Content="Username" BorderBrush="LightGray" BorderThickness="5" Height="50" Width="455" Margin="20" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+        <Label Name="CurrentChatUserName" BorderBrush="LightGray" BorderThickness="5" Height="50" Width="455" Margin="20" HorizontalAlignment="Right" VerticalAlignment="Top"/>
         <ScrollViewer Width="455" Margin="20, 70, 20, 55" BorderThickness="5" BorderBrush="LightGray" HorizontalAlignment="Right">
-            <StackPanel>
-                <Label Content="Message"  BorderBrush="PaleVioletRed" BorderThickness="2" Height="30" Width="150" Margin="20" HorizontalAlignment="Right">
+            <StackPanel Name="ChatHistoryStackPanel">
+                <Label Content="Message" BorderBrush="PaleVioletRed" BorderThickness="2" Height="30" Width="150" Margin="20" HorizontalAlignment="Right">
                     <Label.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="10,10,0,10"/>
@@ -61,7 +52,7 @@
                 </Label>
             </StackPanel>
         </ScrollViewer>
-        <TextBox Width="400" Height="30" Margin="20,0,75,20" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
-        <Button Content="Send" Height="30" Width="50" Margin="20" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <TextBox Name="MessageField" Width="400" Height="30" Margin="20,0,75,20" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <Image Name="SendButton" Source="/Views/SendMessageIcon.png" Height="33" Width="335" Margin="20,20,35,20" HorizontalAlignment="Right" VerticalAlignment="Bottom" MouseEnter="SendButtonFocus" MouseLeave="SendButtonFocusLost" MouseDown="SendButtonClick"/>
     </Grid>
 </Page>
