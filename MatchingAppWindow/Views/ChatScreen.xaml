@@ -69,13 +69,16 @@
                 <ColumnDefinition Width="70"/>
             </Grid.ColumnDefinitions>
 
-            <ItemsControl x:Name="messageControl" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Messages}" ItemTemplateSelector="{StaticResource templateSelector}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+            <ScrollViewer Grid.Row="0" Grid.ColumnSpan="2">
+                <ItemsControl x:Name="messageControl" ItemTemplateSelector="{StaticResource templateSelector}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+            
 
             <TextBox x:Name="messageBox" Grid.Row="1" Grid.Column="0" TextChanged="UpdateSendButton" PreviewKeyDown="SendMessage"/>
             <Button x:Name="sendButton" Grid.Row="1" Grid.Column="1" Content="Verstuur" Click="SendMessage" IsEnabled="False"/>

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,9 +14,11 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MatchingAppWindow.Views
 {
@@ -30,6 +33,8 @@ namespace MatchingAppWindow.Views
 
         Contact SelectedContact { get; set; }
 
+        BackgroundWorker messageChecker = new BackgroundWorker();
+
         public ChatScreen()
         {
             InitializeComponent();
@@ -37,6 +42,15 @@ namespace MatchingAppWindow.Views
             DataContext = this;
 
             messageControl.ItemsSource = Messages;
+            contactList.ItemsSource = Contacts;
+
+            messageChecker.DoWork += CheckMessages;
+            messageChecker.ProgressChanged += UpdateMessages;
+            messageChecker.WorkerSupportsCancellation = true;
+            messageChecker.WorkerReportsProgress = true;
+
+            Loaded += (sender, e) => messageChecker.RunWorkerAsync();
+            Unloaded += (sender, e) => messageChecker.CancelAsync();
         }
 
         public void InitializePage()
@@ -51,8 +65,6 @@ namespace MatchingAppWindow.Views
 
                 Contacts.Add(contact);
             }
-
-            contactList.ItemsSource = Contacts;
         }
 
         private void SelectContact(object sender, SelectionChangedEventArgs e)
@@ -62,20 +74,42 @@ namespace MatchingAppWindow.Views
             SelectedContact = Contacts[contactList.SelectedIndex];
 
             chatWindow.Visibility = Visibility.Visible;
-
-            LoadMessages();
         }
 
-        private void LoadMessages()
+        private void CheckMessages(object sender, DoWorkEventArgs e)
         {
-            List<Message> MessageList = MainWindow.repo.GetMessages(MainWindow.profile.UserName, SelectedContact.UserName);
 
-            Messages.Clear();
-
-            foreach(Message message in  MessageList)
+            while (true)
             {
-                Messages.Add(message);
+                if (SelectedContact == null) continue;
+
+                DateTime localLatestMessage = Messages.Count == 0 ? DateTime.MinValue : Messages[Messages.Count - 1].TimeStamp;
+                DateTime? LatestMessage = MainWindow.repo.GetLatestTimeStamp(MainWindow.profile.UserName, SelectedContact.UserName);
+
+                if (LatestMessage == null) continue;
+
+                if (((DateTime)LatestMessage).CompareTo(localLatestMessage) > 0) messageChecker.ReportProgress(0, GetMessages());
+
+                Thread.Sleep(1000);
             }
+        }
+
+        private void UpdateMessages(object sender, ProgressChangedEventArgs e)
+        {
+            if (e.UserState is List<Message> messages)
+            {
+                Messages.Clear();
+
+                foreach (Message message in messages)
+                {
+                    Messages.Add(message);
+                }
+            }
+        }
+
+        private List<Message> GetMessages()
+        {
+            return MainWindow.repo.GetMessages(MainWindow.profile.UserName, SelectedContact.UserName);
         }
 
         private void SendMessage(object sender, RoutedEventArgs e)
@@ -84,8 +118,6 @@ namespace MatchingAppWindow.Views
             Message message = new(DateTime.Now, messageBox.Text, true);
             MainWindow.repo.SendMessage(message, MainWindow.profile.UserName, SelectedContact.UserName);
             messageBox.Text = string.Empty;
-
-            LoadMessages();
         }
 
         private void SendMessage(object sender, KeyEventArgs e)
