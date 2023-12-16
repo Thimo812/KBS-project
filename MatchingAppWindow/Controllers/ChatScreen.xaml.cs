@@ -88,7 +88,7 @@ namespace MatchingAppWindow.Views
 
                 if (LatestMessage == null) continue;
 
-                if (((DateTime)LatestMessage).CompareTo(localLatestMessage) > 0) messageChecker.ReportProgress(0, GetMessages());
+                if (((DateTime)LatestMessage).CompareTo(localLatestMessage) != 0) messageChecker.ReportProgress(0, GetMessages());
 
                 Thread.Sleep(1000);
             }
@@ -105,6 +105,11 @@ namespace MatchingAppWindow.Views
                     Messages.Add(message);
                 }
             }
+        }
+
+        private void UpdateMessages()
+        {
+
         }
 
         private List<Message> GetMessages()
