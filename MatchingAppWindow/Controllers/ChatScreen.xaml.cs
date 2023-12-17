@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -27,13 +28,15 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class ChatScreen : Page
     {
-        ObservableCollection<Contact> Contacts { get; set; } = new();
 
-        ObservableCollection<Message> Messages { get; set; } = new();
+        public static int chatRefreshDelay = 100;
+        private ObservableCollection<Contact> Contacts { get; set; } = new();
 
-        Contact SelectedContact { get; set; }
+        private ObservableCollection<Message> Messages { get; set; } = new();
 
-        BackgroundWorker messageChecker = new BackgroundWorker();
+        private Contact SelectedContact { get; set; }
+
+        public BackgroundWorker MessageChecker { get; private set; }
 
         public ChatScreen()
         {
@@ -44,13 +47,8 @@ namespace MatchingAppWindow.Views
             messageControl.ItemsSource = Messages;
             contactList.ItemsSource = Contacts;
 
-            messageChecker.DoWork += CheckMessages;
-            messageChecker.ProgressChanged += UpdateMessages;
-            messageChecker.WorkerSupportsCancellation = true;
-            messageChecker.WorkerReportsProgress = true;
-
-            Loaded += (sender, e) => messageChecker.RunWorkerAsync();
-            Unloaded += (sender, e) => messageChecker.CancelAsync();
+            Loaded += StartChecking;
+            Unloaded += StopChecking;
         }
 
         public void InitializePage()
@@ -86,11 +84,11 @@ namespace MatchingAppWindow.Views
                 DateTime localLatestMessage = Messages.Count == 0 ? DateTime.MinValue : Messages[Messages.Count - 1].TimeStamp;
                 DateTime? LatestMessage = MainWindow.repo.GetLatestTimeStamp(MainWindow.profile.UserName, SelectedContact.UserName);
 
-                if (LatestMessage == null) continue;
+                Debug.WriteLine("actief");
 
-                if (((DateTime)LatestMessage).CompareTo(localLatestMessage) != 0) messageChecker.ReportProgress(0, GetMessages());
+                if (((DateTime)LatestMessage).CompareTo(localLatestMessage) != 0) MessageChecker.ReportProgress(0, GetMessages());
 
-                Thread.Sleep(1000);
+                Thread.Sleep(chatRefreshDelay);
             }
         }
 
@@ -107,9 +105,20 @@ namespace MatchingAppWindow.Views
             }
         }
 
-        private void UpdateMessages()
+        public void StopChecking(object sender, RoutedEventArgs e)
         {
+            if (MessageChecker.IsBusy) MessageChecker.CancelAsync();
+        }
 
+        private void StartChecking(object sender, RoutedEventArgs e)
+        {
+            MessageChecker = new();
+            MessageChecker.DoWork += CheckMessages;
+            MessageChecker.ProgressChanged += UpdateMessages;
+            MessageChecker.WorkerSupportsCancellation = true;
+            MessageChecker.WorkerReportsProgress = true;
+
+            MessageChecker.RunWorkerAsync();
         }
 
         private List<Message> GetMessages()
@@ -120,7 +129,7 @@ namespace MatchingAppWindow.Views
         private void SendMessage(object sender, RoutedEventArgs e)
         {
             if (messageBox.Text.Length == 0) return;
-            Message message = new(DateTime.Now, messageBox.Text, true);
+            Message message = new(DateTime.UtcNow, messageBox.Text, true);
             MainWindow.repo.SendMessage(message, MainWindow.profile.UserName, SelectedContact.UserName);
             messageBox.Text = string.Empty;
         }

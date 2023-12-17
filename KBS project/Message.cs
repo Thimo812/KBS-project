@@ -23,16 +23,20 @@ namespace KBS_project
 
         private string ReturnDateString()
         {
-            if (TimeStamp.Date.Equals(DateTime.Today))
+            TimeZoneInfo localTimeZone = TimeZoneInfo.Local;
+
+            DateTime localTime = TimeZoneInfo.ConvertTimeFromUtc(TimeStamp, localTimeZone);
+
+            if (localTime.Date.Equals(DateTime.Today))
             {
-                return $"Today at {TimeStamp.ToString("HH:mm")}";
+                return $"Today at {localTime.ToString("HH:mm")}";
             }
-            else if (TimeStamp.Date.Equals(DateTime.Today.AddDays(-1)))
+            else if (localTime.Date.Equals(DateTime.Today.AddDays(-1)))
             {
-                return $"Yesterday at {TimeStamp.ToString("HH:mm")}";
+                return $"Yesterday at {localTime.ToString("HH:mm")}";
             }
 
-            return TimeStamp.ToString("yyyy-MM-dd");
+            return localTime.ToString("yyyy-MM-dd");
         }
     }
 }

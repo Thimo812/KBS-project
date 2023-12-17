@@ -52,7 +52,7 @@ namespace MatchingAppWindow
 
             tunnel = new ForwardedPortLocal("127.0.0.1", (uint)localPort, "127.0.0.1", (uint)remotePort);
             sshClient.AddForwardedPort(tunnel);
-               tunnel.Start();
+            tunnel.Start();
         }
 
         private void MainWindow_Closed(object sender, EventArgs e)
@@ -67,6 +67,10 @@ namespace MatchingAppWindow
                 sshClient.Disconnect();
                 sshClient.Dispose();
             }
+
+            if (navigation.ChatScreen.MessageChecker == null) return;
+
+            navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
         }
 
         private void InitScreen()

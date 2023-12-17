@@ -809,7 +809,7 @@ namespace MatchingApp.DataAccess.SQL
                         }
                         catch (InvalidOperationException)
                         {
-                            return null;
+                            return DateTime.MinValue;
                         }
                     }
                 }
