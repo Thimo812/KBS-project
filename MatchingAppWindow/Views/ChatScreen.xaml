@@ -12,23 +12,165 @@
     <Page.Resources>
         <DataTemplate x:Key="senderTemplate">
             <WrapPanel HorizontalAlignment="Right" Margin="5,0,10,5">
-                <Label Content="{Binding DateString}" FontSize="12"/>
-                <Border CornerRadius="10" Background="Pink">
-                    <Label Content="{Binding Content}" FontSize="18"/>
+                <Label Content="{Binding DateString}" Foreground="White" FontSize="12"/>
+                <Border CornerRadius="10" Background="#AD0090">
+                    <TextBlock Text="{Binding Content}" Foreground="White" FontSize="18" TextWrapping="Wrap" Margin="5"/>
                 </Border>
             </WrapPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="receiverTemplate">
             <WrapPanel HorizontalAlignment="Left" Margin="5,0,10,5">
-                <Border CornerRadius="10" Background="LightGray">
-                    <Label Content="{Binding Content}" FontSize="18"/>
+                <Border CornerRadius="10" Background="#434E5B">
+                    <TextBlock Text="{Binding Content}" Foreground="White" FontSize="18" TextWrapping="Wrap" Margin="5"/>
                 </Border>
-                <Label Content="{Binding DateString}" FontSize="12"/>
+                <Label Content="{Binding DateString}" Foreground="White" FontSize="12"/>
             </WrapPanel>
         </DataTemplate>
-
+        
         <local:MessageDataTemplateSelector x:Key="templateSelector" SenderTemplate="{StaticResource senderTemplate}" ReceiverTemplate="{StaticResource receiverTemplate}"/>
+
+        <Style x:Key="SelectedContactStyle" TargetType="ListBoxItem">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="LightBlue"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ScrollBarTrackThumb"
+        TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid x:Name="Grid">
+                            <Rectangle HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Width="Auto"
+                                Height="Auto"
+                                Fill="Transparent" />
+                            <Border x:Name="CornerScrollBarRectangle"
+                            CornerRadius="5"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Width="Auto"
+                            Height="Auto"
+                            Margin="0,1,0,1"
+                            Background="{TemplateBinding Background}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Tag"
+                                Value="Horizontal">
+                                <Setter TargetName="CornerScrollBarRectangle"
+                                Property="Width"
+                                Value="Auto" />
+                                <Setter TargetName="CornerScrollBarRectangle"
+                                Property="Height"
+                                Value="6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsFlicksEnabled"
+            Value="false" />
+            <Setter Property="Foreground"
+            Value="#3B4651" />
+            <Setter Property="Background"
+            Value="Transparent" />
+            <Setter Property="Width"
+            Value="7" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid x:Name="GridRoot"
+                        Width="10"
+                        Background="{TemplateBinding Background}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.00001*" />
+                            </Grid.RowDefinitions>
+                            <Track x:Name="PART_Track"
+                            Grid.Row="0"
+                            IsDirectionReversed="true"
+                            Focusable="false">
+                                <Track.Thumb>
+                                    <Thumb x:Name="Thumb"
+                                    Background="{TemplateBinding Foreground}"
+                                    Style="{DynamicResource ScrollBarTrackThumb}" />
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton x:Name="PageUp"
+                                            Command="ScrollBar.PageDownCommand"
+                                            Opacity="0"
+                                            Focusable="false" />
+                                </Track.IncreaseRepeatButton>
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton x:Name="PageDown"
+                                            Command="ScrollBar.PageUpCommand"
+                                            Opacity="0"
+                                            Focusable="false" />
+                                </Track.DecreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="Thumb"
+                                Property="IsMouseOver"
+                                Value="true">
+                                <Setter Value="{DynamicResource ButtonSelectBrush}"
+                                TargetName="Thumb"
+                                Property="Background" />
+                            </Trigger>
+                            <Trigger SourceName="Thumb"
+                                Property="IsDragging"
+                                Value="true">
+                                <Setter Value="{DynamicResource DarkBrush}"
+                                TargetName="Thumb"
+                                Property="Background" />
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled"
+                                Value="false">
+                                <Setter TargetName="Thumb"
+                                Property="Visibility"
+                                Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="Orientation"
+                                Value="Horizontal">
+                                <Setter TargetName="GridRoot"
+                                Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="PART_Track"
+                                Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Width"
+                                Value="Auto" />
+                                <Setter Property="Height"
+                                Value="8" />
+                                <Setter TargetName="Thumb"
+                                Property="Tag"
+                                Value="Horizontal" />
+                                <Setter TargetName="PageDown"
+                                Property="Command"
+                                Value="ScrollBar.PageLeftCommand" />
+                                <Setter TargetName="PageUp"
+                                Property="Command"
+                                Value="ScrollBar.PageRightCommand" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         
     </Page.Resources>
 
@@ -38,38 +180,45 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ListBox x:Name="contactList" Grid.Column="0" ItemsSource="{Binding Contacts}" SelectionChanged="SelectContact">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
+        <ScrollViewer Grid.Column="0" Background="#1D2228">
+            <ListBox x:Name="contactList" Background="Transparent" ItemsSource="{Binding Contacts}" SelectionChanged="SelectContact" BorderThickness="0">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
 
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <WrapPanel>
-                        <Border CornerRadius="50">
-                            <Grid ClipToBounds="True">
-                                <Image Source="{Binding ProfileImage}" Height="70" Width="70"/>
-                            </Grid>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border CornerRadius="0,12,12,0">
+                            <WrapPanel>
+                                <Ellipse Width="50" Height="50">
+                                    <Ellipse.Fill>
+                                        <ImageBrush ImageSource="{Binding ProfileImage}" />
+                                    </Ellipse.Fill>
+                                </Ellipse>
+                                <Label Content="{Binding UserName}" VerticalAlignment="Center" FontSize="18" Foreground="White"/>
+                            </WrapPanel>
                         </Border>
-                        <Label Content="{Binding UserName}" VerticalAlignment="Center" FontSize="15"/>
-                    </WrapPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+
 
         <Grid x:Name="chatWindow" Grid.Column="1" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="90"/>
             </Grid.ColumnDefinitions>
 
-            <ScrollViewer Grid.Row="0" Grid.ColumnSpan="2">
+            <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="#121519"/>
+
+            <ScrollViewer Grid.Row="0" Grid.ColumnSpan="2" Background="#2C343D">
                 <ItemsControl x:Name="messageControl" ItemTemplateSelector="{StaticResource templateSelector}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -78,10 +227,25 @@
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
             </ScrollViewer>
-            
 
-            <TextBox x:Name="messageBox" Grid.Row="1" Grid.Column="0" TextChanged="UpdateSendButton" PreviewKeyDown="SendMessage"/>
-            <Button x:Name="sendButton" Grid.Row="1" Grid.Column="1" Content="Verstuur" Click="SendMessage" IsEnabled="False"/>
+            <TextBox x:Name="messageBox" Background="#434E5B" BorderThickness="0" Foreground="White" TextChanged="UpdateSendButton" PreviewKeyDown="SendMessage" TextWrapping="Wrap" FontSize="18" Grid.Column="0" Grid.Row="1" Margin="5" Padding="10,6,0,0">
+                <TextBox.Template>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </TextBox.Template>
+            </TextBox>
+            <Button x:Name="sendButton" Background="#AD0090" BorderThickness="0" Foreground="White" Grid.Row="1" Grid.Column="1" Content="Verstuur" Click="SendMessage" IsEnabled="False" FontSize="15" Margin="5">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
     </Grid>
 </Page>

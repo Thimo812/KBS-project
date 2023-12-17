@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -37,6 +38,8 @@ namespace MatchingAppWindow.Views
         private Contact SelectedContact { get; set; }
 
         public BackgroundWorker MessageChecker { get; private set; }
+
+        private int maxMessageBoxWidth = 400;
 
         public ChatScreen()
         {
@@ -140,6 +143,8 @@ namespace MatchingAppWindow.Views
             {
                 SendMessage(sender, new RoutedEventArgs());
             }
+
+            
         }
 
         private void UpdateSendButton(object sender, TextChangedEventArgs e)
@@ -151,18 +156,6 @@ namespace MatchingAppWindow.Views
             else
             {
                 sendButton.IsEnabled = true;
-            }
-        }
-
-        private class Contact
-        {
-            public string UserName { get; set; }
-            public BitmapImage ProfileImage { get; set; }
-
-            public Contact(string userName, BitmapImage profileImage)
-            {
-                UserName = userName;
-                ProfileImage = profileImage;
             }
         }
     }

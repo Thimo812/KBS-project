@@ -57,6 +57,8 @@ namespace MatchingAppWindow
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
+            if (navigation.ChatScreen.MessageChecker != null) navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
+
             // Controleren of de SSH-verbinding open is voordat we proberen deze te sluiten
             if (sshClient != null && sshClient.IsConnected)
             {
@@ -67,10 +69,6 @@ namespace MatchingAppWindow
                 sshClient.Disconnect();
                 sshClient.Dispose();
             }
-
-            if (navigation.ChatScreen.MessageChecker == null) return;
-
-            navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
         }
 
         private void InitScreen()
