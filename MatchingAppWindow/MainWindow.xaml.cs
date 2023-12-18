@@ -96,7 +96,7 @@ namespace MatchingAppWindow
         private void LogoutButton_Click(object? sender, RoutedEventArgs e)
         {
             Content = startScreen;
-            navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
+            if (navigation.ChatScreen.MessageChecker != null) navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
             navigation.ChatScreen = null;
             navigation = null;
             startScreen.userNameField.Text = string.Empty;
