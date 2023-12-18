@@ -174,7 +174,7 @@
         
     </Page.Resources>
 
-    <Grid>
+    <Grid  Background="#2C343D">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
@@ -191,7 +191,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border CornerRadius="0,12,12,0">
-                            <WrapPanel>
+                            <WrapPanel>     
                                 <Ellipse Width="50" Height="50">
                                     <Ellipse.Fill>
                                         <ImageBrush ImageSource="{Binding ProfileImage}" />
@@ -206,7 +206,7 @@
         </ScrollViewer>
 
 
-        <Grid x:Name="chatWindow" Grid.Column="1" Visibility="Visible">
+        <Grid x:Name="chatWindow" Grid.Column="1" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="50"/>
@@ -218,7 +218,7 @@
 
             <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="#121519"/>
 
-            <ScrollViewer Grid.Row="0" Grid.ColumnSpan="2" Background="#2C343D">
+            <ScrollViewer x:Name="messageScrollViewer" Grid.Row="0" Grid.ColumnSpan="2" Background="#2C343D" ScrollChanged="UpdateScrollViewer">
                 <ItemsControl x:Name="messageControl" ItemTemplateSelector="{StaticResource templateSelector}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

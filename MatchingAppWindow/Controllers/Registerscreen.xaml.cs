@@ -164,8 +164,8 @@ namespace MatchingAppWindow.Views
 
             foreach (Control field in fields)
             {
-                field.Background = Brushes.White;
-                field.BorderBrush = Brushes.Gray;
+                field.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#434E5B");
+                field.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#434E5B");
             }
 
             errorMessage.Visibility = Visibility.Hidden;
@@ -183,7 +183,7 @@ namespace MatchingAppWindow.Views
 
         private void DisplayFieldError(Control inputField)
         {
-            inputField.Background = Brushes.Pink;
+            inputField.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff6666");
             inputField.BorderBrush = Brushes.Red;
         }
 

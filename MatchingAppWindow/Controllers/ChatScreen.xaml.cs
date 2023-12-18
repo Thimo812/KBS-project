@@ -37,6 +37,8 @@ namespace MatchingAppWindow.Views
 
         private Contact SelectedContact { get; set; }
 
+        private bool AutoScroll { get; set; } = true;
+
         public BackgroundWorker MessageChecker { get; private set; }
 
         private int maxMessageBoxWidth = 400;
@@ -81,7 +83,6 @@ namespace MatchingAppWindow.Views
 
         private void CheckMessages(object sender, DoWorkEventArgs e)
         {
-
             while (true)
             {
                 if (SelectedContact == null) continue;
@@ -105,6 +106,9 @@ namespace MatchingAppWindow.Views
                 {
                     Messages.Add(message);
                 }
+
+                Contacts = new(Contacts.OrderByDescending(x => MainWindow.repo.GetLatestTimeStamp(MainWindow.profile.UserName, x.UserName)));
+                contactList.ItemsSource = Contacts;
             }
         }
 
@@ -156,6 +160,26 @@ namespace MatchingAppWindow.Views
             {
                 sendButton.IsEnabled = true;
                 sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIcon.png", UriKind.Relative));
+            }
+        }
+
+        private void UpdateScrollViewer(Object sender, ScrollChangedEventArgs e)
+        {
+            if (e.ExtentHeightChange == 0)
+            {
+                if (messageScrollViewer.VerticalOffset == messageScrollViewer.ScrollableHeight)
+                {
+                    AutoScroll = true;
+                }
+                else
+                {
+                    AutoScroll = false;
+                }
+            }
+
+            if (AutoScroll && e.ExtentHeightChange != 0)
+            {
+                messageScrollViewer.ScrollToVerticalOffset(messageScrollViewer.ExtentHeight);
             }
         }
 

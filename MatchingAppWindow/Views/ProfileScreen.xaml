@@ -131,7 +131,7 @@
         </ScrollViewer>
 
         <Grid Grid.Column="1">
-            <ListBox  Name="resultBox" BorderThickness="5,5,5,5" SelectionChanged="resultBox_SelectedIndexChanged">
+            <ListBox  Name="resultBox"  SelectionChanged="resultBox_SelectedIndexChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Height="50" >

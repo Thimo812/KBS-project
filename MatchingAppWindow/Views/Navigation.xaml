@@ -48,8 +48,9 @@
             <Button x:Name="profilesButton" Content="Profielen" Style="{StaticResource navButtonStyle}" FontSize="15"/>
             <Button x:Name="matchesButton" Content="Matches" Style="{StaticResource navButtonStyle}" FontSize="15"/>
             <Button x:Name="messageButton" Content="Berichten" Style="{StaticResource navButtonStyle}" FontSize="15"/>
-            <Image x:Name="logoutButton" Source="/Views/LogoutIcon.png" Margin="10" Width="25" Height="25" MouseEnter="LogoutButtonFocus" MouseLeave="LogoutButtonFocusLost"/>
         </StackPanel>
+        <Image x:Name="logoutButton" Source="/Views/LogoutIcon.png" Margin="10" Width="25" Height="25" MouseEnter="LogoutButtonFocus" MouseLeave="LogoutButtonFocusLost" VerticalAlignment="Bottom"/>
+
 
         <Frame x:Name="contentFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2"/>
 
