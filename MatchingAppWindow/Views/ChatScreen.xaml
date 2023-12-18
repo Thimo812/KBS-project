@@ -191,7 +191,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Border CornerRadius="0,12,12,0">
-                            <WrapPanel>
+                            <WrapPanel>     
                                 <Ellipse Width="50" Height="50">
                                     <Ellipse.Fill>
                                         <ImageBrush ImageSource="{Binding ProfileImage}" />
