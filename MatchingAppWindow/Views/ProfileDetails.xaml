@@ -26,7 +26,7 @@
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
 
-            <Image x:Name="profileImage" Grid.ColumnSpan="3" Width="300" Margin="3"/>
+            <Image x:Name="profileImage" Grid.ColumnSpan="3" Width="300"/>
 
             <Button x:Name="previousImage" Content="&lt;" Grid.Column="0" Height="30" BorderBrush="Transparent" FontSize="15" Click="PreviousImage">
                 <Button.Background>
@@ -49,32 +49,32 @@
             <TextBlock x:Name="descriptionBlock" Text="" TextWrapping="Wrap"  HorizontalAlignment="Stretch" Margin="5" Foreground="White" Padding="4"/>
         </Border>
 
-        
-            <Border Grid.Row="3" BorderBrush="#252C33" Background="#434E5B" CornerRadius="10" Margin="3">
-                <ItemsControl x:Name="interestBlock">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border CornerRadius="10" Background="#AD0090" BorderBrush="#AD0090" Margin="3">
-                                <Label Content="{Binding}" Foreground="White" />
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Border>
+
+        <Border Grid.Row="3" BorderBrush="#252C33" Background="#434E5B" CornerRadius="10" Margin="3">
+            <ItemsControl x:Name="interestBlock">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border CornerRadius="10" Background="#AD0090" BorderBrush="#AD0090" Margin="3">
+                            <Label Content="{Binding}" Foreground="White" />
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
 
 
         <Border Grid.Row="4" CornerRadius="10" Background="#434E5B" BorderBrush="#434E5B" Margin="3">
             <ItemsControl x:Name="detailList" Grid.Row="4" BorderThickness="2"  Foreground="White">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Label Content="{Binding}" Foreground="White"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding}" Foreground="White"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Border>
 

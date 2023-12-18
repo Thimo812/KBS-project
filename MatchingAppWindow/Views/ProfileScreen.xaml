@@ -347,7 +347,7 @@
         </ScrollViewer>
 
         <Grid Grid.Column="1">
-            <ListBox  Name="resultBox"  SelectionChanged="resultBox_SelectedIndexChanged" Background="#2C343D" BorderBrush="#2C343D" d:ItemsSource="{d:SampleData ItemCount=5}" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}"  >
+            <ListBox Name="resultBox" SelectionChanged="resultBox_SelectedIndexChanged" Background="#2C343D" BorderBrush="#2C343D" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel  Orientation="Vertical" VerticalAlignment="Stretch" ItemWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"/>
@@ -359,7 +359,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Frame Grid.Column="1" x:Name="profileDetailsFrame" HorizontalAlignment="Right" MinWidth="300" />
+            <Frame Grid.Column="1" x:Name="profileDetailsFrame" HorizontalAlignment="Right" MinWidth="200" />
         </Grid>
     </Grid>
 </Page>
