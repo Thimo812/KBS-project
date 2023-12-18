@@ -48,10 +48,10 @@ namespace MatchingAppWindow.Views
             accountEditScreen.InitializePage();
             ChatScreen.InitializePage();
 
-            profileEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
-            accountEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
+            profileEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = ProfileScreen;
+            accountEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = ProfileScreen;
 
-            profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
+            profilesButton.Click += (s, e) => contentFrame.Content = ProfileScreen;
             messageButton.Click += (s, e) => contentFrame.Content = ChatScreen;
 
             profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
