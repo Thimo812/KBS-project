@@ -47,7 +47,7 @@
             </Image>
             <Button x:Name="profilesButton" Content="Profielen" Style="{StaticResource navButtonStyle}" FontSize="15"/>
             <Button x:Name="matchesButton" Content="Matches" Style="{StaticResource navButtonStyle}" FontSize="15"/>
-            <Button x:Name="messagesButton" Content="Berichten" Style="{StaticResource navButtonStyle}" FontSize="15"/>
+            <Button x:Name="messageButton" Content="Berichten" Style="{StaticResource navButtonStyle}" FontSize="15"/>
         </StackPanel>
 
         <Frame x:Name="contentFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2"/>

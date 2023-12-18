@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -26,6 +27,7 @@ namespace MatchingAppWindow.Views
         private ProfileScreen profileScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
+        public ChatScreen ChatScreen { get; private set; } = new();
 
         public Navigation()
         {
@@ -46,11 +48,13 @@ namespace MatchingAppWindow.Views
         {
             profileEditScreen.InitializePage();
             accountEditScreen.InitializePage();
+            ChatScreen.InitializePage();
 
             profileEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
             accountEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
+            messageButton.Click += (s, e) => contentFrame.Content = ChatScreen;
 
             profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
 

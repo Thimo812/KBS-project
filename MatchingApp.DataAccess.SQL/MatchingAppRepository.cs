@@ -262,7 +262,7 @@ namespace MatchingApp.DataAccess.SQL
             }
             catch (SqlNullValueException ex) { vaccinated = null; }
 
-            return new Profile(userName, firstName, infix, lastName, birthDate, gender, pref, city, postalCode, country, RetrieveImages(userName), GetHobbies(userName), GetMatchingQuiz(userName), description, degree, school, workplace, diet, vaccinated);
+            return new Profile(userName, firstName, infix, lastName, birthDate, gender, pref, city, postalCode, country, GetImages(userName), GetHobbies(userName), GetMatchingQuiz(userName), description, degree, school, workplace, diet, vaccinated);
 
         }
 
@@ -435,14 +435,14 @@ namespace MatchingApp.DataAccess.SQL
         }
 
 
-        public List<byte[]> RetrieveImages(string userName)
+        public List<byte[]> GetImages(string userName)
         {
             List<byte[]> images = new List<byte[]>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-
                 var sql = $"SELECT FotoData FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @gebruikersnaam)";
+
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -458,6 +458,7 @@ namespace MatchingApp.DataAccess.SQL
                         }
                     }
                 }
+                connection.Close();
             }
 
             return images;
@@ -733,6 +734,154 @@ namespace MatchingApp.DataAccess.SQL
                 }
             }
             return diets;
+        }
+
+        public byte[] GetProfileImageData(string userName)
+        {
+            byte[] imageData;
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT FotoData FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName)";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        try
+                        {
+                            reader.Read();
+                            imageData = (byte[])reader["FotoData"];
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            connection.Close();
+                            imageData = null;
+                        }
+                    }
+                }
+                connection.Close();
+            }
+
+            return imageData;
+        }
+
+        public List<string> GetContactNames(string userName)
+        {
+            List<string> activeChats = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT Gebruiker1 FROM Conversatie WHERE Gebruiker2 = @userName AND IsActief = 1 UNION SELECT Gebruiker2 FROM Conversatie WHERE Gebruiker1 = @userName AND IsActief = 1";
+
+                connection.Open();
+
+                using(SqlCommand command = new SqlCommand(sql,connection))
+                {
+                    command.Parameters.AddWithValue("userName", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            activeChats.Add(reader.GetString(0));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+
+            return activeChats;
+        }
+
+        public List<Message> GetMessages(string user, string contact)
+        {
+            List<Message> messages = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT Bericht, Tijdstip, Verzender FROM Bericht WHERE (Verzender = @user AND Ontvanger = @contact) OR (Verzender = @contact AND Ontvanger = @user) ORDER BY Tijdstip";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("user", user);
+                    command.Parameters.AddWithValue("contact", contact);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string content = reader.GetString(0);
+                            DateTime timeStamp = reader.GetDateTime(1);
+                            bool isSender = reader.GetString(2) == user;
+                            messages.Add(new Message(timeStamp, content, isSender));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return messages;
+        }
+
+        public void SendMessage(Message message, string sender, string receiver)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "INSERT INTO Bericht (Verzender, Ontvanger, Tijdstip, Bericht) VALUES (@sender, @receiver, @timeStamp, @content)";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("sender", sender);
+                    command.Parameters.AddWithValue("receiver", receiver);
+                    command.Parameters.AddWithValue("timeStamp", message.TimeStamp.ToString("yyyy-MM-ddTHH:mm:ss"));
+                    command.Parameters.AddWithValue("content", message.Content);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public DateTime? GetLatestTimeStamp(string user, string contact)
+        {
+            DateTime LatestTimeStamp;
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT TOP 1 Tijdstip FROM Bericht WHERE (Verzender = @user AND Ontvanger = @contact) OR (Verzender = @contact AND Ontvanger = @user) ORDER BY Tijdstip DESC";
+
+                connection.Open();
+                using(SqlCommand command = new SqlCommand(sql,connection))
+                {
+                    command.Parameters.AddWithValue("user", user);
+                    command.Parameters.AddWithValue("contact", contact);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+
+                        try
+                        {
+                            LatestTimeStamp = reader.GetDateTime(0);
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            return DateTime.MinValue;
+                        }
+                    }
+                }
+                connection.Close();
+            }
+
+            return LatestTimeStamp;
         }
     }
 }

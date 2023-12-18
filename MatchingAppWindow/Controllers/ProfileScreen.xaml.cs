@@ -210,7 +210,6 @@ namespace MatchingAppWindow.Views
             List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
             resultBox.ItemsSource = results;
-            
         }
 
         private void ClearUncheckedHobbies(int item)

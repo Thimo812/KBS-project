@@ -52,11 +52,13 @@ namespace MatchingAppWindow
 
             tunnel = new ForwardedPortLocal("127.0.0.1", (uint)localPort, "127.0.0.1", (uint)remotePort);
             sshClient.AddForwardedPort(tunnel);
-               tunnel.Start();
+            tunnel.Start();
         }
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
+            if (navigation.ChatScreen.MessageChecker != null) navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
+
             // Controleren of de SSH-verbinding open is voordat we proberen deze te sluiten
             if (sshClient != null && sshClient.IsConnected)
             {

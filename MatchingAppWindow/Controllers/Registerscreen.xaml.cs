@@ -70,13 +70,13 @@ namespace MatchingAppWindow.Views
 
             invalidFields = new List<Control>();
 
-            string userName = CheckTextField(userNameInput, RegistrationFields.UserName);
-            string firstName = CheckTextField(firstNameInput, RegistrationFields.FirstName);
-            string infix = CheckTextField(infixInput, RegistrationFields.Infix);
-            string lastName = CheckTextField(lastNameInput, RegistrationFields.LastName);
-            string city = CheckTextField(cityInput, RegistrationFields.City);
-            string country = CheckTextField(countryInput, RegistrationFields.Country);
-            string postalCode = CheckTextField(postalCodeInput, RegistrationFields.PostalCode);
+            string userName = CheckField(userNameInput, RegistrationFields.UserName);
+            string firstName = CheckField(firstNameInput, RegistrationFields.FirstName);
+            string infix = CheckField(infixInput, RegistrationFields.Infix);
+            string lastName = CheckField(lastNameInput, RegistrationFields.LastName);
+            string city = CheckField(cityInput, RegistrationFields.City);
+            string country = CheckField(countryInput, RegistrationFields.Country);
+            string postalCode = CheckField(postalCodeInput, RegistrationFields.PostalCode);
             Gender gender = new();
             SexualPreference sexualPreference = new();
             DateTime birthDate = new();
@@ -128,7 +128,7 @@ namespace MatchingAppWindow.Views
             ExitPage?.Invoke(this, EventArgs.Empty);
         }
 
-        private string CheckTextField(TextBox textBox, RegistrationFields field)
+        private string CheckField(TextBox textBox, RegistrationFields field)
         {
             try
             {
@@ -138,13 +138,8 @@ namespace MatchingAppWindow.Views
             {
                 invalidFields.Add(textBox);
             }
-            catch (SqlException sqlEx)
-            {
-                MessageBox.Show("Er kon geen verbinding worden gemaakt met de database");
-            }
 
             return String.Empty;
-
         }
 
         private void ClearErrorFields()
