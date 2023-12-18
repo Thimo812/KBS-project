@@ -174,7 +174,7 @@
         
     </Page.Resources>
 
-    <Grid>
+    <Grid  Background="#2C343D">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
@@ -206,7 +206,7 @@
         </ScrollViewer>
 
 
-        <Grid x:Name="chatWindow" Grid.Column="1" Visibility="Visible">
+        <Grid x:Name="chatWindow" Grid.Column="1" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="50"/>
