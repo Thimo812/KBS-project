@@ -35,6 +35,8 @@ namespace MatchingAppWindow
             InitializeComponent();
 
             InitScreen();
+
+            Logout();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -87,6 +89,19 @@ namespace MatchingAppWindow
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
 
+            Content = startScreen;
+        }
+
+        private void Logout()
+        {
+            navigation.logoutButton.MouseDown += LogoutButton_Click;
+        }
+
+        private void LogoutButton_Click(object? sender, RoutedEventArgs e)
+        {
+            profile = null;
+            navigation.profileScreen = null;
+            startScreen.userNameField.Text = string.Empty;
             Content = startScreen;
         }
     }

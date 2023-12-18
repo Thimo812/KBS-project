@@ -13,7 +13,7 @@
         <DataTemplate x:Key="senderTemplate">
             <WrapPanel HorizontalAlignment="Right" Margin="5,0,10,5">
                 <Label Content="{Binding DateString}" Foreground="White" FontSize="12"/>
-                <Border CornerRadius="10" Background="#AD0090">
+                <Border CornerRadius="10,10,0,10" Background="#AD0090">
                     <TextBlock Text="{Binding Content}" Foreground="White" FontSize="18" TextWrapping="Wrap" Margin="5"/>
                 </Border>
             </WrapPanel>
@@ -21,7 +21,7 @@
 
         <DataTemplate x:Key="receiverTemplate">
             <WrapPanel HorizontalAlignment="Left" Margin="5,0,10,5">
-                <Border CornerRadius="10" Background="#434E5B">
+                <Border CornerRadius="0,10,10,10" Background="#434E5B">
                     <TextBlock Text="{Binding Content}" Foreground="White" FontSize="18" TextWrapping="Wrap" Margin="5"/>
                 </Border>
                 <Label Content="{Binding DateString}" Foreground="White" FontSize="12"/>
@@ -213,7 +213,7 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
 
             <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="#121519"/>
@@ -237,15 +237,7 @@
                     </ControlTemplate>
                 </TextBox.Template>
             </TextBox>
-            <Button x:Name="sendButton" Background="#AD0090" BorderThickness="0" Foreground="White" Grid.Row="1" Grid.Column="1" Content="Verstuur" Click="SendMessage" IsEnabled="False" FontSize="15" Margin="5">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
+            <Image Name="sendButton" Source="/Views/SendMessageIcon.png" Grid.Row="1" Grid.Column="1" Margin="5" HorizontalAlignment="Right"  MouseEnter="SendButtonFocus" MouseLeave="SendButtonFocusLost" MouseDown="SendMessage"/>
         </Grid>
     </Grid>
 </Page>

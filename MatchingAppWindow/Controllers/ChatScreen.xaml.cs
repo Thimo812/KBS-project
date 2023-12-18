@@ -54,6 +54,8 @@ namespace MatchingAppWindow.Views
 
             Loaded += StartChecking;
             Unloaded += StopChecking;
+
+            UpdateSendButton(this, null);
         }
 
         public void InitializePage()
@@ -145,8 +147,6 @@ namespace MatchingAppWindow.Views
             {
                 SendMessage(sender, new RoutedEventArgs());
             }
-
-            
         }
 
         private void UpdateSendButton(object sender, TextChangedEventArgs e)
@@ -154,10 +154,12 @@ namespace MatchingAppWindow.Views
             if (messageBox.Text.Length == 0)
             {
                 sendButton.IsEnabled = false;
+                sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIconUnabled.png", UriKind.Relative));
             }
             else
             {
                 sendButton.IsEnabled = true;
+                sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIcon.png", UriKind.Relative));
             }
         }
 
@@ -179,6 +181,16 @@ namespace MatchingAppWindow.Views
             {
                 messageScrollViewer.ScrollToVerticalOffset(messageScrollViewer.ExtentHeight);
             }
+        }
+
+        private void SendButtonFocus(object? sender, MouseEventArgs e)
+        {
+            sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIconFocus.png", UriKind.Relative));
+        }
+
+        private void SendButtonFocusLost(object? sender, MouseEventArgs e)
+        {
+            sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIcon.png", UriKind.Relative));
         }
     }
 }
