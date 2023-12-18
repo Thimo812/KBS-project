@@ -28,7 +28,7 @@ namespace MatchingAppWindow.Views
         private LikesMatchesScreen matchScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
-        public ChatScreen ChatScreen { get; private set; } = new();
+        public ChatScreen ChatScreen { get; set; } = new();
 
         public Navigation()
         {
@@ -53,6 +53,8 @@ namespace MatchingAppWindow.Views
         {
             profileEditScreen.InitializePage();
             accountEditScreen.InitializePage();
+
+            if (ChatScreen == null) ChatScreen = new();
             ChatScreen.InitializePage();
 
             profileEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;

@@ -27,7 +27,7 @@ namespace MatchingAppWindow
         private static ForwardedPortLocal tunnel;
 
         private StartScreen startScreen = new();
-        private Navigation navigation = new();
+        private Navigation navigation;
         private RegisterScreen registerScreen = new();
 
         public MainWindow()
@@ -35,8 +35,6 @@ namespace MatchingAppWindow
             InitializeComponent();
 
             InitScreen();
-
-            Logout();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -59,7 +57,7 @@ namespace MatchingAppWindow
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
-            if (navigation.ChatScreen.MessageChecker != null) navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
+            if(navigation != null) if (navigation.ChatScreen.MessageChecker != null) navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
 
             // Controleren of de SSH-verbinding open is voordat we proberen deze te sluiten
             if (sshClient != null && sshClient.IsConnected)
@@ -77,6 +75,8 @@ namespace MatchingAppWindow
         {
             startScreen.LoginSuccessful += (sender, e) =>
             {
+                if (navigation == null) navigation = new();
+                navigation.logoutButton.MouseDown += LogoutButton_Click;
                 navigation.InitScreens();
                 Content = navigation;
             };
@@ -92,17 +92,14 @@ namespace MatchingAppWindow
             Content = startScreen;
         }
 
-        private void Logout()
-        {
-            navigation.logoutButton.MouseDown += LogoutButton_Click;
-        }
 
         private void LogoutButton_Click(object? sender, RoutedEventArgs e)
         {
-            profile = null;
-            navigation.profileScreen = null;
-            startScreen.userNameField.Text = string.Empty;
             Content = startScreen;
+            navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
+            navigation.ChatScreen = null;
+            navigation = null;
+            startScreen.userNameField.Text = string.Empty;
         }
     }
 }
