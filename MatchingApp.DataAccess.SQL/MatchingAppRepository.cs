@@ -13,6 +13,7 @@ using KBS_project.Exceptions;
 using System.Data.SqlTypes;
 using Renci.SshNet;
 using System.Diagnostics;
+using System.Data;
 
 namespace MatchingApp.DataAccess.SQL
 {
@@ -671,8 +672,48 @@ namespace MatchingApp.DataAccess.SQL
         }
 
 
-        private void UnlikeProfile(string liker, string liked)
+        private void UnlikeProfile(string disliker, string disliked)
         {
+            bool isThere, isGebruiker1Liked, isGebruiker2Liked;
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+                var sqlCheckExistence = $"SELECT COUNT(*) FROM MatchingDB.dbo.[Like] WHERE (Gebruiker1 = @disliker OR Gebruiker1 = @disliked) AND (Gebruiker2 = @disliker OR Gebruiker2 = @disliked)";
+                using (SqlCommand commandExistence = new SqlCommand(sqlCheckExistence, connection))
+                {
+                    commandExistence.Parameters.AddWithValue("disliker", disliker);
+                    commandExistence.Parameters.AddWithValue("disliked", disliked);
+                    isThere = (int)commandExistence.ExecuteScalar() > 0;
+                }
+
+                // Retrieve like status
+                var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker2 FROM MatchingDB.dbo.[Like] WHERE Gebruiker1 = @liker OR Gebruiker2 = @liker OR Gebruiker1 = @liked OR Gebruiker2 = @liked";
+                using (SqlCommand commandLikes = new SqlCommand(sqlCheckLikes, connection))
+                {
+                    commandLikes.Parameters.AddWithValue("disliker", disliker);
+                    commandLikes.Parameters.AddWithValue("disliked", disliked);
+
+                    using (SqlDataReader readerLikes = commandLikes.ExecuteReader())
+                    {
+                        readerLikes.Read();
+                        isGebruiker1Liked = !readerLikes.IsDBNull(0) && readerLikes.GetString(0) == disliker;
+                        isGebruiker2Liked = !readerLikes.IsDBNull(1) && readerLikes.GetString(1) == disliker;
+                    }
+                }
+                if (!isThere)
+                {
+                    throw new InvalidDislikeException();
+                }
+                var sqlUpdateLike = isGebruiker1Liked ? $"UPDATE [Like] SET Gebruiker1Liked = false WHERE Gebruiker1 = @disliker AND Gebruiker2 = @disliked;"
+                                                     : $"UPDATE [Like] SET Gebruiker2Liked = false WHERE Gebruiker2 = @disliker AND Gebruiker1 = @disliked;";
+
+                using (SqlCommand commandUpdateLike = new SqlCommand(sqlUpdateLike, connection))
+                {
+                    commandUpdateLike.Parameters.AddWithValue("disliker", disliker);
+                    commandUpdateLike.Parameters.AddWithValue("disliked", disliked);
+                    commandUpdateLike.ExecuteNonQuery();
+                }
+            }
 
         }
 

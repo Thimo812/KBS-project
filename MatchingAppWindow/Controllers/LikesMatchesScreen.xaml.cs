@@ -257,5 +257,16 @@ namespace MatchingAppWindow.Views
             }
         }
 
+        private void filterLkes()
+        {
+
+        }
+
+        private void filterMatch()
+        {
+
+        }
+
+
     }
 }
