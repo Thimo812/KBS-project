@@ -27,6 +27,7 @@ namespace MatchingAppWindow.Views
     {
         Profile selectedProfile;
         MatchingAppRepository repo = new MatchingAppRepository();
+        private string usr = MainWindow.profile.UserName;
         private int currentImage;
         public ProfileDetails()
         {
@@ -34,6 +35,7 @@ namespace MatchingAppWindow.Views
 
             DataContext = this;
             Visibility = Visibility.Collapsed;
+            
 
             likebutton.Visibility = Visibility.Visible;
             dislikebutton.Visibility = Visibility.Collapsed;         
@@ -94,19 +96,19 @@ namespace MatchingAppWindow.Views
 
         public void LikeProfileEvent(object sender, RoutedEventArgs e)
         {
-            repo.LikeProfile("Tim", selectedProfile.UserName);
+            repo.LikeProfile(usr, selectedProfile.UserName);
             updatebutton();
         }
 
         public void DislikeProfileEvent(object sender, RoutedEventArgs e)
         {
-            repo.DislikeProfile("Tim", selectedProfile.UserName);
+            repo.DislikeProfile(usr, selectedProfile.UserName);
             updatebutton();
         }
 
         public void updatebutton()
         {
-            if (repo.CheckLikeStatus("Tim", selectedProfile.UserName) == "Tim")
+            if (repo.CheckLikeStatus(usr, selectedProfile.UserName) == usr)
             {
                 dislikebutton.Visibility = Visibility.Visible;
                 likebutton.Visibility = Visibility.Collapsed;

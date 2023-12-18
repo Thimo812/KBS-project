@@ -612,11 +612,12 @@ namespace MatchingApp.DataAccess.SQL
             return diets;
         }
 
-        private (bool, bool) RetrieveLikeStatus(SqlConnection connection, string liker, string liked)
+        private (string, bool, string, bool) RetrieveLikeStatus(SqlConnection connection, string liker, string liked)
         {
+            string gbr1, gbr2;
             bool isGebruiker1Liker, isGebruiker2Liker;
 
-            var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker2 FROM MatchingDB.dbo.[Like] WHERE Gebruiker1 = @liker OR Gebruiker2 = @liker OR Gebruiker1 = @liked OR Gebruiker2 = @liked";
+            var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker1Liked, Gebruiker2, Gebruiker1Liked FROM MatchingDB.dbo.[Like] WHERE (Gebruiker1 = @liker OR Gebruiker2 = @liker) AND (Gebruiker1 = @liked OR Gebruiker2 = @liked)";
 
             using (SqlCommand commandLikes = new SqlCommand(sqlCheckLikes, connection))
             {
@@ -626,12 +627,19 @@ namespace MatchingApp.DataAccess.SQL
                 using (SqlDataReader readerLikes = commandLikes.ExecuteReader())
                 {
                     readerLikes.Read();
-                    isGebruiker1Liker = !readerLikes.IsDBNull(0) && readerLikes.GetString(0) == liker;
-                    isGebruiker2Liker = !readerLikes.IsDBNull(1) && readerLikes.GetString(1) == liker;
+                    if (readerLikes != null)
+                    {
+                        gbr1 = readerLikes.GetString(0);
+                        isGebruiker1Liker = readerLikes.GetBoolean(1);
+                        gbr2 = readerLikes.GetString(2);
+                        isGebruiker2Liker = readerLikes.GetBoolean(3);
+                        return (gbr1, isGebruiker1Liker, gbr2, isGebruiker2Liker);
+                    }
+                    throw new NullReferenceException();
                 }
             }
 
-            return (isGebruiker1Liker, isGebruiker2Liker);
+
         }
 
         public void LikeProfile(string liker, string liked)
@@ -663,12 +671,16 @@ namespace MatchingApp.DataAccess.SQL
                     }
                 }
 
-                // Retrieve like status
-                var (isGebruiker1Liked, isGebruiker2Liked) = RetrieveLikeStatus(connection, liker, liked);
-
-                // Update like status
-                var sqlUpdateLike = isGebruiker1Liked ? $"UPDATE [Like] SET Gebruiker2Liked = 'true' WHERE Gebruiker2 = @liker AND Gebruiker1 = @liked;"
-                                                      : $"UPDATE [Like] SET Gebruiker1Liked = 'true' WHERE Gebruiker1 = @liker AND Gebruiker2 = @liked;";
+                var (gbr1, isGebruiker1Liked, gbr2, isGebruiker2Liked) = RetrieveLikeStatus(connection, liker, liked);
+                var sqlUpdateLike = "";
+                if (gbr1 == liker)
+                {
+                    sqlUpdateLike = $"UPDATE [Like] SET Gebruiker1Liked = 'true' WHERE Gebruiker1 = @liker AND Gebruiker2 = @liked;";
+                }
+                else
+                {
+                    sqlUpdateLike = $"UPDATE [Like] SET Gebruiker2Liked = 'true' WHERE Gebruiker1 = @liked AND Gebruiker2 = @liker;";
+                }
 
                 using (SqlCommand commandUpdateLike = new SqlCommand(sqlUpdateLike, connection))
                 {
@@ -703,10 +715,17 @@ namespace MatchingApp.DataAccess.SQL
                 }
 
                 // Retrieve like status
-                var (isGebruiker1Liked, isGebruiker2Liked) = RetrieveLikeStatus(connection, disliker, disliked);
+                var (gbr1, isGebruiker1Liked, gbr2, isGebruiker2Liked) = RetrieveLikeStatus(connection, disliker, disliked);
+                var sqlUpdateLike = "";
+                if (gbr1 == disliker)
+                {
+                    sqlUpdateLike = $"UPDATE [Like] SET Gebruiker1Liked = 'false' WHERE Gebruiker1 = @disliker AND Gebruiker2 = @disliked;";
+                } else
+                {
+                    sqlUpdateLike = $"UPDATE [Like] SET Gebruiker2Liked = 'false' WHERE Gebruiker1 = @disliked AND Gebruiker2 = @disliker;";
+                }
 
-                var sqlUpdateLike = isGebruiker2Liked ? $"UPDATE [Like] SET Gebruiker1Liked = 'false' WHERE Gebruiker1 = @disliker AND Gebruiker2 = @disliked;"
-                                                     : $"UPDATE [Like] SET Gebruiker2Liked = 'false' WHERE Gebruiker2 = @disliker AND Gebruiker1 = @disliked;";
+                
 
                 using (SqlCommand commandUpdateLike = new SqlCommand(sqlUpdateLike, connection))
                 {
@@ -726,7 +745,7 @@ namespace MatchingApp.DataAccess.SQL
                 string existingLiker = null;
 
                 // Retrieve liker who has already liked
-                var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker2 FROM MatchingDB.dbo.[Like] WHERE " +
+                var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker1Liked, Gebruiker2, Gebruiker2Liked FROM MatchingDB.dbo.[Like] WHERE " +
                                     $"((Gebruiker1 = @liker AND Gebruiker2 = @liked) OR (Gebruiker1 = @liked AND Gebruiker2 = @liker)) " +
                                     $"AND (Gebruiker1Liked = 'true' OR Gebruiker2Liked = 'true')";
 
@@ -739,8 +758,8 @@ namespace MatchingApp.DataAccess.SQL
                     {
                         if (readerLikes.Read())
                         {
-                            // Choose the liker based on the liked status
-                            existingLiker = readerLikes.GetString(0) == liked ? readerLikes.GetString(1) : readerLikes.GetString(0);
+                            existingLiker = readerLikes.GetString(0) == liker && readerLikes.GetBoolean(1) ? liker 
+                                : (readerLikes.GetString(2) == liker && readerLikes.GetBoolean(3) ? liker : liked);
                         }
                     }
                 }
