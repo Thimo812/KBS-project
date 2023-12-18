@@ -100,7 +100,7 @@ namespace MatchingAppWindow
         private void LogoutButton_Click(object? sender, RoutedEventArgs e)
         {
             profile = null;
-            navigation.ProfileScreen = null;
+            navigation.profileScreen = null;
             startScreen.userNameField.Text = string.Empty;
             Content = startScreen;
         }
