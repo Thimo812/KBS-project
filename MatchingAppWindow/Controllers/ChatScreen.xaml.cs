@@ -37,6 +37,8 @@ namespace MatchingAppWindow.Views
 
         private Contact SelectedContact { get; set; }
 
+        private ProfileDetails ProfileDetails { get; set; } = new();
+
         private bool AutoScroll { get; set; } = true;
 
         public BackgroundWorker MessageChecker { get; private set; }
@@ -51,6 +53,7 @@ namespace MatchingAppWindow.Views
 
             messageControl.ItemsSource = Messages;
             contactList.ItemsSource = Contacts;
+            detailFrame.Content = ProfileDetails;
 
             Loaded += StartChecking;
             Unloaded += StopChecking;
@@ -77,6 +80,8 @@ namespace MatchingAppWindow.Views
             if (contactList.SelectedItem == null) return;
 
             SelectedContact = Contacts[contactList.SelectedIndex];
+
+            ProfileDetails.SetProfile(SelectedContact.UserName);
 
             chatWindow.Visibility = Visibility.Visible;
         }

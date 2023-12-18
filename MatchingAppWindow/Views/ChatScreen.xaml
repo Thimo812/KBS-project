@@ -214,6 +214,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
 
             <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="#121519"/>
@@ -238,6 +239,8 @@
                 </TextBox.Template>
             </TextBox>
             <Image Name="sendButton" Source="/Views/SendMessageIcon.png" Grid.Row="1" Grid.Column="1" Margin="5" HorizontalAlignment="Right"  MouseEnter="SendButtonFocus" MouseLeave="SendButtonFocusLost" MouseDown="SendMessage"/>
+
+            <Frame x:Name="detailFrame" Grid.Column="2"/>
         </Grid>
     </Grid>
 </Page>

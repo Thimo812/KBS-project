@@ -21,9 +21,6 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-
-
-
         <Border Grid.Column="1" VerticalAlignment="Center" CornerRadius="30" Background="#1D2228" Width="300">
             <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,0,0">
                 <Viewbox Width="75" Height="75" Stretch="Uniform" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="10" >
