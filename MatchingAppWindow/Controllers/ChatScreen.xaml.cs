@@ -87,8 +87,6 @@ namespace MatchingAppWindow.Views
                 DateTime localLatestMessage = Messages.Count == 0 ? DateTime.MinValue : Messages[Messages.Count - 1].TimeStamp;
                 DateTime? LatestMessage = MainWindow.repo.GetLatestTimeStamp(MainWindow.profile.UserName, SelectedContact.UserName);
 
-                Debug.WriteLine("actief");
-
                 if (((DateTime)LatestMessage).CompareTo(localLatestMessage) != 0) MessageChecker.ReportProgress(0, GetMessages());
 
                 Thread.Sleep(chatRefreshDelay);
