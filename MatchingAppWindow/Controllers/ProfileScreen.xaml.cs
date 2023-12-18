@@ -50,8 +50,6 @@ namespace MatchingAppWindow.Views
 
             profileDetailsFrame.Content = profileDetails;
 
-            loginButton.Content = MainWindow.profile.UserName;
-
             DataContext = this;
 
             int hobbyCount = repo.GetHobbies().Count;
