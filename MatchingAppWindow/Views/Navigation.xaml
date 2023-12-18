@@ -6,8 +6,55 @@
       xmlns:local="clr-namespace:MatchingAppWindow.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Navigation">
-    <Grid Background="Gray">
-        <Button Name="loginButton" Content="Username" HorizontalAlignment="Right" />
+      Title="Navigation"
+      Background="White">
+
+    <Page.Resources>
+        <Style TargetType="Button" x:Key="navButtonStyle">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="LightGray"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="293*"/>
+        </Grid.ColumnDefinitions>
+        <Rectangle Fill="Gray" Grid.Column="0"/>
+        <StackPanel Grid.Column="0">
+            <Image x:Name="profileButton" Source="/Views/AccountIcon.png" Margin="20" MouseEnter="ProfileButtonFocus" MouseLeave="ProfileButtonFocusLost" MouseDown="ToggleProfileButtons">
+                <!--<Image.Source>/Views/AccountIcon.png</Image.Source>-->
+            </Image>
+            <Button x:Name="profilesButton" Content="Profielen" Style="{StaticResource navButtonStyle}" FontSize="15"/>
+            <Button x:Name="matchesButton" Content="Matches" Style="{StaticResource navButtonStyle}" FontSize="15"/>
+            <Button x:Name="messagesButton" Content="Berichten" Style="{StaticResource navButtonStyle}" FontSize="15"/>
+        </StackPanel>
+
+        <Frame x:Name="contentFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2"/>
+
+        <StackPanel Grid.Column="1">
+            <Button x:Name="editProfileButton" Content="Profiel" Margin="5,27,5,0" Visibility="Hidden"/>
+            <Button x:Name="editAccountButton" Content="Account" Margin="5,6,5,0" Visibility="Hidden"/>
+        </StackPanel>
     </Grid>
 </Page>

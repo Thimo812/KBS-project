@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -113,7 +114,14 @@ namespace MatchingAppWindow.Views
                 return;
             }
 
-            MainWindow.profile = new Profile(userName, firstName, infix, lastName, birthDate, gender, sexualPreference, city, postalCode, country, ImageList.ToList());
+            List <byte[]> imageDataList = new List<byte[]>();
+
+            foreach (var image in ImageList)
+            {
+                imageDataList.Add(File.ReadAllBytes(image));
+            }
+
+            MainWindow.profile = new Profile(userName, firstName, infix, lastName, birthDate, gender, sexualPreference, city, postalCode, country, imageDataList);
 
             MainWindow.repo.SaveProfile(MainWindow.profile);
 

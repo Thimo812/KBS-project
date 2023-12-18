@@ -24,12 +24,12 @@ namespace KBS_project
 		public string? Description { get; set; }
 		public bool? Vaccinated {  get; set; }
 		public List<Interest>? Interests { get; set; }
-		public List<string>? Images { get; set; }
+		public List<byte[]> Images { get; set; }
 		public List<int>? QuizAnswers { get; set; }
 		public AnswerManager Answers { get; } = new AnswerManager();
 
 		public Profile(string userName, string firstName, string infix, string lastName, DateTime birthDate, Gender gender, 
-			SexualPreference sexualPreference, string city, string postalCode, string country, List<string> images, 
+			SexualPreference sexualPreference, string city, string postalCode, string country, List<byte[]> images, 
 			List<Interest> interests, List<int> quizAnswers, string description, string degree, string school, string workplace, Diet? diet, bool? vaccinated) : 
 			this(userName, firstName, infix, lastName, birthDate, gender, sexualPreference, city, postalCode, country, images)
 		{
@@ -44,7 +44,7 @@ namespace KBS_project
 		}
 
         public Profile(string userName, string firstName, string infix, string lastName, DateTime birthDate, Gender gender,
-            SexualPreference sexualPreference, string city, string postalCode, string country, List<string> images)
+            SexualPreference sexualPreference, string city, string postalCode, string country, List<byte[]> images)
         {
             UserName = userName;
             FirstName = firstName;

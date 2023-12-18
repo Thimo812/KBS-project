@@ -30,21 +30,6 @@ namespace MatchingApp.DataAccess.SQL
 			builder.TrustServerCertificate = false; 
 		}
 
-        private static void CloseTunnel(ForwardedPortLocal tunnel, SshClient client)
-        {
-            // Stop the tunnel
-            tunnel.Stop();
-
-            // Disconnect the SSH client
-            client.Disconnect();
-
-            // Dispose of resources
-            tunnel.Dispose();
-            client.Dispose();
-
-            Console.WriteLine("SSH tunnel closed.");
-        }
-
         public string AgeToDate(int age)
 		{
             var today = DateTime.Today;
@@ -277,7 +262,7 @@ namespace MatchingApp.DataAccess.SQL
             }
             catch (SqlNullValueException ex) { vaccinated = null; }
 
-            return new Profile(userName, firstName, infix, lastName, birthDate, gender, pref, city, postalCode, country, new List<string>(), GetHobbies(userName), GetMatchingQuiz(userName), description, degree, school, workplace, diet, vaccinated);
+            return new Profile(userName, firstName, infix, lastName, birthDate, gender, pref, city, postalCode, country, RetrieveImages(userName), GetHobbies(userName), GetMatchingQuiz(userName), description, degree, school, workplace, diet, vaccinated);
 
         }
 
@@ -348,7 +333,7 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
                     command.Parameters.AddWithValue("Naam", profile.FirstName);
-                    command.Parameters.AddWithValue("Achternaam", profile.LastName);
+                    command.Parameters.AddWithValue("Achternaam", profile.LastName); 
                     command.Parameters.AddWithValue("Tussenvoegsels", profile.Infix);
                     command.Parameters.AddWithValue("Geboortedatum", $"{profile.BirthDate.Year}-{profile.BirthDate.Month}-{profile.BirthDate.Day}");
                     command.Parameters.AddWithValue("Sekspref", profile.SexualPreference);
@@ -356,17 +341,18 @@ namespace MatchingApp.DataAccess.SQL
                     command.Parameters.AddWithValue("Woonplaats", profile.City);
                     command.Parameters.AddWithValue("Land", profile.Country);
                     command.Parameters.AddWithValue("Postcode", profile.PostalCode);
-                    command.Parameters.AddWithValue("Beschrijving", profile.Description);
-                    command.Parameters.AddWithValue("Opleiding", profile.Degree);
-                    command.Parameters.AddWithValue("School", profile.School);
-                    command.Parameters.AddWithValue("Werkplek", profile.WorkPlace);
-                    command.Parameters.AddWithValue("Dieet", profile.Diet);
+                    command.Parameters.AddWithValue("Beschrijving", profile.Description == null ? String.Empty : profile.Description);
+                    command.Parameters.AddWithValue("Opleiding", profile.Degree == null ? String.Empty : profile.Degree);
+                    command.Parameters.AddWithValue("School", profile.School == null ? String.Empty : profile.School);
+                    command.Parameters.AddWithValue("Werkplek", profile.WorkPlace == null ? String.Empty : profile.WorkPlace);
+                    command.Parameters.AddWithValue("Dieet", profile.Diet == null ? String.Empty : profile.Diet);
                     command.ExecuteNonQuery();
                 }
                 connection.Close();
             }
 
             UpdateHobbies(profile);  
+            UpdateImages(profile);
         }
 
         public void UpdateHobbies(Profile profile)
@@ -403,6 +389,28 @@ namespace MatchingApp.DataAccess.SQL
             }
         }
 
+        public void UpdateImages(Profile profile)
+        {
+            if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
+
+            CheckPhotoAlbum(profile);
+
+            using(SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "DELETE FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName)";
+
+                connection.Open();
+                using(SqlCommand command = new SqlCommand(sql,connection))
+                {
+                    command.Parameters.AddWithValue("userName", profile.UserName);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+
+            StoreImages(profile);
+        }
+
         public void StoreImages(Profile profile)
         {
             if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
@@ -411,14 +419,13 @@ namespace MatchingApp.DataAccess.SQL
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
+                connection.Open();
                 foreach (var image in profile.Images)
                 {
-                    byte[] imageData = File.ReadAllBytes(image);
                     var sql = $"INSERT INTO Foto(FotoData, FotoAlbumID) VALUES (@imageData, (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName))";
-                    connection.Open();
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        command.Parameters.AddWithValue("imageData", imageData);
+                        command.Parameters.AddWithValue("imageData", image);
                         command.Parameters.AddWithValue("userName", profile.UserName);
                         command.ExecuteNonQuery();
                     }
@@ -428,9 +435,9 @@ namespace MatchingApp.DataAccess.SQL
         }
 
 
-        public List<Image> RetrieveImages(string userName)
+        public List<byte[]> RetrieveImages(string userName)
         {
-            List<Image> images = new List<Image>();
+            List<byte[]> images = new List<byte[]>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
@@ -447,21 +454,13 @@ namespace MatchingApp.DataAccess.SQL
                         {
                             byte[] imageData = (byte[])reader["FotoData"];
 
-                            images.Add(ByteArrayToImage(imageData));
+                            images.Add(imageData);
                         }
                     }
                 }
             }
 
             return images;
-        }
-
-        static Image ByteArrayToImage(byte[] byteArray)
-        {
-            using (MemoryStream stream = new MemoryStream(byteArray))
-            {
-                return Image.FromStream(stream);
-            }
         }
 
         private void CheckPhotoAlbum(Profile profile)

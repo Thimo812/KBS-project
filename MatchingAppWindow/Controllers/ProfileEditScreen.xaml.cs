@@ -38,6 +38,12 @@ namespace MatchingAppWindow.Views
 
         public void InitializePage()
         {
+            BeschrijvingBox.Text = MainWindow.profile.Description;
+            OpleidingBox.Text = MainWindow.profile.Degree;
+            SchoolBox.Text = MainWindow.profile.School;
+            WerkplekBox.Text = MainWindow.profile.WorkPlace;
+            SetDiet(MainWindow.profile.Diet);
+
             foreach (var item in MainWindow.profile.Interests)
             {
                 Interests.Add(item);
