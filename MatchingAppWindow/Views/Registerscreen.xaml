@@ -9,17 +9,54 @@
 	  d:DesignHeight="450" d:DesignWidth="800"
 	  Title="Register">
 
-    <Grid Background="White">
+
+
+    <Grid Background="Black">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="115"/>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="120"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="800" MaxWidth="800" MinWidth="800"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="*" />
+            <!-- First column -->
+            <ColumnDefinition Width="800"/>
+            <!-- Second column -->
+            <ColumnDefinition Width="*" />
+            <!-- Third column -->
+
         </Grid.ColumnDefinitions>
 
-        <Rectangle HorizontalAlignment="Center" Stroke="Black" Width="798" Grid.Column="1" Fill="#FFCDE6FF"/>
+        
 
-        <ListBox x:Name="imageBox" ItemsSource="{Binding ImageList, Mode=TwoWay}" Height="135" VerticalAlignment="Top" Background="#FF9ACDFF" BorderBrush="#FF000002" Grid.Column="1">
+        <Rectangle Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Grid.RowSpan="4" >
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="red" Offset="0"/>
+                    <GradientStop Color="Purple" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <Rectangle  Stroke="Black" Grid.Row="0" Grid.Column="1" Width="200" >
+            <Rectangle.Fill>
+                <SolidColorBrush Color="Black"/>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <!--Rectangle for background-->
+        <Rectangle HorizontalAlignment="Stretch"  Grid.Row="1" Grid.RowSpan="3"  Grid.ColumnSpan="1" Grid.Column="1">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="#1D2228" ></SolidColorBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+
+        <!-- StackPanel for Image View -->
+
+        <!--Listbox for image view-->
+        <ListBox x:Name="imageBox" ItemsSource="{Binding ImageList, Mode=TwoWay}" Height="135" VerticalAlignment="Center" Background="Black" BorderBrush="#FF000002" Grid.Column="1">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Image Source="{Binding}" Width="125" Height="125"/>
@@ -32,44 +69,194 @@
             </ListBox.ItemsPanel>
         </ListBox>
 
-        <Button x:Name="AddPhotoButton" Content="Foto toevoegen" Margin="680,70,0,0" BorderThickness="3,3,3,3" Click="AddPhoto" HorizontalAlignment="Left" Width="100" Height="24" VerticalAlignment="Top" Grid.Column="1"/>
-        <Button x:Name="deletePhotoButton" Content="Foto Verwijderen" Margin="680,99,0,0" BorderThickness="3,3,3,3" Click="DeletePhoto" HorizontalAlignment="Left" Width="100" Height="24" VerticalAlignment="Top" IsEnabled="False" Grid.Column="1"/>
+        <!--Stackpanel buttons Photos-->
+        
+            <StackPanel  Grid.Row="0" Grid.Column="1" Background="Black" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" >
+            <!--addPhotoButton-->
+            <Border CornerRadius="15">
+                <Button x:Name="AddPhotoButton" Content="Foto toevoegen" Height="30" Width="150" Click="AddPhoto" FontSize="16" Background="#AD0090" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" >
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border  Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"  CornerRadius="15">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Border>
 
-        <Label Content="Gebruikersnaam:" Margin="98,151,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="userNameInput" Margin="256,152,0,0" TextWrapping="Wrap" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="142" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1" />
+            <!--deletePhotoButton-->
+            <Border CornerRadius="15">
+                <Button x:Name="deletePhotoButton" Content="Foto Verwijderen" Height="30" Width="150" Click="DeletePhoto" FontSize="16" Background="#AD0090" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" IsEnabled="False">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Border>
+        </StackPanel>
+        
 
-        <Label Content="Woonplaats:" Margin="416,151,0,0" Height="31" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
-        <TextBox x:Name="cityInput" Margin="548,151,110,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" Grid.Column="1"/>
+        <!--Stackpanel user Input-->
 
-        <Label Content="Voornaam:" Margin="98,188,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="firstNameInput" Margin="256,189,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="90" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
-        <TextBox x:Name="infixInput" Margin="350,189,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="48" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
+        <!-- userNameInput -->
+        <StackPanel Orientation="Horizontal" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1">
+            <Label Content="Gebruikersnaam:"  FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Center" Grid.Row="1" Foreground="White"/>
+            <Border CornerRadius="15"  Grid.Row="1" HorizontalAlignment="Center" Height="30" Width="150" >
+                <TextBox x:Name="userNameInput" TextWrapping="Wrap"  Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White">
+                    <TextBox.Template>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                            </Border>
+                        </ControlTemplate>
+                    </TextBox.Template>
+                </TextBox>
+            </Border>
+        </StackPanel>
 
-        <Label Content="Land:" Margin="416,188,0,0" Height="30" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
-        <TextBox x:Name="countryInput" Margin="548,189,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" HorizontalAlignment="Left" Width="142" BorderThickness="2,2,2,2" RenderTransformOrigin="0.5,0.5" Grid.Column="1"/>
+        <!--city Input-->
+        <StackPanel Margin="400,10,0,0" Width="300" HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="1" Grid.Column="1" >
+            <Label Content="Woonplaats:"  Height="30" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Center" Width="132" Grid.Row="1" Foreground="White" />
+            <Border CornerRadius="15" Grid.Row="1" >
+                <TextBox x:Name="cityInput" TextWrapping="Wrap"  Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White" >
+                    <TextBox.Template>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                            </Border>
+                        </ControlTemplate>
+                    </TextBox.Template>
+                </TextBox>
+            </Border>
+        </StackPanel>
+        <!--firstNameInput & infixInput-->
+        <StackPanel Orientation="Horizontal" Margin="10,10,0,0" Grid.Row="1" Grid.Column="1" >
+            <Label Content="Voornaam:"  FontSize="15" Width="123" Height="32" Grid.Row="1" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+            <Border CornerRadius="15" Grid.Row="1" >
+                <TextBox x:Name="firstNameInput"  TextWrapping="Wrap"  Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBox.Template>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                            </Border>
+                        </ControlTemplate>
+                    </TextBox.Template>
+                </TextBox>
+            </Border>
+            <Border CornerRadius="15"  Grid.Row="1" >
+                <TextBox x:Name="infixInput" TextWrapping="Wrap"  Height="30" Width="50" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White" Margin="10,0,90,0">
+                    <TextBox.Template>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                            </Border>
+                        </ControlTemplate>
+                    </TextBox.Template>
+                </TextBox>
+            </Border>
+        </StackPanel>
+        <!--country Input-->
+        <StackPanel Margin="400,10,0,0" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+            <Label Content="Land:"  Height="30" VerticalAlignment="Center" FontSize="15" HorizontalAlignment="Right" Width="132" Grid.Row="1" Foreground="White"/>
+            <Border CornerRadius="15" Grid.Row="1">
+                <TextBox x:Name="countryInput" TextWrapping="Wrap"  Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White">
+                    <TextBox.Template>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                            </Border>
+                        </ControlTemplate>
+                    </TextBox.Template>
+                </TextBox>
+            </Border>
+        </StackPanel>
 
-        <Label Content="Achternaam:" Margin="98,226,0,0" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <TextBox x:Name="lastNameInput" Margin="256,226,0,0" TextWrapping="Wrap" Text="" RenderTransformOrigin="0.292,0.316" TextChanged="TextBox_TextChanged" HorizontalAlignment="Left" Width="142" Height="32" VerticalAlignment="Top" BorderThickness="2,2,2,2" Grid.Column="1"/>
+        <!--lastName Input-->
+        <StackPanel Orientation="Horizontal" Margin="10,100,0,0" Grid.Row="1" Grid.Column="1">
+            <Label Content="Achternaam:" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Center" Grid.Row="1" Foreground="White"/>
+            <Border CornerRadius="15" Grid.Row="1">
+                <TextBox x:Name="lastNameInput" TextWrapping="Wrap"  HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White">
+                    <TextBox.Template>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                            </Border>
+                        </ControlTemplate>
+                    </TextBox.Template>
+                </TextBox>
+            </Border>
+        </StackPanel>
+        <!--postalCode Input-->
+        <StackPanel Margin="400,10,0,0"  Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
+            <Label Content="Postcode:"  Height="30" VerticalAlignment="Bottom" FontSize="15" HorizontalAlignment="Right" Width="132" Grid.Row="1" Foreground="White"/>
+            <Border CornerRadius="15"  Grid.Row="1">
+                <TextBox x:Name="postalCodeInput" TextWrapping="Wrap"  Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White">
+                    <TextBox.Template>
+                        <ControlTemplate TargetType="{x:Type TextBox}">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                            </Border>
+                        </ControlTemplate>
+                    </TextBox.Template>
+                </TextBox>
+            </Border>
+        </StackPanel>
 
-        <Label Content="Postcode:" Margin="416,227,0,0" Height="30" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132" Grid.Column="1"/>
-        <TextBox x:Name="postalCodeInput" Margin="548,226,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="32" TextChanged="TextBox_TextChanged_1" FontSize="15" BorderThickness="2,2,2,2" HorizontalAlignment="Left" Width="142" Grid.Column="1"/>
 
-        <Label Content="Seksuele preferentie:" Margin="98,262,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <RadioButton x:Name="heteroSexual" GroupName="Sexuality" Content="Hetero" Margin="260,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="homoSexual" GroupName="Sexuality" Content="Homosexueel" Margin="357,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="112" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="biSexual" GroupName="Sexuality" Content="Bisexueel" Margin="482,268,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.474,0.158" Grid.Column="1"/>
+        <!--Sexuality-->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1">
+            <Label Content="Seksuele preferentie:" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32"  Foreground="White"/>
+            <RadioButton x:Name="heteroSexual" GroupName="Sexuality" Content="Hetero"  Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20"  FontSize="15" Foreground="White"/>
+            <RadioButton x:Name="homoSexual" GroupName="Sexuality" Content="Homosexueel"  Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="112" Height="20"  FontSize="15" Foreground="White"/>
+            <RadioButton x:Name="biSexual" GroupName="Sexuality" Content="Bisexueel"  Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20"  FontSize="15" Foreground="White"  />
+        </StackPanel>
+        <!--Gender-->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1">
+            <Label Content="Geslacht:"  FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" Foreground="White"/>
+            <RadioButton x:Name="femaleGender" GroupName="Gender" Content="Vrouw"  Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20"  FontSize="15" Foreground="White"/>
+            <RadioButton x:Name="maleGender" GroupName="Gender" Content="Man" Checked="RadioButton_Checked" HorizontalAlignment="Center" Width="86" Height="20"  FontSize="15" Foreground="White"/>
+            <RadioButton x:Name="nonBinaryGender" GroupName="Gender" Content="Non-binair"  Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="98" Height="20"  FontSize="15" Foreground="White"/>
+        </StackPanel>
 
-        <Label Content="Geslacht:" Margin="98,299,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <RadioButton x:Name="femaleGender" GroupName="Gender" Content="Vrouw" Margin="260,304,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="maleGender" GroupName="Gender" Content="Man" Margin="0,305,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Center" Width="86" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
-        <RadioButton x:Name="nonBinaryGender" GroupName="Gender" Content="Non-binair" Margin="482,305,0,0" Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="98" Height="20" VerticalAlignment="Top" FontSize="15" Grid.Column="1"/>
+        <!--birthDateePicker-->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1">
+            <Label Content="Geboortedatum:"  FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" Foreground="White"/>
+            <DatePicker x:Name="birthDatePicker"  FirstDayOfWeek="Monday" HorizontalAlignment="Left" Width="142" Height="32" BorderThickness="2,2,2,2" BorderBrush="#FFA3AEB9" Background="White" />
+        </StackPanel>
 
-        <Label Content="Geboortedatum:" Margin="98,336,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top" Grid.Column="1"/>
-        <DatePicker x:Name="birthDatePicker" Margin="260,336,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" HorizontalAlignment="Left" Width="142" Height="32" BorderThickness="2,2,2,2" BorderBrush="#FFA3AEB9" Background="White" Grid.Column="1"/>
+        <!--createAccountButton-->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Center" Grid.Column="1" >
+            <Border CornerRadius="15"  >
+                <Button x:Name="CreateAccountButton" Content="Account aanmaken" Height="30" Width="150" Click="RegisterAccount" FontSize="16" Background="#AD0090" BorderBrush="#AD0090" Foreground="White" Margin="0,0,10,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Border>
 
-        <Button x:Name="CreateAccountButton" Content="Account aanmaken" Margin="0,383,0,0" Click="RegisterAccount" FontSize="15" HorizontalAlignment="Center" Width="264" Background="White" Grid.Column="1" Height="34" VerticalAlignment="Top"/>
-        <Button x:Name="loginButton" Content="Of log in" Margin="537,383,0,0" FontSize="15" BorderBrush="Transparent" Background="Transparent" Grid.Column="1"  HorizontalAlignment="Left" Width="98" Height="34" VerticalAlignment="Top"/>
+            <!--loginButton-->
+            <Border CornerRadius="15" >
+                <Button x:Name="loginButton" Content="Of log in" Height="30" Width="100" FontSize="16" Background="#AD0090" BorderBrush="#AD0090" Foreground="White">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Border>
 
-        <Label x:Name="errorMessage" Content="Voer alle verplichte velden in" Margin="0,417,0,0" Foreground="Red" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" Width="224" Height="30" VerticalAlignment="Top" Visibility="Hidden" Grid.Column="1" />
+            <!--errorMessage-->
+            <Label x:Name="errorMessage" Content="Voer alle verplichte velden in" Margin="0,0,0,10" Foreground="Red" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" Width="224" Height="30" VerticalAlignment="Bottom" Visibility="Hidden" Grid.Column="1"/>
+        </StackPanel>
     </Grid>
 </Page>

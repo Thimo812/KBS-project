@@ -37,7 +37,7 @@ namespace MatchingAppWindow.Views
         private void ShowErrors() 
         {
 
-            userNameField.Background = Brushes.Pink;
+            userNameField.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff6666");
             userNameField.BorderBrush = Brushes.Red;
             errorMessage.Visibility = Visibility.Visible;
         }
