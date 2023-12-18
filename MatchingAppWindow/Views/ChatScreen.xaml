@@ -218,7 +218,7 @@
 
             <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="#121519"/>
 
-            <ScrollViewer Grid.Row="0" Grid.ColumnSpan="2" Background="#2C343D">
+            <ScrollViewer x:Name="messageScrollViewer" Grid.Row="0" Grid.ColumnSpan="2" Background="#2C343D" ScrollChanged="UpdateScrollViewer">
                 <ItemsControl x:Name="messageControl" ItemTemplateSelector="{StaticResource templateSelector}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

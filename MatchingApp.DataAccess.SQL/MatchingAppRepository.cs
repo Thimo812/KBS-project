@@ -796,6 +796,8 @@ namespace MatchingApp.DataAccess.SQL
                 connection.Close();
             }
 
+            activeChats = activeChats.OrderByDescending(x => GetLatestTimeStamp(userName, x)).ToList();
+
             return activeChats;
         }
 
@@ -862,7 +864,11 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     command.Parameters.AddWithValue("user", user);
                     command.Parameters.AddWithValue("contact", contact);
-                    command.ExecuteNonQuery();
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (SqlException) { }
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
