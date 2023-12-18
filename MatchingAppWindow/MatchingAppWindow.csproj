@@ -11,6 +11,8 @@
     <None Remove="Views\AccountIcon.png" />
     <None Remove="Views\AccountIconFocus.png" />
     <None Remove="Views\DeleteIcon.png" />
+    <None Remove="Views\LogoutIcon.png" />
+    <None Remove="Views\LogoutIconFocus.png" />
     <None Remove="Views\PlusIcon.png" />
   </ItemGroup>
 
@@ -25,6 +27,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Views\DeleteIcon.png" />
+    <Resource Include="Views\LogoutIcon.png" />
+    <Resource Include="Views\LogoutIconFocus.png" />
     <Resource Include="Views\PlusIcon.png" />
   </ItemGroup>
 

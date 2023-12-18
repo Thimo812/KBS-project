@@ -24,12 +24,11 @@ using System.Net;
 namespace MatchingAppWindow.Views
 {
     /// <summary>
-    /// Interaction logic for FilterScreen.xaml
+    /// Interaction logic for LikesMatchesScreen.xaml
     /// </summary>
-    public partial class ProfileScreen : Page
-    {
 
-        //Creating all attributes
+    public partial class LikesMatchesScreen : Page
+    {
         MatchingAppRepository repo = new MatchingAppRepository();
         private LocationFilter location = LocationFilter.Global;
         private int minimumAge;
@@ -40,7 +39,9 @@ namespace MatchingAppWindow.Views
         private List<Diet> excludedDiets = new();
 
         private ProfileDetails profileDetails = new();
-        public ProfileScreen()
+        private Navigation navigation = new();
+
+        public LikesMatchesScreen()
         {
             InitializeComponent();
 
@@ -52,9 +53,7 @@ namespace MatchingAppWindow.Views
 
             DataContext = this;
 
-            int hobbyCount = repo.GetHobbies().Count;
-
-            for (int i = 1; i < hobbyCount; i++)
+            for (int i = 1; i < repo.GetHobbies().Count; i++)
             {
                 CheckBox checkBox = new CheckBox();
 
@@ -86,15 +85,26 @@ namespace MatchingAppWindow.Views
             }
         }
 
+        //RadioButtons to filter on location
         private void LocationChecked(object sender, RoutedEventArgs e)
         {
-            if (sender is RadioButton senderLoc)
-            {
-                location = Enum.TryParse<LocationFilter>(senderLoc.Name, out var filter) ? filter : LocationFilter.Global;
-                Filter();
-            }
-        }
+            RadioButton senderLoc = (RadioButton)sender;
 
+            if (senderLoc.Name == "Global")
+            {
+                location = LocationFilter.Global;
+            }
+            if (senderLoc.Name == "Country")
+            {
+                location = LocationFilter.Country;
+            }
+            if (senderLoc.Name == "City")
+            {
+                location = LocationFilter.City;
+            }
+
+            Filter();
+        }
 
         private void ExtendOrCollapseHobbies_Click(object sender, RoutedEventArgs e)
         {
@@ -103,7 +113,7 @@ namespace MatchingAppWindow.Views
                 ExtendOrCollapseHobbies.Content = "Hobby ▼";
                 HobbyCheckBoxes.Visibility = Visibility.Collapsed;
             }
-            else if((string)ExtendOrCollapseHobbies.Content == "Hobby ▼")
+            else if ((string)ExtendOrCollapseHobbies.Content == "Hobby ▼")
             {
                 ExtendOrCollapseHobbies.Content = "Hobby ▲";
                 HobbyCheckBoxes.Visibility = Visibility.Visible;
@@ -197,6 +207,7 @@ namespace MatchingAppWindow.Views
             List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
 
             resultBox.ItemsSource = results;
+
         }
 
         private void ClearUncheckedHobbies(int item)
@@ -245,5 +256,17 @@ namespace MatchingAppWindow.Views
                 profileDetails.Visibility = Visibility.Visible;
             }
         }
+
+        private void filterLkes()
+        {
+
+        }
+
+        private void filterMatch()
+        {
+
+        }
+
+
     }
 }

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,7 +24,8 @@ namespace MatchingAppWindow.Views
     public partial class Navigation : Page
     {
         private Matchingquiz matchingQuiz = new();
-        private ProfileScreen profileScreen;
+        public ProfileScreen profileScreen;
+        private LikesMatchesScreen matchScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
         public ChatScreen ChatScreen { get; private set; } = new();
@@ -39,9 +40,13 @@ namespace MatchingAppWindow.Views
         public void SwitchToProfileScreen(object? sender, EventArgs e)
         {
             if (profileScreen == null) profileScreen = new();
-            profileScreen.matchingQuizButton.Click += (object sender, RoutedEventArgs e) => contentFrame.Content = matchingQuiz;
-            profileScreen.loginButton.Click += (object sender, RoutedEventArgs e) => contentFrame.Content = profileEditScreen;
             contentFrame.Content = profileScreen;
+        }
+
+        public void SwitchToLikesMatchesScreen(object? sender, EventArgs e)
+        {
+            if (matchScreen == null) matchScreen = new();
+            contentFrame.Content = matchScreen;
         }
 
         public void InitScreens()
@@ -65,6 +70,7 @@ namespace MatchingAppWindow.Views
 
             matchingQuiz.ExitPage += (sender, e) => contentFrame.Content = profileEditScreen;
 
+            SwitchToLikesMatchesScreen(this, EventArgs.Empty);
             SwitchToProfileScreen(this, EventArgs.Empty);
         }
 
@@ -90,6 +96,16 @@ namespace MatchingAppWindow.Views
                 editProfileButton.Visibility = Visibility.Hidden;
                 editAccountButton.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void LogoutButtonFocus(object? sender, MouseEventArgs e)
+        {
+            logoutButton.Source = new BitmapImage(new Uri("/Views/LogoutIconFocus.png", UriKind.Relative));
+        }
+
+        private void LogoutButtonFocusLost(object? sender, MouseEventArgs e)
+        {
+            logoutButton.Source = new BitmapImage(new Uri("/Views/LogoutIcon.png", UriKind.Relative));
         }
     }
 }
