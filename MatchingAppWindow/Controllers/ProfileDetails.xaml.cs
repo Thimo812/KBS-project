@@ -76,6 +76,11 @@ namespace MatchingAppWindow.Views
             detailList.ItemsSource = GetProfileDetails();
         }
 
+        public void NewChatRequest(object sender, RoutedEventArgs e)
+        {
+            MainWindow.repo.CreateMessageRequest(MainWindow.profile.UserName, selectedProfile.UserName);
+        }
+        
         public void PreviousImage(object sender, RoutedEventArgs e)
         {
             if (currentImage == 0) return;

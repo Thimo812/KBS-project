@@ -572,6 +572,71 @@ namespace MatchingApp.DataAccess.SQL
 
             }
         }
+        
+        //creates a new message request with a status of 0 (Sent)
+        public void CreateMessageRequest(string sender, string receiver)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "INSERT INTO MessageRequests (Sender, Receiver, Status) " +
+                        "VALUES (@Sender, @Receiver, @Status)";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Sender", sender);
+                    command.Parameters.AddWithValue("Receiver", receiver);
+                    command.Parameters.AddWithValue("Status", 0);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        // gets a list of every message request send to the receiver
+        public List<string> GetMessageRequest(string receiver)
+        {
+            List<string> requests = new List<string>();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT Sender FROM MessageRequests WHERE Receiver = @Receiver";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Receiver", receiver);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            requests.Add(reader.GetString(0));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return requests;
+        }
+
+        public void UpdateMessageRequest(int status, string receiver, string sender)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "UPDATE MessageRequests SET Status = @Status WHERE Receiver = @receiver AND Sender = @Sender";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Status", status);
+                    command.Parameters.AddWithValue("Receiver", receiver);
+                    command.Parameters.AddWithValue("Sender", sender);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
 
         public bool ValidateUserName(string userName)
         {
