@@ -180,7 +180,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <ScrollViewer Grid.Column="0" Background="#1D2228">
+        <ScrollViewer Grid.Column="0" Background="#252C33">
             <ListBox x:Name="contactList" Background="Transparent" ItemsSource="{Binding Contacts}" SelectionChanged="SelectContact" BorderThickness="0">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>

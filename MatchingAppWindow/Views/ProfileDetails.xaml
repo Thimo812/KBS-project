@@ -9,7 +9,7 @@
       Title="ProfileDetails"
       Background="White">
 
-    <Grid d:Name="Grid" Background="LightGray">
+    <Grid d:Name="Grid" Background="#2C343D">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -41,28 +41,30 @@
             </Button>
 
         </Grid>
-            
-        
-        <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center" BorderThickness="2" BorderBrush="DarkGray" Background="White" Height="auto"/>
-        <TextBlock x:Name="descriptionBlock" Grid.Row="2" Text="" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="5" Width="300"/>
-        <ItemsControl x:Name="interestBlock" Grid.Row="3" BorderThickness="2" BorderBrush="DarkGray" Background="White">
+
+
+        <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center" BorderThickness="3"  Background="#434E5B" BorderBrush="#252C33" Foreground="White" Height="auto"/>
+        <Border CornerRadius="10" Grid.Row="2" Background="#434E5B"   >
+            <TextBlock x:Name="descriptionBlock" Text="" TextWrapping="Wrap"  HorizontalAlignment="Stretch" Margin="5" Foreground="White" Padding="4"/>
+        </Border>
+        <ItemsControl x:Name="interestBlock" Grid.Row="3" BorderThickness="3" BorderBrush="#252C33" Background="#434E5B">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Border CornerRadius="10" Background="Gray" Margin="1,1,1,1">
-                        <Label Content="{Binding}"  />
+            <ItemsControl.ItemTemplate >
+                <DataTemplate >
+                    <Border CornerRadius="10" Background="#AD0090" BorderBrush="#AD0090" Margin="1,1,1,1">
+                        <Label Content="{Binding}" Foreground="White" />
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <ItemsControl x:Name="detailList" Grid.Row="4" BorderThickness="2" BorderBrush="DarkGray" Background="White">
+        <ItemsControl x:Name="detailList" Grid.Row="4" BorderThickness="2" Background="#434E5B" BorderBrush="#434E5B" Foreground="White">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Label Content="{Binding}"/>
+                    <Label Content="{Binding}" Foreground="White"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -71,8 +73,24 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="chatrequest" Grid.Column="0" Content="ChatReq" />
+            
+            
+            <Border CornerRadius="15">
+                <Button x:Name="chatrequest" Grid.Column="0" Content="ChatReq" Foreground="White" Background="#AD0090" BorderBrush="#AD0090" Margin="0,10,0,0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Border>
+            
+            
             <Button x:Name="likebutton" Grid.Column="1" Content="Hartjuh" />
+            
+            
         </Grid>
     </Grid>
 </Page>
