@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MatchingAppWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Frame x:Name="Main" Margin="0,10,0,0" NavigationUIVisibility="Hidden"/>
-    </Grid>
+        Title="MainWindow" Height="600" Width="1000" MinWidth="1000" MinHeight="600">
+
+    <Image x:Name="testIMG"/>
+
 </Window>

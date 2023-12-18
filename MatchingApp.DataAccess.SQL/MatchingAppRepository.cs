@@ -13,6 +13,7 @@ using KBS_project.Exceptions;
 using System.Data.SqlTypes;
 using Renci.SshNet;
 using System.Diagnostics;
+using System.Data;
 
 namespace MatchingApp.DataAccess.SQL
 {
@@ -31,14 +32,12 @@ namespace MatchingApp.DataAccess.SQL
 		}
 
         public string AgeToDate(int age)
-		{
+        {
             var today = DateTime.Today;
             var byear = today.Year - age;
-			DateTime date = new DateTime(byear, today.Month, today.Day);
-            var dateString = date.ToString("yyyy-MM-dd");
-            return dateString;
+            return new DateTime(byear, today.Month, today.Day).ToString("yyyy-MM-dd");
         }
-		public Profile GetProfile(string userName)
+        public Profile GetProfile(string userName)
 		{
 			Profile profile;
 
@@ -122,75 +121,51 @@ namespace MatchingApp.DataAccess.SQL
             return profiles;
         }
 
-        public List<string> GetProfiles(Profile profile, LocationFilter location, int minimumAge, int maximumAge, 
-			List<int> includedHobbys, List<int> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets)
+        public List<string> GetProfiles(Profile profile, LocationFilter location, int minimumAge, int maximumAge,
+            List<int> includedHobbies, List<int> excludedHobbies, List<Diet> includedDiets, List<Diet> excludedDiets)
         {
-            List<string> results = new();
+            List<string> results = new List<string>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = $"SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel WHERE 1 = 1 ";
+                var sql = new StringBuilder("SELECT DISTINCT Gebruikersnaam FROM Profiel WHERE 1 = 1 ");
 
+                // Location
                 if (location != LocationFilter.Global)
                 {
-                    if (location == LocationFilter.City) { sql += $"AND Woonplaats = '{profile.City}' AND Land = '{profile.Country}' "; }
-                    if (location == LocationFilter.Country) { sql += $"AND Land = '{profile.Country}' "; }
-                }
-                if (minimumAge != 0)
-                {
-                    sql += $"AND Geboortedatum <= '{AgeToDate(minimumAge)}' ";
-                }
-                if (maximumAge != 0)
-                {
-                    sql += $"AND Geboortedatum >= '{AgeToDate(maximumAge)}' ";
-                }
-
-                if (includedHobbys.Count > 0)
-                {
-                    sql += $"AND Profiel.Gebruikersnaam IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE id IN ({string.Join(",", includedHobbys.Select(h => $"'{h}'"))})) ";
-                }
-
-                if (excludedHobbys.Count > 0)
-                {
-                    sql += $"AND Profiel.Gebruikersnaam NOT IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE id IN ({string.Join(",", excludedHobbys.Select(h => $"'{h}'"))})) ";
-                }
-                if (includedDiets.Count > 0)
-                {
-                    sql += $"AND (";
-
-                    bool isFirst = true;
-                    foreach (var inclDiet in includedDiets)
+                    sql.Append(location switch
                     {
-                        if (isFirst)
-                        {
-                            sql += $"Dieet = '{(int)inclDiet}'";
-                            isFirst = false;
-                        }
-                        else
-                        {
-                            sql += $"OR Dieet = '{(int)inclDiet}'";
-                        }
-                    }
-                    sql += ")";
-                }
-                if (excludedDiets.Count > 0)
-                {
-                    foreach (var exclDiet in excludedDiets)
-                    {
-                        sql += $"AND (Dieet is NULL OR NOT Dieet = '{(int)exclDiet}')";
-                    }
+                        LocationFilter.City => $"AND Woonplaats = '{profile.City}' AND Land = '{profile.Country}' ",
+                        LocationFilter.Country => $"AND Land = '{profile.Country}' ",
+                        _ => ""
+                    });
                 }
 
-                if (profile.GetPreferredGender() != PreferredGender.Both)
-                {
-                    sql += $" AND (Geslacht = '{(int)profile.GetPreferredGender()}')";
-                }
+                sql.Append(minimumAge != 0 ? $"AND Geboortedatum <= '{AgeToDate(minimumAge)}' " : "");
+                sql.Append(maximumAge != 0 ? $"AND Geboortedatum >= '{AgeToDate(maximumAge)}' " : "");
 
-                sql += $"AND Profiel.Gebruikersnaam != '{profile.UserName}' ";
+                sql.Append(includedHobbies.Count > 0
+                    ? $"AND Gebruikersnaam IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE id IN ({string.Join(",", includedHobbies)})) "
+                    : "");
 
+                sql.Append(excludedHobbies.Count > 0
+                    ? $"AND Gebruikersnaam NOT IN (SELECT ProfielGebruikersnaam FROM Hobbies WHERE id IN ({string.Join(",", excludedHobbies)})) "
+                    : "");
+
+                sql.Append(includedDiets.Count > 0
+                    ? $"AND ({string.Join(" OR ", includedDiets.Select(inclDiet => $"Dieet = '{(int)inclDiet}'"))})"
+                    : "");
+
+                sql.Append(string.Join("", excludedDiets.Select(exclDiet => $"AND (Dieet IS NULL OR NOT Dieet = '{(int)exclDiet}')")));
+
+                sql.Append(profile.GetPreferredGender() != PreferredGender.Both
+                    ? $" AND (Geslacht = '{(int)profile.GetPreferredGender()}')"
+                    : "");
+
+                sql.Append($"AND Gebruikersnaam != '{profile.UserName}' ");
 
                 connection.Open();
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                using (SqlCommand command = new SqlCommand(sql.ToString(), connection))
                 {
                     command.ExecuteNonQuery();
 
@@ -204,8 +179,10 @@ namespace MatchingApp.DataAccess.SQL
                 }
                 connection.Close();
             }
+
             return results;
         }
+
 
         private Profile ProfileFromQuery(SqlDataReader reader)
         {
@@ -252,7 +229,7 @@ namespace MatchingApp.DataAccess.SQL
 
             try
             {
-                diet = (Diet) reader.GetInt16(12);
+                diet = (Diet)reader.GetInt16(12);
             }
             catch (SqlNullValueException ex) { diet = null; }
 
@@ -266,14 +243,16 @@ namespace MatchingApp.DataAccess.SQL
 
         }
 
-		public void SaveProfile(Profile profile)
+      
+
+
+        public void SaveProfile(Profile profile)
 		{
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "INSERT INTO Profiel (Gebruikersnaam, Naam, Achternaam, Tussenvoegsels, Geboortedatum, Seksuele_preferentie, Geslacht, Woonplaats, Land, Postcode) " +
-                        "VALUES (@Gebruikersnaam, @Naam, @Achternaam, @Tussenvoegsels, @Geboortedatum, @Sekspref, @Geslacht, @Woonplaats, @land, @postcode)";
                 connection.Open();
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                using (SqlCommand command = new SqlCommand("INSERT INTO Profiel (Gebruikersnaam, Naam, Achternaam, Tussenvoegsels, Geboortedatum, Seksuele_preferentie, Geslacht, Woonplaats, Land, Postcode) " +
+                        "VALUES (@Gebruikersnaam, @Naam, @Achternaam, @Tussenvoegsels, @Geboortedatum, @Sekspref, @Geslacht, @Woonplaats, @land, @postcode)", connection))
                 {
 					command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
                     command.Parameters.AddWithValue("Naam", profile.FirstName);
@@ -287,9 +266,7 @@ namespace MatchingApp.DataAccess.SQL
                     command.Parameters.AddWithValue("postcode", profile.PostalCode);
                     command.ExecuteNonQuery();
 				}
-				connection.Close();
             }
-
             StoreImages(profile);
         }
 
@@ -299,11 +276,8 @@ namespace MatchingApp.DataAccess.SQL
 
             using(SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "Select ID FROM Hobbies WHERE ProfielGebruikersnaam = @userName";
-
                 connection.Open();
-
-                using(SqlCommand command = new SqlCommand(sql, connection))
+                using(SqlCommand command = new SqlCommand("Select ID FROM Hobbies WHERE ProfielGebruikersnaam = @userName", connection))
                 {
                     command.Parameters.AddWithValue("userName", userName);
                     command.ExecuteNonQuery();
@@ -318,24 +292,23 @@ namespace MatchingApp.DataAccess.SQL
                 }
             }
             return results;
-        }
-
-        
-        public void UpdateProfile(Profile profile) 
+        } 
+       
+        public void UpdateProfile(Profile profile)
         {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "UPDATE profiel SET Gebruikersnaam = @Gebruikersnaam, Naam = @Naam, Achternaam = @Achternaam, Tussenvoegsels = @Tussenvoegsels," +
-                    " Geboortedatum = @Geboortedatum, Seksuele_preferentie = @Sekspref, Geslacht = @Geslacht, Woonplaats = @Woonplaats, Land = @Land, Postcode = @Postcode," +
-                    " Beschrijving = @Beschrijving, Opleiding = @Opleiding, School = @School, Werkplek = @Werkplek, Dieet = @Dieet WHERE Gebruikersnaam = @Gebruikersnaam";
                 connection.Open();
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                using (SqlCommand command = new SqlCommand(
+                    "UPDATE profiel SET Gebruikersnaam = @Gebruikersnaam, Naam = @Naam, Achternaam = @Achternaam, Tussenvoegsels = @Tussenvoegsels," +
+                    " Geboortedatum = @Geboortedatum, Seksuele_preferentie = @Sekspref, Geslacht = @Geslacht, Woonplaats = @Woonplaats, Land = @Land, Postcode = @Postcode," +
+                    " Beschrijving = @Beschrijving, Opleiding = @Opleiding, School = @School, Werkplek = @Werkplek, Dieet = @Dieet WHERE Gebruikersnaam = @Gebruikersnaam", connection))
                 {
                     command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
                     command.Parameters.AddWithValue("Naam", profile.FirstName);
                     command.Parameters.AddWithValue("Achternaam", profile.LastName); 
                     command.Parameters.AddWithValue("Tussenvoegsels", profile.Infix);
-                    command.Parameters.AddWithValue("Geboortedatum", $"{profile.BirthDate.Year}-{profile.BirthDate.Month}-{profile.BirthDate.Day}");
+                    command.Parameters.AddWithValue("Geboortedatum", $"{profile.BirthDate:yyyy-MM-dd}");
                     command.Parameters.AddWithValue("Sekspref", profile.SexualPreference);
                     command.Parameters.AddWithValue("Geslacht", profile.Gender);
                     command.Parameters.AddWithValue("Woonplaats", profile.City);
@@ -348,8 +321,6 @@ namespace MatchingApp.DataAccess.SQL
                     command.Parameters.AddWithValue("Dieet", profile.Diet == null ? String.Empty : profile.Diet);
                     command.ExecuteNonQuery();
                 }
-                connection.Close();
-            }
 
             UpdateHobbies(profile);  
             UpdateImages(profile);
@@ -359,31 +330,24 @@ namespace MatchingApp.DataAccess.SQL
         {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "DELETE FROM Hobbies WHERE ProfielGebruikersnaam = @userName";
-
                 connection.Open();
 
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                using (SqlCommand command = new SqlCommand("DELETE FROM Hobbies WHERE ProfielGebruikersnaam = @userName", connection))
                 {
                     command.Parameters.AddWithValue("userName", profile.UserName);
-
                     command.ExecuteNonQuery();
                 }
 
-                sql = "INSERT INTO Hobbies (ID, Hobby, ProfielGebruikersnaam) VALUES (@ID, @Hobby, @userName)";
-
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                using (SqlCommand command = new SqlCommand("INSERT INTO Hobbies (ID, Hobby, ProfielGebruikersnaam) VALUES (@ID, @Hobby, @userName)", connection))
                 {
-                    foreach(var item in profile.Interests)
+                    foreach (var item in profile.Interests)
                     {
                         command.Parameters.AddWithValue("ID", item);
                         command.Parameters.AddWithValue("Hobby", nameof(item));
                         command.Parameters.AddWithValue("userName", profile.UserName);
 
                         command.ExecuteNonQuery();
-
                         command.Parameters.Clear();
-
                     }
                 }
             }
@@ -882,6 +846,115 @@ namespace MatchingApp.DataAccess.SQL
             }
 
             return LatestTimeStamp;
+                
+        private void LikeProfile(string liker, string liked)
+        {
+            bool isThere, isGebruiker1Liked, isGebruiker2Liked;
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                // Check if the like record already exists
+                var sqlCheckExistence = $"SELECT COUNT(*) FROM MatchingDB.dbo.[Like] WHERE (Gebruiker1 = @liker OR Gebruiker1 = @liked) AND (Gebruiker2 = @liker OR Gebruiker2 = @liked)";
+                using (SqlCommand commandExistence = new SqlCommand(sqlCheckExistence, connection))
+                {
+                    commandExistence.Parameters.AddWithValue("liker", liker);
+                    commandExistence.Parameters.AddWithValue("liked", liked);
+                    isThere = (int)commandExistence.ExecuteScalar() > 0;
+                }
+
+                // Retrieve like status
+                var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker2 FROM MatchingDB.dbo.[Like] WHERE Gebruiker1 = @liker OR Gebruiker2 = @liker OR Gebruiker1 = @liked OR Gebruiker2 = @liked";
+                using (SqlCommand commandLikes = new SqlCommand(sqlCheckLikes, connection))
+                {
+                    commandLikes.Parameters.AddWithValue("liker", liker);
+                    commandLikes.Parameters.AddWithValue("liked", liked);
+
+                    using (SqlDataReader readerLikes = commandLikes.ExecuteReader())
+                    {
+                        readerLikes.Read();
+                        isGebruiker1Liked = !readerLikes.IsDBNull(0) && readerLikes.GetString(0) == liker;
+                        isGebruiker2Liked = !readerLikes.IsDBNull(1) && readerLikes.GetString(1) == liker;
+                    }
+                }
+
+                // Insert like record if not exists
+                if (!isThere)
+                {
+                    var sqlInsertLike = $"INSERT INTO [Like] (Gebruiker1, Gebruiker1Liked, Gebruiker2, Gebruiker2Liked) VALUES (@liker, 'true', @liked, 'false');";
+                    using (SqlCommand commandInsertLike = new SqlCommand(sqlInsertLike, connection))
+                    {
+                        commandInsertLike.Parameters.AddWithValue("liker", liker);
+                        commandInsertLike.Parameters.AddWithValue("liked", liked);
+                        commandInsertLike.ExecuteNonQuery();
+                    }
+                }
+
+                // Update like status
+                var sqlUpdateLike = isGebruiker1Liked ? $"UPDATE [Like] SET Gebruiker1Liked = true WHERE Gebruiker1 = @liker AND Gebruiker2 = @liked;"
+                                                      : $"UPDATE [Like] SET Gebruiker2Liked = true WHERE Gebruiker2 = @liker AND Gebruiker1 = @liked;";
+
+                using (SqlCommand commandUpdateLike = new SqlCommand(sqlUpdateLike, connection))
+                {
+                    commandUpdateLike.Parameters.AddWithValue("liker", liker);
+                    commandUpdateLike.Parameters.AddWithValue("liked", liked);
+                    commandUpdateLike.ExecuteNonQuery();
+                }
+
+                connection.Close();
+            }
+        }
+
+
+        private void UnlikeProfile(string disliker, string disliked)
+        {
+            bool isThere, isGebruiker1Liked, isGebruiker2Liked;
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+                var sqlCheckExistence = $"SELECT COUNT(*) FROM MatchingDB.dbo.[Like] WHERE (Gebruiker1 = @disliker OR Gebruiker1 = @disliked) AND (Gebruiker2 = @disliker OR Gebruiker2 = @disliked)";
+                using (SqlCommand commandExistence = new SqlCommand(sqlCheckExistence, connection))
+                {
+                    commandExistence.Parameters.AddWithValue("disliker", disliker);
+                    commandExistence.Parameters.AddWithValue("disliked", disliked);
+                    isThere = (int)commandExistence.ExecuteScalar() > 0;
+                }
+
+                // Retrieve like status
+                var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker2 FROM MatchingDB.dbo.[Like] WHERE Gebruiker1 = @liker OR Gebruiker2 = @liker OR Gebruiker1 = @liked OR Gebruiker2 = @liked";
+                using (SqlCommand commandLikes = new SqlCommand(sqlCheckLikes, connection))
+                {
+                    commandLikes.Parameters.AddWithValue("disliker", disliker);
+                    commandLikes.Parameters.AddWithValue("disliked", disliked);
+
+                    using (SqlDataReader readerLikes = commandLikes.ExecuteReader())
+                    {
+                        readerLikes.Read();
+                        isGebruiker1Liked = !readerLikes.IsDBNull(0) && readerLikes.GetString(0) == disliker;
+                        isGebruiker2Liked = !readerLikes.IsDBNull(1) && readerLikes.GetString(1) == disliker;
+                    }
+                }
+                if (!isThere)
+                {
+                    throw new InvalidDislikeException();
+                }
+                var sqlUpdateLike = isGebruiker1Liked ? $"UPDATE [Like] SET Gebruiker1Liked = false WHERE Gebruiker1 = @disliker AND Gebruiker2 = @disliked;"
+                                                     : $"UPDATE [Like] SET Gebruiker2Liked = false WHERE Gebruiker2 = @disliker AND Gebruiker1 = @disliked;";
+
+                using (SqlCommand commandUpdateLike = new SqlCommand(sqlUpdateLike, connection))
+                {
+                    commandUpdateLike.Parameters.AddWithValue("disliker", disliker);
+                    commandUpdateLike.Parameters.AddWithValue("disliked", disliked);
+                    commandUpdateLike.ExecuteNonQuery();
+                }
+            }
+
+        }
+
+        private void CheckLikeStatus(string liker, string liked)
+        {
+
         }
     }
 }

@@ -24,7 +24,8 @@ namespace MatchingAppWindow.Views
     public partial class Navigation : Page
     {
         private Matchingquiz matchingQuiz = new();
-        public ProfileScreen? ProfileScreen { get; set; }
+        private ProfileScreen profileScreen;
+        private LikesMatchesScreen matchScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
         public ChatScreen ChatScreen { get; private set; } = new();
@@ -38,8 +39,14 @@ namespace MatchingAppWindow.Views
 
         public void SwitchToProfileScreen(object? sender, EventArgs e)
         {
-            if (ProfileScreen == null) ProfileScreen = new();
-            contentFrame.Content = ProfileScreen;
+            if (profileScreen == null) profileScreen = new();
+            contentFrame.Content = profileScreen;
+        }
+
+        public void SwitchToLikesMatchesScreen(object? sender, EventArgs e)
+        {
+            if (matchScreen == null) matchScreen = new();
+            contentFrame.Content = matchScreen;
         }
 
         public void InitScreens()
@@ -63,6 +70,7 @@ namespace MatchingAppWindow.Views
 
             matchingQuiz.ExitPage += (sender, e) => contentFrame.Content = profileEditScreen;
 
+            SwitchToLikesMatchesScreen(this, EventArgs.Empty);
             SwitchToProfileScreen(this, EventArgs.Empty);
         }
 
