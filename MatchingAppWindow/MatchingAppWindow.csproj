@@ -14,6 +14,9 @@
     <None Remove="Views\LogoutIcon.png" />
     <None Remove="Views\LogoutIconFocus.png" />
     <None Remove="Views\PlusIcon.png" />
+    <None Remove="Views\SendMessageIcon.png" />
+    <None Remove="Views\SendMessageIconFocus.png" />
+    <None Remove="Views\SendMessageIconUnabled.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +33,9 @@
     <Resource Include="Views\LogoutIcon.png" />
     <Resource Include="Views\LogoutIconFocus.png" />
     <Resource Include="Views\PlusIcon.png" />
+    <Resource Include="Views\SendMessageIcon.png" />
+    <Resource Include="Views\SendMessageIconFocus.png" />
+    <Resource Include="Views\SendMessageIconUnabled.png" />
   </ItemGroup>
 
 </Project>
