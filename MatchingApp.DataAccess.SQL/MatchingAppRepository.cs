@@ -122,14 +122,20 @@ namespace MatchingApp.DataAccess.SQL
         }
 
         public List<string> GetProfiles(Profile profile, LocationFilter location, int minimumAge, int maximumAge,
-            List<int> includedHobbies, List<int> excludedHobbies, List<Diet> includedDiets, List<Diet> excludedDiets)
+            List<int> includedHobbies, List<int> excludedHobbies, List<Diet> includedDiets, List<Diet> excludedDiets, bool likebutt, bool matchbutt)
         {
             List<string> results = new List<string>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
                 var sql = new StringBuilder("SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel ");
-                if (true)
+                if (likebutt)
+                {
+                    sql.Append("JOIN MatchingDB.dbo.[Like] ON Profiel.Gebruikersnaam = [Like].Gebruiker1 OR Profiel.Gebruikersnaam = [Like].Gebruiker2 "
+                    + $"WHERE (Gebruiker1 = '{profile.UserName}' OR Gebruiker2 = '{profile.UserName}') "
+                    + "AND (Gebruiker1Liked = 'true' OR Gebruiker2Liked = 'true') ");
+                }
+                else if (matchbutt)
                 {
                     sql.Append("JOIN MatchingDB.dbo.[Like] ON Profiel.Gebruikersnaam = [Like].Gebruiker1 OR Profiel.Gebruikersnaam = [Like].Gebruiker2 "
                     + $"WHERE (Gebruiker1 = '{profile.UserName}' OR Gebruiker2 = '{profile.UserName}') "
@@ -139,6 +145,7 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     sql.Append($"WHERE 1 = 1 ");
                 }
+
 
                 // Location
                 if (location != LocationFilter.Global)

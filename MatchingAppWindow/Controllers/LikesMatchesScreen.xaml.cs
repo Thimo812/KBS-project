@@ -37,6 +37,8 @@ namespace MatchingAppWindow.Views
         private List<int> excludedHobbies = new();
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
+        bool likebutt = true;
+        bool matchbutt = false;
 
         private ProfileDetails profileDetails = new();
         private Navigation navigation = new();
@@ -204,7 +206,7 @@ namespace MatchingAppWindow.Views
         //Save the filteroptions and show the matching profiles
         private void Filter()
         {
-            List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
+            List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets, likebutt, matchbutt);
 
             resultBox.ItemsSource = results;
 
@@ -259,6 +261,8 @@ namespace MatchingAppWindow.Views
 
         private void filterLikesButton(object s, System.EventArgs e)
         {
+            likebutt = true;
+            matchbutt = false;
             var profileList = repo.FilterLikes(MainWindow.profile);
 
             resultBox.ItemsSource = profileList;
@@ -266,6 +270,8 @@ namespace MatchingAppWindow.Views
 
         private void filterMatchButton(object s, System.EventArgs e)
         {
+            matchbutt = true;
+            likebutt = false;
             var profileList = repo.FilterMatch(MainWindow.profile);
 
             resultBox.ItemsSource = profileList;
