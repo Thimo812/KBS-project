@@ -319,7 +319,7 @@
                             </TextBox.Template>
                         </TextBox>
                     </Border>
-                    
+
 
                     <Border CornerRadius="15">
                         <Button
@@ -339,9 +339,6 @@
                             </Button.Template>
                         </Button>
                     </Border>
-
-
-
                 </StackPanel>
             </Border>
         </ScrollViewer>

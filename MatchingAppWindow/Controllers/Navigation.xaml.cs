@@ -56,13 +56,13 @@ namespace MatchingAppWindow.Views
             profileEditScreen.InitializePage();
             accountEditScreen.InitializePage();
 
-            profileEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
+            profileEditScreen.confirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
             accountEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
             messageButton.Click += (s, e) => contentFrame.Content = ChatScreen;
 
-            profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
+            //profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
 
             editProfileButton.Click += ToggleProfileButtons;
             editProfileButton.Click += (sender, e) => contentFrame.Content = profileEditScreen;

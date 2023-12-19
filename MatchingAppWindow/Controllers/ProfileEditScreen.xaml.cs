@@ -38,11 +38,14 @@ namespace MatchingAppWindow.Views
 
         public void InitializePage()
         {
-            BeschrijvingBox.Text = MainWindow.profile.Description;
-            OpleidingBox.Text = MainWindow.profile.Degree;
-            SchoolBox.Text = MainWindow.profile.School;
-            WerkplekBox.Text = MainWindow.profile.WorkPlace;
-            SetDiet(MainWindow.profile.Diet);
+            descriptionBox.Text = MainWindow.profile.Description;
+            degreeBox.Text = MainWindow.profile.Degree;
+            schoolBox.Text = MainWindow.profile.School;
+            workPlaceBox.Text = MainWindow.profile.WorkPlace;
+            //SetDiet(MainWindow.profile.Diet);
+
+            Interests.Clear();
+            AvailableInterests.Clear();
 
             foreach (var item in MainWindow.profile.Interests)
             {
@@ -56,30 +59,33 @@ namespace MatchingAppWindow.Views
                     AvailableInterests.Add((Interest)i);
                 }
             }
+            hobbyBox.ItemsSource = Interests;
+            availableHobbyBox.ItemsSource = AvailableInterests;
         }
+
+        private void InitializePage(object sender, RoutedEventArgs e)
+        {
+            InitializePage();
+        } 
 
         public void InterestSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (hobbyPanel.SelectedIndex == -1)
-            {
-                return;
-            }
+            if (hobbyBox.SelectedIndex == -1) return;
 
-            var selectedInterest = Interests[hobbyPanel.SelectedIndex];
+            var selectedInterest = Interests[hobbyBox.SelectedIndex];
 
             AvailableInterests.Add(selectedInterest);
             Interests.Remove(selectedInterest);
-
         }
 
         public void AvailableInterestSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (availableHobbyList.SelectedIndex == -1)
+            if (availableHobbyBox.SelectedIndex == -1)
             {
                 return;
             }
 
-            var selectedInterest = AvailableInterests[availableHobbyList.SelectedIndex];
+            var selectedInterest = AvailableInterests[availableHobbyBox.SelectedIndex];
 
             Interests.Add(selectedInterest);
             AvailableInterests.Remove(selectedInterest);
@@ -97,58 +103,15 @@ namespace MatchingAppWindow.Views
         {
             if (MainWindow.profile != null)
             {
-                MainWindow.profile.Description = BeschrijvingBox.Text;
-                MainWindow.profile.Degree = OpleidingBox.Text;
-                MainWindow.profile.School = SchoolBox.Text;
-                MainWindow.profile.WorkPlace = WerkplekBox.Text;
-                MainWindow.profile.Diet = GetDiet();
+                MainWindow.profile.Description = descriptionBox.Text;
+                MainWindow.profile.Degree = degreeBox.Text;
+                MainWindow.profile.School = schoolBox.Text;
+                MainWindow.profile.WorkPlace = workPlaceBox.Text;
+                //MainWindow.profile.Diet = GetDiet();
                 MainWindow.profile.Interests = Interests.ToList();
 
                 MainWindow.repo.UpdateProfile(MainWindow.profile);
             }
-        }
-
-        public void SetDiet(Diet? diet)
-        {
-            switch(diet)
-            {
-                case Diet.Geen:
-                    NoDiet.IsChecked = true;
-                    break;
-                case Diet.Vegetarisch:
-                    VegieDiet.IsChecked = true;
-                    break;
-                case Diet.Veganistisch:
-                    VeganDiet.IsChecked = true;
-                    break;
-                case Diet.Keto:
-                    KetoDiet.IsChecked = true;
-                    break;
-                default:
-                    OtherDiet.IsChecked = true;
-                    break;
-            }
-        }
-
-        public Diet GetDiet()
-        {
-            if ((bool)NoDiet.IsChecked)
-            {
-                return Diet.Geen;
-            }
-            else if ((bool)VegieDiet.IsChecked)
-            {
-                return Diet.Vegetarisch;
-            }
-            else if ((bool)VeganDiet.IsChecked)
-            {
-                return Diet.Veganistisch;
-            }
-            else if ((bool)KetoDiet.IsChecked)
-            {
-                return Diet.Keto;
-            }
-            return Diet.Anders;
         }
     }
 }

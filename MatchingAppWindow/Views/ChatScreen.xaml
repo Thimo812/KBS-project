@@ -177,23 +177,19 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
                         <Border Name="_Border"
-                        Padding="1"
-                        SnapsToDevicePixels="true"
-                        HorizontalAlignment="Stretch"
-                        Width="auto"
-                        Margin="5"
-                        Background="#434E5B"
-                        CornerRadius="10"
-                        
-                        >
+                                Padding="1"
+                                SnapsToDevicePixels="true"
+                                HorizontalAlignment="Stretch"
+                                Width="auto"
+                                Margin="5"
+                                Background="#434E5B"
+                                CornerRadius="10">
                             <ContentPresenter Name="ContentPresenter" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="true">
                                 <Setter TargetName="_Border" Property="Background" Value=" #6C7D92"/>
-                                <Setter Property="Foreground" Value="Red"/>
                                 <Setter TargetName="ContentPresenter" Property="TextElement.Background" Value="LightGray"/>
-
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
