@@ -559,7 +559,7 @@ namespace MatchingApp.DataAccess.SQL
             }
 
             // gets a list of every message request send to the receiver
-            public List<string> GetMessageRequest(string receiver)
+            public List<string> GetIncomingMessageRequest(string receiver)
             {
                 List<string> requests = new List<string>();
 
@@ -575,9 +575,11 @@ namespace MatchingApp.DataAccess.SQL
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            while (reader.Read())
-                            {
-                                requests.Add(reader.GetString(0));
+                            if (reader.HasRows) {
+                                while (reader.Read())
+                                {
+                                    requests.Add(reader.GetString(0));
+                                }
                             }
                         }
                     }
@@ -586,12 +588,43 @@ namespace MatchingApp.DataAccess.SQL
                 return requests;
             }
 
+            public List<string> GetOutgoingMessageRequest(string sender)
+            {
+                List<string> requests = new List<string>();
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    var sql = "SELECT Receiver FROM MessageRequests WHERE Sender = @Sender";
+
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("Sender", sender);
+                        command.ExecuteNonQuery();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    requests.Add(reader.GetString(0));
+                                }
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+                return requests;
+            }
+
+
             public void UpdateMessageRequest(int status, string receiver, string sender)
             {
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
+                { 
                     var sql = "UPDATE MessageRequests SET Status = @Status WHERE Receiver = @receiver AND Sender = @Sender";
-
+                
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {

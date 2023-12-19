@@ -179,9 +179,8 @@
             <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-
-        <ScrollViewer Grid.Column="0" Background="#1D2228">
-            <ListBox x:Name="contactList" Background="Transparent" ItemsSource="{Binding Contacts}" SelectionChanged="SelectContact" BorderThickness="0">
+        <ScrollViewer Grid.Row="0" Grid.Column="0" Background="#1D2228">
+            <ListBox x:Name="contactList" Grid.Row="1" Background="Transparent" ItemsSource="{Binding Contacts}" SelectionChanged="SelectContact" BorderThickness="0">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel/>
@@ -197,7 +196,7 @@
                                         <ImageBrush ImageSource="{Binding ProfileImage}" />
                                     </Ellipse.Fill>
                                 </Ellipse>
-                                <Label Content="{Binding UserName}" VerticalAlignment="Center" FontSize="18" Foreground="White"/>
+                                <Label Content="{Binding UserName}" VerticalAlignment="Bottom" FontSize="18" Foreground="White"/>
                             </WrapPanel>
                         </Border>
                     </DataTemplate>

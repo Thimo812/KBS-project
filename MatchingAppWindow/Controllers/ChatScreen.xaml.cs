@@ -58,6 +58,8 @@ namespace MatchingAppWindow.Views
         {
             string userName = MainWindow.profile.UserName;
             List<string> contactNames = MainWindow.repo.GetContactNames(userName);
+            List<string> incomingRequests = MainWindow.repo.GetIncomingMessageRequest(userName);
+            List<string> outgoingRequests = MainWindow.repo.GetOutgoingMessageRequest(userName);
 
             foreach(string contactName in contactNames)
             {
@@ -65,6 +67,24 @@ namespace MatchingAppWindow.Views
                 Contact contact = new Contact(contactName, contactImage);
 
                 Contacts.Add(contact);
+            }
+
+            foreach(string incRequest in incomingRequests)
+            {
+                BitmapImage contactImage = ImageConverter.ImageDataToBitmap(MainWindow.repo.GetProfileImageData(incRequest));
+                Contact contact = new Contact(incRequest, contactImage, true, false);
+
+                Contacts.Add(contact);
+
+            }
+
+            foreach (string outRequest in outgoingRequests)
+            {
+                BitmapImage contactImage = ImageConverter.ImageDataToBitmap(MainWindow.repo.GetProfileImageData(outRequest));
+                Contact contact = new Contact(outRequest, contactImage, false, true);
+
+                Contacts.Add(contact);
+
             }
         }
 
@@ -74,7 +94,23 @@ namespace MatchingAppWindow.Views
 
             SelectedContact = Contacts[contactList.SelectedIndex];
 
-            chatWindow.Visibility = Visibility.Visible;
+            if (SelectedContact.IsOutgoingRequest == SelectedContact.IsIncomingRequest)
+            {
+                chatWindow.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                chatWindow.Visibility = Visibility.Hidden;
+                if (SelectedContact.IsIncomingRequest == true)
+                {
+
+                }
+                else // IsOutgoingRequest == true
+                {
+
+                }
+
+            }
         }
 
         private void CheckMessages(object sender, DoWorkEventArgs e)
@@ -141,8 +177,6 @@ namespace MatchingAppWindow.Views
             {
                 SendMessage(sender, new RoutedEventArgs());
             }
-
-            
         }
 
         private void UpdateSendButton(object sender, TextChangedEventArgs e)

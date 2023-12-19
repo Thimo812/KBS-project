@@ -71,7 +71,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="chatrequest" Grid.Column="0" Content="ChatReq" />
+            <Button x:Name="chatrequest" Grid.Column="0" Content="Chatverzoek" Click="NewChatRequest" />
             <Button x:Name="likebutton" Grid.Column="1" Content="Hartjuh" />
         </Grid>
     </Grid>
