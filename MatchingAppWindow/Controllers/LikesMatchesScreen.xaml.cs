@@ -45,7 +45,7 @@ namespace MatchingAppWindow.Views
         {
             InitializeComponent();
 
-            var profileList = repo.GetProfiles(MainWindow.profile);
+            var profileList = repo.FilterLikes(MainWindow.profile);
 
             resultBox.ItemsSource = profileList;
 
@@ -257,16 +257,19 @@ namespace MatchingAppWindow.Views
             }
         }
 
-        private void filterLkes()
+        private void filterLikesButton(object s, System.EventArgs e)
         {
+            var profileList = repo.FilterLikes(MainWindow.profile);
 
+            resultBox.ItemsSource = profileList;
         }
 
-        private void filterMatch()
+        private void filterMatchButton(object s, System.EventArgs e)
         {
+            var profileList = repo.FilterMatch(MainWindow.profile);
 
+            resultBox.ItemsSource = profileList;
         }
-
 
     }
 }

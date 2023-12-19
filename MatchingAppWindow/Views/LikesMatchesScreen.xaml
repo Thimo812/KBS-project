@@ -52,11 +52,13 @@
                         Content="Likes"
                         FontWeight="Bold"
                         Grid.Column="0"
+                        Click="filterLikesButton"
                     />
                     <Button
                         Content="Matches"
                         FontWeight="Bold"
                         Grid.Column="1"
+                        Click="filterMatchButton"
                     />
                 </Grid>
 

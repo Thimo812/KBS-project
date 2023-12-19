@@ -128,7 +128,17 @@ namespace MatchingApp.DataAccess.SQL
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = new StringBuilder("SELECT DISTINCT Gebruikersnaam FROM Profiel WHERE 1 = 1 ");
+                var sql = new StringBuilder("SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel ");
+                if (true)
+                {
+                    sql.Append("JOIN MatchingDB.dbo.[Like] ON Profiel.Gebruikersnaam = [Like].Gebruiker1 OR Profiel.Gebruikersnaam = [Like].Gebruiker2 "
+                    + $"WHERE (Gebruiker1 = '{profile.UserName}' OR Gebruiker2 = '{profile.UserName}') "
+                    + "AND (Gebruiker1Liked = 'true' AND Gebruiker2Liked = 'true') ");
+                }
+                else
+                {
+                    sql.Append($"WHERE 1 = 1 ");
+                }
 
                 // Location
                 if (location != LocationFilter.Global)
@@ -140,7 +150,6 @@ namespace MatchingApp.DataAccess.SQL
                         _ => ""
                     });
                 }
-
                 sql.Append(minimumAge != 0 ? $"AND Geboortedatum <= '{AgeToDate(minimumAge)}' " : "");
                 sql.Append(maximumAge != 0 ? $"AND Geboortedatum >= '{AgeToDate(maximumAge)}' " : "");
 
@@ -162,7 +171,7 @@ namespace MatchingApp.DataAccess.SQL
                     ? $" AND (Geslacht = '{(int)profile.GetPreferredGender()}')"
                     : "");
 
-                sql.Append($"AND Gebruikersnaam != '{profile.UserName}' ");
+                sql.Append($" AND Gebruikersnaam != '{profile.UserName}'");
 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql.ToString(), connection))
@@ -768,6 +777,59 @@ namespace MatchingApp.DataAccess.SQL
 
                 return existingLiker;
             }
+        }
+
+
+        public List<string> FilterLikes(Profile profile)
+        {
+            List<string> profiles = new List<string>();
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT Profiel.* FROM MatchingDB.dbo.Profiel JOIN MatchingDB.dbo.[Like] ON [Like].Gebruiker1 = Profiel.Gebruikersnaam OR [Like].Gebruiker2 = Profiel.Gebruikersnaam "
+                    + "WHERE (Gebruiker1 = @Gebruiker OR Gebruiker2 = @Gebruiker)"
+                    + "AND (Gebruiker1Liked = 'true' OR Gebruiker2Liked = 'true') AND Profiel.Gebruikersnaam != @Gebruiker";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Gebruiker", profile.UserName);
+                    command.ExecuteNonQuery();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            profiles.Add(reader.GetString(0));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return profiles;
+        }
+
+        public List<string> FilterMatch(Profile profile)
+        {
+            List<string> profiles = new List<string>();
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT Profiel.* FROM MatchingDB.dbo.Profiel JOIN MatchingDB.dbo.[Like] ON Profiel.Gebruikersnaam = [Like].Gebruiker1 OR Profiel.Gebruikersnaam = [Like].Gebruiker2 "
+                    + "WHERE (Gebruiker1 = @Gebruiker OR Gebruiker2 = @Gebruiker)"
+                    + "AND (Gebruiker1Liked = 'true' AND Gebruiker2Liked = 'true') AND Profiel.Gebruikersnaam != @Gebruiker;";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Gebruiker", profile.UserName);
+                    command.ExecuteNonQuery();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            profiles.Add(reader.GetString(0));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return profiles;
         }
 
     }
