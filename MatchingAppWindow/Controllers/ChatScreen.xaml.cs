@@ -37,6 +37,8 @@ namespace MatchingAppWindow.Views
 
         private Contact SelectedContact { get; set; }
 
+        private bool AutoScroll { get; set; } = true;
+
         public BackgroundWorker MessageChecker { get; private set; }
 
         private int maxMessageBoxWidth = 400;
@@ -52,6 +54,8 @@ namespace MatchingAppWindow.Views
 
             Loaded += StartChecking;
             Unloaded += StopChecking;
+
+            UpdateSendButton(this, null);
         }
 
         public void InitializePage()
@@ -115,7 +119,6 @@ namespace MatchingAppWindow.Views
 
         private void CheckMessages(object sender, DoWorkEventArgs e)
         {
-
             while (true)
             {
                 if (SelectedContact == null) continue;
@@ -139,6 +142,9 @@ namespace MatchingAppWindow.Views
                 {
                     Messages.Add(message);
                 }
+
+                Contacts = new(Contacts.OrderByDescending(x => MainWindow.repo.GetLatestTimeStamp(MainWindow.profile.UserName, x.UserName)));
+                contactList.ItemsSource = Contacts;
             }
         }
 
@@ -184,11 +190,43 @@ namespace MatchingAppWindow.Views
             if (messageBox.Text.Length == 0)
             {
                 sendButton.IsEnabled = false;
+                sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIconUnabled.png", UriKind.Relative));
             }
             else
             {
                 sendButton.IsEnabled = true;
+                sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIcon.png", UriKind.Relative));
             }
+        }
+
+        private void UpdateScrollViewer(Object sender, ScrollChangedEventArgs e)
+        {
+            if (e.ExtentHeightChange == 0)
+            {
+                if (messageScrollViewer.VerticalOffset == messageScrollViewer.ScrollableHeight)
+                {
+                    AutoScroll = true;
+                }
+                else
+                {
+                    AutoScroll = false;
+                }
+            }
+
+            if (AutoScroll && e.ExtentHeightChange != 0)
+            {
+                messageScrollViewer.ScrollToVerticalOffset(messageScrollViewer.ExtentHeight);
+            }
+        }
+
+        private void SendButtonFocus(object? sender, MouseEventArgs e)
+        {
+            sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIconFocus.png", UriKind.Relative));
+        }
+
+        private void SendButtonFocusLost(object? sender, MouseEventArgs e)
+        {
+            sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIcon.png", UriKind.Relative));
         }
     }
 }

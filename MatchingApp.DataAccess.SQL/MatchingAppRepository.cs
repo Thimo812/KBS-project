@@ -327,251 +327,251 @@ namespace MatchingApp.DataAccess.SQL
             }
         }
 
-            public void UpdateHobbies(Profile profile)
+        public void UpdateHobbies(Profile profile)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    connection.Open();
+                connection.Open();
 
-                    using (SqlCommand command = new SqlCommand("DELETE FROM Hobbies WHERE ProfielGebruikersnaam = @userName", connection))
+                using (SqlCommand command = new SqlCommand("DELETE FROM Hobbies WHERE ProfielGebruikersnaam = @userName", connection))
+                {
+                    command.Parameters.AddWithValue("userName", profile.UserName);
+                    command.ExecuteNonQuery();
+                }
+
+                using (SqlCommand command = new SqlCommand("INSERT INTO Hobbies (ID, Hobby, ProfielGebruikersnaam) VALUES (@ID, @Hobby, @userName)", connection))
+                {
+                    foreach (var item in profile.Interests)
                     {
+                        command.Parameters.AddWithValue("ID", item);
+                        command.Parameters.AddWithValue("Hobby", nameof(item));
+                        command.Parameters.AddWithValue("userName", profile.UserName);
+
+                        command.ExecuteNonQuery();
+                        command.Parameters.Clear();
+                    }
+                }
+            }
+        }
+
+        public void UpdateImages(Profile profile)
+        {
+            if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
+
+            CheckPhotoAlbum(profile);
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "DELETE FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName)";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", profile.UserName);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+
+            StoreImages(profile);
+        }
+
+        public void StoreImages(Profile profile)
+        {
+            if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
+
+            CheckPhotoAlbum(profile);
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+                foreach (var image in profile.Images)
+                {
+                    var sql = $"INSERT INTO Foto(FotoData, FotoAlbumID) VALUES (@imageData, (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName))";
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("imageData", image);
                         command.Parameters.AddWithValue("userName", profile.UserName);
                         command.ExecuteNonQuery();
                     }
+                }
+                connection.Close();
+            }
+        }
 
-                    using (SqlCommand command = new SqlCommand("INSERT INTO Hobbies (ID, Hobby, ProfielGebruikersnaam) VALUES (@ID, @Hobby, @userName)", connection))
+
+        public List<byte[]> GetImages(string userName)
+        {
+            List<byte[]> images = new List<byte[]>();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = $"SELECT FotoData FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @gebruikersnaam)";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("gebruikersnaam", userName);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        foreach (var item in profile.Interests)
+                        while (reader.Read())
                         {
-                            command.Parameters.AddWithValue("ID", item);
-                            command.Parameters.AddWithValue("Hobby", nameof(item));
-                            command.Parameters.AddWithValue("userName", profile.UserName);
+                            byte[] imageData = (byte[])reader["FotoData"];
 
-                            command.ExecuteNonQuery();
-                            command.Parameters.Clear();
+                            images.Add(imageData);
                         }
                     }
                 }
+                connection.Close();
             }
 
-            public void UpdateImages(Profile profile)
+            return images;
+        }
+
+        private void CheckPhotoAlbum(Profile profile)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
+                var sql = $"SELECT COUNT(*) as amount FROM FotoAlbum WHERE ProfielGebruikersnaam = @Gebruikersnaam";
 
-                CheckPhotoAlbum(profile);
+                int amount;
 
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    var sql = "DELETE FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName)";
+                    command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
+                    command.ExecuteNonQuery();
 
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        command.Parameters.AddWithValue("userName", profile.UserName);
-                        command.ExecuteNonQuery();
+                        reader.Read();
+                        amount = (int)reader["amount"];
                     }
-                    connection.Close();
                 }
 
-                StoreImages(profile);
-            }
-
-            public void StoreImages(Profile profile)
-            {
-                if (!ValidateUserName(profile.UserName)) throw new InvalidUserNameException();
-
-                CheckPhotoAlbum(profile);
-
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                if (amount == 0)
                 {
-                    connection.Open();
-                    foreach (var image in profile.Images)
-                    {
-                        var sql = $"INSERT INTO Foto(FotoData, FotoAlbumID) VALUES (@imageData, (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName))";
-                        using (SqlCommand command = new SqlCommand(sql, connection))
-                        {
-                            command.Parameters.AddWithValue("imageData", image);
-                            command.Parameters.AddWithValue("userName", profile.UserName);
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                    connection.Close();
-                }
-            }
+                    var insertAlbumQuery = $"INSERT INTO FotoAlbum (ProfielGebruikersnaam) VALUES (@Gebruikersnaam)";
 
-
-            public List<byte[]> GetImages(string userName)
-            {
-                List<byte[]> images = new List<byte[]>();
-
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    var sql = $"SELECT FotoData FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @gebruikersnaam)";
-
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        command.Parameters.AddWithValue("gebruikersnaam", userName);
-
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                byte[] imageData = (byte[])reader["FotoData"];
-
-                                images.Add(imageData);
-                            }
-                        }
-                    }
-                    connection.Close();
-                }
-
-                return images;
-            }
-
-            private void CheckPhotoAlbum(Profile profile)
-            {
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    var sql = $"SELECT COUNT(*) as amount FROM FotoAlbum WHERE ProfielGebruikersnaam = @Gebruikersnaam";
-
-                    int amount;
-
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    using (SqlCommand command = new SqlCommand(insertAlbumQuery, connection))
                     {
                         command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
                         command.ExecuteNonQuery();
-
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            reader.Read();
-                            amount = (int)reader["amount"];
-                        }
                     }
-
-                    if (amount == 0)
-                    {
-                        var insertAlbumQuery = $"INSERT INTO FotoAlbum (ProfielGebruikersnaam) VALUES (@Gebruikersnaam)";
-
-                        using (SqlCommand command = new SqlCommand(insertAlbumQuery, connection))
-                        {
-                            command.Parameters.AddWithValue("Gebruikersnaam", profile.UserName);
-                            command.ExecuteNonQuery();
-                        }
-                    }
-
-                    connection.Close();
                 }
-            }
 
-            public void SaveMatchingQuiz(List<int> answers, Profile profile)
+                connection.Close();
+            }
+        }
+
+        public void SaveMatchingQuiz(List<int> answers, Profile profile)
+        {
+            int quizID;
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                int quizID;
-
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                var sql = $"SELECT count(*) FROM MatchingQuiz WHERE ";
+                for (int i = 1; i <= 13; i++)
                 {
-                    var sql = $"SELECT count(*) FROM MatchingQuiz WHERE ";
-                    for (int i = 1; i <= 13; i++)
-                    {
-                        sql = sql + $"Vraag{i} = @vraag{i} AND ";
-                    }
-                    sql = sql + "1 = 1";
-
-                    int amount;
-
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        for (int i = 0; i < answers.Count; i++)
-                        {
-                            command.Parameters.AddWithValue($"vraag{i + 1}", answers[i]);
-                        }
-                        command.ExecuteNonQuery();
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            reader.Read();
-                            amount = reader.GetInt32(0);
-                        }
-                    }
-
-                    if (amount > 0)
-                    {
-                        connection.Close();
-                        return;
-                    }
-
-                    sql = $"INSERT INTO MatchingQuiz (Vraag1, Vraag2, Vraag3, Vraag4, Vraag5, Vraag6, Vraag7, Vraag8, Vraag9, Vraag10, Vraag11, Vraag12, Vraag13) VALUES (@Vraag1, @Vraag2, @Vraag3, @Vraag4, @Vraag5, @Vraag6, @Vraag7, @Vraag8, @Vraag9, @Vraag10, @Vraag11, @Vraag12, @Vraag13)";
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        for (int i = 0; i < answers.Count; i++)
-                        {
-                            command.Parameters.AddWithValue($"Vraag{i + 1}", answers[i]);
-                        }
-                        command.ExecuteNonQuery();
-                    }
-
-                    sql = "SELECT MAX(ID) FROM MatchingQuiz";
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        command.ExecuteNonQuery();
-
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            reader.Read();
-                            quizID = reader.GetInt32(0);
-                        }
-                    }
-
-                    sql = "UPDATE Profiel SET QuizID = @quizID WHERE Gebruikersnaam = @userName";
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        command.Parameters.AddWithValue("quizID", quizID);
-                        command.Parameters.AddWithValue("userName", profile.UserName);
-
-                        command.ExecuteNonQuery();
-                    }
-
+                    sql = sql + $"Vraag{i} = @vraag{i} AND ";
                 }
-            }
+                sql = sql + "1 = 1";
 
-            //creates a new message request with a status of 0 (Sent)
-            public void CreateMessageRequest(string sender, string receiver)
-            {
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                int amount;
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    var sql = "INSERT INTO MessageRequests (Sender, Receiver, Status) " +
-                            "VALUES (@Sender, @Receiver, @Status)";
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    for (int i = 0; i < answers.Count; i++)
                     {
-                        command.Parameters.AddWithValue("Sender", sender);
-                        command.Parameters.AddWithValue("Receiver", receiver);
-                        command.Parameters.AddWithValue("Status", 0);
-                        command.ExecuteNonQuery();
+                        command.Parameters.AddWithValue($"vraag{i + 1}", answers[i]);
                     }
+                    command.ExecuteNonQuery();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        amount = reader.GetInt32(0);
+                    }
+                }
+
+                if (amount > 0)
+                {
                     connection.Close();
+                    return;
                 }
+
+                sql = $"INSERT INTO MatchingQuiz (Vraag1, Vraag2, Vraag3, Vraag4, Vraag5, Vraag6, Vraag7, Vraag8, Vraag9, Vraag10, Vraag11, Vraag12, Vraag13) VALUES (@Vraag1, @Vraag2, @Vraag3, @Vraag4, @Vraag5, @Vraag6, @Vraag7, @Vraag8, @Vraag9, @Vraag10, @Vraag11, @Vraag12, @Vraag13)";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    for (int i = 0; i < answers.Count; i++)
+                    {
+                        command.Parameters.AddWithValue($"Vraag{i + 1}", answers[i]);
+                    }
+                    command.ExecuteNonQuery();
+                }
+
+                sql = "SELECT MAX(ID) FROM MatchingQuiz";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        reader.Read();
+                        quizID = reader.GetInt32(0);
+                    }
+                }
+
+                sql = "UPDATE Profiel SET QuizID = @quizID WHERE Gebruikersnaam = @userName";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("quizID", quizID);
+                    command.Parameters.AddWithValue("userName", profile.UserName);
+
+                    command.ExecuteNonQuery();
+                }
+
             }
+        }
+
+        //creates a new message request with a status of 0 (Sent)
+        public void CreateMessageRequest(string sender, string receiver)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "INSERT INTO MessageRequests (Sender, Receiver, Status) " +
+                        "VALUES (@Sender, @Receiver, @Status)";
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Sender", sender);
+                    command.Parameters.AddWithValue("Receiver", receiver);
+                    command.Parameters.AddWithValue("Status", 0);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
 
             // gets a list of every message request send to the receiver
             public List<string> GetIncomingMessageRequest(string receiver)
             {
                 List<string> requests = new List<string>();
 
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    var sql = "SELECT Sender FROM MessageRequests WHERE Receiver = @Receiver";
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT Sender FROM MessageRequests WHERE Receiver = @Receiver";
 
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        command.Parameters.AddWithValue("Receiver", receiver);
-                        command.ExecuteNonQuery();
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Receiver", receiver);
+                    command.ExecuteNonQuery();
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
@@ -637,215 +637,218 @@ namespace MatchingApp.DataAccess.SQL
                 }
             }
 
-            public bool ValidateUserName(string userName)
-            {
-                List<string> profiles = GetProfiles();
-                return profiles.Any(x => x == userName);
-            }
+        public bool ValidateUserName(string userName)
+        {
+            List<string> profiles = GetProfiles();
+            return profiles.Any(x => x == userName);
+        }
 
-            public List<int> GetMatchingQuiz(string userName)
-            {
-                List<int> answers = new List<int>();
+        public List<int> GetMatchingQuiz(string userName)
+        {
+            List<int> answers = new List<int>();
 
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT * FROM MatchingQuiz WHERE ID = (SELECT QuizID FROM Profiel WHERE Gebruikersnaam = @userName)";
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    var sql = "SELECT * FROM MatchingQuiz WHERE ID = (SELECT QuizID FROM Profiel WHERE Gebruikersnaam = @userName)";
+                    command.Parameters.AddWithValue("userName", userName);
+                    command.ExecuteNonQuery();
 
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        command.Parameters.AddWithValue("userName", userName);
-                        command.ExecuteNonQuery();
-
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            reader.Read();
-                            for (int i = 0; i < 13; i++)
-                            {
-                                try
-                                {
-                                    answers.Add(reader.GetInt16(i));
-                                }
-                                catch (InvalidOperationException)
-                                {
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                return answers;
-            }
-
-            public Dictionary<int, string> GetHobbies()
-            {
-                Dictionary<int, string> hobbies = new();
-
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    var sql = "SELECT DISTINCT Hobby FROM Hobbies";
-
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            int i = 0;
-                            while (reader.Read())
-                            {
-                                string name = reader.GetString(0);
-
-                                hobbies.Add(i, name);
-                                i++;
-                            }
-                        }
-                    }
-                }
-                return hobbies;
-            }
-
-            public List<Diet> GetDiets()
-            {
-                List<Diet> diets = new();
-
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    var sql = "SELECT DISTINCT Dieet FROM Profiel";
-
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                if (reader.IsDBNull(0) == false)
-                                {
-                                    int diet = reader.GetInt16(reader.GetOrdinal("Dieet"));
-                                    diets.Add((Diet)diet);
-                                }
-                            }
-                        }
-                    }
-                }
-                return diets;
-            }
-
-            public byte[] GetProfileImageData(string userName)
-            {
-                byte[] imageData;
-
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    var sql = "SELECT FotoData FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName)";
-
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(sql, connection))
-                    {
-                        command.Parameters.AddWithValue("userName", userName);
-                        command.ExecuteNonQuery();
-
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        reader.Read();
+                        for (int i = 0; i < 13; i++)
                         {
                             try
                             {
-                                reader.Read();
-                                imageData = (byte[])reader["FotoData"];
+                                answers.Add(reader.GetInt16(i));
                             }
                             catch (InvalidOperationException)
                             {
-                                connection.Close();
-                                imageData = null;
+                                break;
                             }
                         }
                     }
-                    connection.Close();
                 }
-
-                return imageData;
             }
+            return answers;
+        }
 
-            public List<string> GetContactNames(string userName)
+        public Dictionary<int, string> GetHobbies()
+        {
+            Dictionary<int, string> hobbies = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                List<string> activeChats = new();
+                var sql = "SELECT DISTINCT Hobby FROM Hobbies";
 
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    var sql = "SELECT Gebruiker1 FROM Conversatie WHERE Gebruiker2 = @userName AND IsActief = 1 UNION SELECT Gebruiker2 FROM Conversatie WHERE Gebruiker1 = @userName AND IsActief = 1";
-
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        command.Parameters.AddWithValue("userName", userName);
-                        command.ExecuteNonQuery();
-
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        int i = 0;
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                activeChats.Add(reader.GetString(0));
-                            }
+                            string name = reader.GetString(0);
+
+                            hobbies.Add(i, name);
+                            i++;
                         }
                     }
-                    connection.Close();
                 }
-
-                return activeChats;
             }
+            return hobbies;
+        }
 
-            public List<Message> GetMessages(string user, string contact)
+        public List<Diet> GetDiets()
+        {
+            List<Diet> diets = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                List<Message> messages = new();
+                var sql = "SELECT DISTINCT Dieet FROM Profiel";
 
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    var sql = "SELECT Bericht, Tijdstip, Verzender FROM Bericht WHERE (Verzender = @user AND Ontvanger = @contact) OR (Verzender = @contact AND Ontvanger = @user) ORDER BY Tijdstip";
-
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        command.Parameters.AddWithValue("user", user);
-                        command.Parameters.AddWithValue("contact", contact);
-                        command.ExecuteNonQuery();
-
-                        using (SqlDataReader reader = command.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
+                            if (reader.IsDBNull(0) == false)
                             {
-                                string content = reader.GetString(0);
-                                DateTime timeStamp = reader.GetDateTime(1);
-                                bool isSender = reader.GetString(2) == user;
-                                messages.Add(new Message(timeStamp, content, isSender));
+                                int diet = reader.GetInt16(reader.GetOrdinal("Dieet"));
+                                diets.Add((Diet)diet);
                             }
                         }
                     }
-                    connection.Close();
                 }
-                return messages;
             }
+            return diets;
+        }
 
-            public void SendMessage(Message message, string sender, string receiver)
+        public byte[] GetProfileImageData(string userName)
+        {
+            byte[] imageData;
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-                {
-                    var sql = "INSERT INTO Bericht (Verzender, Ontvanger, Tijdstip, Bericht) VALUES (@sender, @receiver, @timeStamp, @content)";
+                var sql = "SELECT FotoData FROM Foto WHERE FotoAlbumID = (SELECT ID FROM FotoAlbum WHERE ProfielGebruikersnaam = @userName)";
 
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        command.Parameters.AddWithValue("sender", sender);
-                        command.Parameters.AddWithValue("receiver", receiver);
-                        command.Parameters.AddWithValue("timeStamp", message.TimeStamp.ToString("yyyy-MM-ddTHH:mm:ss"));
-                        command.Parameters.AddWithValue("content", message.Content);
-                        command.ExecuteNonQuery();
+                        try
+                        {
+                            reader.Read();
+                            imageData = (byte[])reader["FotoData"];
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            connection.Close();
+                            imageData = null;
+                        }
                     }
-                    connection.Close();
                 }
+                connection.Close();
             }
+
+            return imageData;
+        }
+
+        public List<string> GetContactNames(string userName)
+        {
+            List<string> activeChats = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT Gebruiker1 FROM Conversatie WHERE Gebruiker2 = @userName AND IsActief = 1 UNION SELECT Gebruiker2 FROM Conversatie WHERE Gebruiker1 = @userName AND IsActief = 1";
+
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("userName", userName);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            activeChats.Add(reader.GetString(0));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+
+            activeChats = activeChats.OrderByDescending(x => GetLatestTimeStamp(userName, x)).ToList();
+
+            return activeChats;
+        }
+
+        public List<Message> GetMessages(string user, string contact)
+        {
+            List<Message> messages = new();
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT Bericht, Tijdstip, Verzender FROM Bericht WHERE (Verzender = @user AND Ontvanger = @contact) OR (Verzender = @contact AND Ontvanger = @user) ORDER BY Tijdstip";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("user", user);
+                    command.Parameters.AddWithValue("contact", contact);
+                    command.ExecuteNonQuery();
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string content = reader.GetString(0);
+                            DateTime timeStamp = reader.GetDateTime(1);
+                            bool isSender = reader.GetString(2) == user;
+                            messages.Add(new Message(timeStamp, content, isSender));
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return messages;
+        }
+
+        public void SendMessage(Message message, string sender, string receiver)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "INSERT INTO Bericht (Verzender, Ontvanger, Tijdstip, Bericht) VALUES (@sender, @receiver, @timeStamp, @content)";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("sender", sender);
+                    command.Parameters.AddWithValue("receiver", receiver);
+                    command.Parameters.AddWithValue("timeStamp", message.TimeStamp.ToString("yyyy-MM-ddTHH:mm:ss"));
+                    command.Parameters.AddWithValue("content", message.Content);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+
+        }
 
         public DateTime? GetLatestTimeStamp(string user, string contact)
         {
@@ -860,7 +863,11 @@ namespace MatchingApp.DataAccess.SQL
                 {
                     command.Parameters.AddWithValue("user", user);
                     command.Parameters.AddWithValue("contact", contact);
-                    command.ExecuteNonQuery();
+                    try
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                    catch (SqlException) { }
 
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
@@ -881,114 +888,115 @@ namespace MatchingApp.DataAccess.SQL
 
             return LatestTimeStamp;
         }
-                private void LikeProfile(string liker, string liked)
+
+        private void LikeProfile(string liker, string liked)
+        {
+            bool isThere, isGebruiker1Liked, isGebruiker2Liked;
+
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+
+                // Check if the like record already exists
+                var sqlCheckExistence = $"SELECT COUNT(*) FROM MatchingDB.dbo.[Like] WHERE (Gebruiker1 = @liker OR Gebruiker1 = @liked) AND (Gebruiker2 = @liker OR Gebruiker2 = @liked)";
+                using (SqlCommand commandExistence = new SqlCommand(sqlCheckExistence, connection))
                 {
-                    bool isThere, isGebruiker1Liked, isGebruiker2Liked;
+                    commandExistence.Parameters.AddWithValue("liker", liker);
+                    commandExistence.Parameters.AddWithValue("liked", liked);
+                    isThere = (int)commandExistence.ExecuteScalar() > 0;
+                }
 
-                    using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                // Retrieve like status
+                var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker2 FROM MatchingDB.dbo.[Like] WHERE Gebruiker1 = @liker OR Gebruiker2 = @liker OR Gebruiker1 = @liked OR Gebruiker2 = @liked";
+                using (SqlCommand commandLikes = new SqlCommand(sqlCheckLikes, connection))
+                {
+                    commandLikes.Parameters.AddWithValue("liker", liker);
+                    commandLikes.Parameters.AddWithValue("liked", liked);
+
+                    using (SqlDataReader readerLikes = commandLikes.ExecuteReader())
                     {
-                        connection.Open();
-
-                        // Check if the like record already exists
-                        var sqlCheckExistence = $"SELECT COUNT(*) FROM MatchingDB.dbo.[Like] WHERE (Gebruiker1 = @liker OR Gebruiker1 = @liked) AND (Gebruiker2 = @liker OR Gebruiker2 = @liked)";
-                        using (SqlCommand commandExistence = new SqlCommand(sqlCheckExistence, connection))
-                        {
-                            commandExistence.Parameters.AddWithValue("liker", liker);
-                            commandExistence.Parameters.AddWithValue("liked", liked);
-                            isThere = (int)commandExistence.ExecuteScalar() > 0;
-                        }
-
-                        // Retrieve like status
-                        var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker2 FROM MatchingDB.dbo.[Like] WHERE Gebruiker1 = @liker OR Gebruiker2 = @liker OR Gebruiker1 = @liked OR Gebruiker2 = @liked";
-                        using (SqlCommand commandLikes = new SqlCommand(sqlCheckLikes, connection))
-                        {
-                            commandLikes.Parameters.AddWithValue("liker", liker);
-                            commandLikes.Parameters.AddWithValue("liked", liked);
-
-                            using (SqlDataReader readerLikes = commandLikes.ExecuteReader())
-                            {
-                                readerLikes.Read();
-                                isGebruiker1Liked = !readerLikes.IsDBNull(0) && readerLikes.GetString(0) == liker;
-                                isGebruiker2Liked = !readerLikes.IsDBNull(1) && readerLikes.GetString(1) == liker;
-                            }
-                        }
-
-                        // Insert like record if not exists
-                        if (!isThere)
-                        {
-                            var sqlInsertLike = $"INSERT INTO [Like] (Gebruiker1, Gebruiker1Liked, Gebruiker2, Gebruiker2Liked) VALUES (@liker, 'true', @liked, 'false');";
-                            using (SqlCommand commandInsertLike = new SqlCommand(sqlInsertLike, connection))
-                            {
-                                commandInsertLike.Parameters.AddWithValue("liker", liker);
-                                commandInsertLike.Parameters.AddWithValue("liked", liked);
-                                commandInsertLike.ExecuteNonQuery();
-                            }
-                        }
-
-                        // Update like status
-                        var sqlUpdateLike = isGebruiker1Liked ? $"UPDATE [Like] SET Gebruiker1Liked = true WHERE Gebruiker1 = @liker AND Gebruiker2 = @liked;"
-                                                              : $"UPDATE [Like] SET Gebruiker2Liked = true WHERE Gebruiker2 = @liker AND Gebruiker1 = @liked;";
-
-                        using (SqlCommand commandUpdateLike = new SqlCommand(sqlUpdateLike, connection))
-                        {
-                            commandUpdateLike.Parameters.AddWithValue("liker", liker);
-                            commandUpdateLike.Parameters.AddWithValue("liked", liked);
-                            commandUpdateLike.ExecuteNonQuery();
-                        }
-
-                        connection.Close();
+                        readerLikes.Read();
+                        isGebruiker1Liked = !readerLikes.IsDBNull(0) && readerLikes.GetString(0) == liker;
+                        isGebruiker2Liked = !readerLikes.IsDBNull(1) && readerLikes.GetString(1) == liker;
                     }
                 }
 
-
-                private void UnlikeProfile(string disliker, string disliked)
+                // Insert like record if not exists
+                if (!isThere)
                 {
-                    bool isThere, isGebruiker1Liked, isGebruiker2Liked;
-                    using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                    var sqlInsertLike = $"INSERT INTO [Like] (Gebruiker1, Gebruiker1Liked, Gebruiker2, Gebruiker2Liked) VALUES (@liker, 'true', @liked, 'false');";
+                    using (SqlCommand commandInsertLike = new SqlCommand(sqlInsertLike, connection))
                     {
-                        connection.Open();
-                        var sqlCheckExistence = $"SELECT COUNT(*) FROM MatchingDB.dbo.[Like] WHERE (Gebruiker1 = @disliker OR Gebruiker1 = @disliked) AND (Gebruiker2 = @disliker OR Gebruiker2 = @disliked)";
-                        using (SqlCommand commandExistence = new SqlCommand(sqlCheckExistence, connection))
-                        {
-                            commandExistence.Parameters.AddWithValue("disliker", disliker);
-                            commandExistence.Parameters.AddWithValue("disliked", disliked);
-                            isThere = (int)commandExistence.ExecuteScalar() > 0;
-                        }
-
-                        // Retrieve like status
-                        var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker2 FROM MatchingDB.dbo.[Like] WHERE Gebruiker1 = @liker OR Gebruiker2 = @liker OR Gebruiker1 = @liked OR Gebruiker2 = @liked";
-                        using (SqlCommand commandLikes = new SqlCommand(sqlCheckLikes, connection))
-                        {
-                            commandLikes.Parameters.AddWithValue("disliker", disliker);
-                            commandLikes.Parameters.AddWithValue("disliked", disliked);
-
-                            using (SqlDataReader readerLikes = commandLikes.ExecuteReader())
-                            {
-                                readerLikes.Read();
-                                isGebruiker1Liked = !readerLikes.IsDBNull(0) && readerLikes.GetString(0) == disliker;
-                                isGebruiker2Liked = !readerLikes.IsDBNull(1) && readerLikes.GetString(1) == disliker;
-                            }
-                        }
-                        if (!isThere)
-                        {
-                            throw new InvalidDislikeException();
-                        }
-                        var sqlUpdateLike = isGebruiker1Liked ? $"UPDATE [Like] SET Gebruiker1Liked = false WHERE Gebruiker1 = @disliker AND Gebruiker2 = @disliked;"
-                                                             : $"UPDATE [Like] SET Gebruiker2Liked = false WHERE Gebruiker2 = @disliker AND Gebruiker1 = @disliked;";
-
-                        using (SqlCommand commandUpdateLike = new SqlCommand(sqlUpdateLike, connection))
-                        {
-                            commandUpdateLike.Parameters.AddWithValue("disliker", disliker);
-                            commandUpdateLike.Parameters.AddWithValue("disliked", disliked);
-                            commandUpdateLike.ExecuteNonQuery();
-                        }
+                        commandInsertLike.Parameters.AddWithValue("liker", liker);
+                        commandInsertLike.Parameters.AddWithValue("liked", liked);
+                        commandInsertLike.ExecuteNonQuery();
                     }
-
                 }
 
-                private void CheckLikeStatus(string liker, string liked)
+                // Update like status
+                var sqlUpdateLike = isGebruiker1Liked ? $"UPDATE [Like] SET Gebruiker1Liked = true WHERE Gebruiker1 = @liker AND Gebruiker2 = @liked;"
+                                                        : $"UPDATE [Like] SET Gebruiker2Liked = true WHERE Gebruiker2 = @liker AND Gebruiker1 = @liked;";
+
+                using (SqlCommand commandUpdateLike = new SqlCommand(sqlUpdateLike, connection))
                 {
-
+                    commandUpdateLike.Parameters.AddWithValue("liker", liker);
+                    commandUpdateLike.Parameters.AddWithValue("liked", liked);
+                    commandUpdateLike.ExecuteNonQuery();
                 }
+
+                connection.Close();
             }
         }
+
+
+        private void UnlikeProfile(string disliker, string disliked)
+        {
+            bool isThere, isGebruiker1Liked, isGebruiker2Liked;
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                connection.Open();
+                var sqlCheckExistence = $"SELECT COUNT(*) FROM MatchingDB.dbo.[Like] WHERE (Gebruiker1 = @disliker OR Gebruiker1 = @disliked) AND (Gebruiker2 = @disliker OR Gebruiker2 = @disliked)";
+                using (SqlCommand commandExistence = new SqlCommand(sqlCheckExistence, connection))
+                {
+                    commandExistence.Parameters.AddWithValue("disliker", disliker);
+                    commandExistence.Parameters.AddWithValue("disliked", disliked);
+                    isThere = (int)commandExistence.ExecuteScalar() > 0;
+                }
+
+                // Retrieve like status
+                var sqlCheckLikes = $"SELECT Gebruiker1, Gebruiker2 FROM MatchingDB.dbo.[Like] WHERE Gebruiker1 = @liker OR Gebruiker2 = @liker OR Gebruiker1 = @liked OR Gebruiker2 = @liked";
+                using (SqlCommand commandLikes = new SqlCommand(sqlCheckLikes, connection))
+                {
+                    commandLikes.Parameters.AddWithValue("disliker", disliker);
+                    commandLikes.Parameters.AddWithValue("disliked", disliked);
+
+                    using (SqlDataReader readerLikes = commandLikes.ExecuteReader())
+                    {
+                        readerLikes.Read();
+                        isGebruiker1Liked = !readerLikes.IsDBNull(0) && readerLikes.GetString(0) == disliker;
+                        isGebruiker2Liked = !readerLikes.IsDBNull(1) && readerLikes.GetString(1) == disliker;
+                    }
+                }
+                if (!isThere)
+                {
+                    throw new InvalidDislikeException();
+                }
+                var sqlUpdateLike = isGebruiker1Liked ? $"UPDATE [Like] SET Gebruiker1Liked = false WHERE Gebruiker1 = @disliker AND Gebruiker2 = @disliked;"
+                                                        : $"UPDATE [Like] SET Gebruiker2Liked = false WHERE Gebruiker2 = @disliker AND Gebruiker1 = @disliked;";
+
+                using (SqlCommand commandUpdateLike = new SqlCommand(sqlUpdateLike, connection))
+                {
+                    commandUpdateLike.Parameters.AddWithValue("disliker", disliker);
+                    commandUpdateLike.Parameters.AddWithValue("disliked", disliked);
+                    commandUpdateLike.ExecuteNonQuery();
+                }
+            }
+
+        }
+
+        private void CheckLikeStatus(string liker, string liked)
+        {
+
+        }
+    }
+}
