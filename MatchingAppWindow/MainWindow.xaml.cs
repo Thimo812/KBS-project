@@ -96,10 +96,10 @@ namespace MatchingAppWindow
         private void LogoutButton_Click(object? sender, RoutedEventArgs e)
         {
             Content = startScreen;
+            startScreen.userNameField.Text = string.Empty;
             if (navigation.ChatScreen.MessageChecker != null) navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
             navigation.ChatScreen = null;
             navigation = null;
-            startScreen.userNameField.Text = string.Empty;
         }
     }
 }

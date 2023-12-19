@@ -819,41 +819,40 @@ namespace MatchingApp.DataAccess.SQL
 
         public DateTime? GetLatestTimeStamp(string user, string contact)
         {
-            DateTime LatestTimeStamp;
+                DateTime LatestTimeStamp;
 
-            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            {
-                var sql = "SELECT TOP 1 Tijdstip FROM Bericht WHERE (Verzender = @user AND Ontvanger = @contact) OR (Verzender = @contact AND Ontvanger = @user) ORDER BY Tijdstip DESC";
-
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    command.Parameters.AddWithValue("user", user);
-                    command.Parameters.AddWithValue("contact", contact);
-                    try
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                    catch (SqlException) { }
+                    var sql = "SELECT TOP 1 Tijdstip FROM Bericht WHERE (Verzender = @user AND Ontvanger = @contact) OR (Verzender = @contact AND Ontvanger = @user) ORDER BY Tijdstip DESC";
 
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(sql, connection))
                     {
-                        reader.Read();
-
+                        command.Parameters.AddWithValue("user", user);
+                        command.Parameters.AddWithValue("contact", contact);
                         try
                         {
-                            LatestTimeStamp = reader.GetDateTime(0);
+                            command.ExecuteNonQuery();
                         }
-                        catch (InvalidOperationException)
+                        catch (SqlException) { }
+
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            return DateTime.MinValue;
+                            reader.Read();
+
+                            try
+                            {
+                                LatestTimeStamp = reader.GetDateTime(0);
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                return DateTime.MinValue;
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
-            }
-
-            return LatestTimeStamp;
+                return LatestTimeStamp;
         }
 
         private void LikeProfile(string liker, string liked)
