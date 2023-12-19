@@ -78,12 +78,7 @@
                         FontWeight="Bold"
                         HorizontalAlignment="Left"
                         Click="ExtendOrCollapseHobbies_Click" Width="62"
-                        
                 />
-                <!--<Label-->
-                <!--Content="Hobby"
-                    FontWeight="Bold"
-                />-->
                 <StackPanel Name="HobbyCheckBoxes"/>
 
                 <!--Filter diets-->
@@ -107,8 +102,7 @@
                     Name="saveMinAgeButton"
                     Content="opslaan"
                     Background="CornflowerBlue" 
-                    Click="ChangeAgeButton" 
-                    
+                    Click="ChangeAgeButton"
                 />
                 <!--Filter maximum age-->
                 <Label
@@ -119,14 +113,13 @@
                     Name="MaxAge"    
                     Text="200"
                 />
-                <Button
+                    <Button
                     Name="saveMaxAgeButton"
                     Content="opslaan"
                     Background="CornflowerBlue" 
                     Click="ChangeAgeButton" 
                 />
-               
-            </StackPanel>
+                </StackPanel>
             </Border>
         </ScrollViewer>
 
