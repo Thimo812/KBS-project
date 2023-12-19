@@ -6,10 +6,16 @@
       xmlns:local="clr-namespace:MatchingAppWindow.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="200"
-      Title="ProfileDetails"
-      Background="White">
+      Title="ProfileDetails">
 
-    <Grid d:Name="Grid" Background="LightGray">
+    <Page.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid d:Name="Grid" Background="#292f36">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -21,31 +27,45 @@
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="23"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="23"/>
             </Grid.ColumnDefinitions>
 
             <Image x:Name="profileImage" Grid.ColumnSpan="3" Width="300"/>
 
-            <Button x:Name="previousImage" Content="&lt;" Grid.Column="0" Height="30" BorderBrush="Transparent" FontSize="15" Click="PreviousImage">
+            <Button x:Name="previousImage" Width="18" HorizontalAlignment="Right" Content="&lt;" Grid.Column="0" Height="30" FontSize="15" Click="PreviousImage">
                 <Button.Background>
-                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                    <SolidColorBrush Color="#AD0090" Opacity="0.8"/>
                 </Button.Background>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="8,6,6,8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
             </Button>
 
-            <Button x:Name="nextImage" Content="&gt;" Grid.Column="2" Height="30" BorderBrush="Transparent" FontSize="15" Click="NextImage" HorizontalAlignment="Left" Margin="0,74,0,75" Width="20">
+            <Button x:Name="nextImage" Content="&gt;" Grid.Column="2" Height="30" BorderBrush="Transparent" FontSize="15" Click="NextImage" HorizontalAlignment="Left" Margin="0,74,0,75" Width="18">
                 <Button.Background>
-                    <SolidColorBrush Color="DarkGray" Opacity="0.8"/>
+                    <SolidColorBrush Color="#AD0090" Opacity="0.8"/>
                 </Button.Background>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="6,8,8,6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
             </Button>
 
         </Grid>
-            
-        
-        <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center" BorderThickness="2" BorderBrush="DarkGray" Background="White" Height="auto"/>
+
+
+        <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center" Background="#434E5B" Height="auto"/>
         <TextBlock x:Name="descriptionBlock" Grid.Row="2" Text="" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="5" Width="300"/>
-        <ItemsControl x:Name="interestBlock" Grid.Row="3" BorderThickness="2" BorderBrush="DarkGray" Background="White">
+        <ItemsControl x:Name="interestBlock" Grid.Row="3" Background="#434E5B">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel />
@@ -53,13 +73,13 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Border CornerRadius="10" Background="Gray" Margin="1,1,1,1">
+                    <Border CornerRadius="10" Margin="1,1,1,1">
                         <Label Content="{Binding}"  />
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <ItemsControl x:Name="detailList" Grid.Row="4" BorderThickness="2" BorderBrush="DarkGray" Background="White">
+        <ItemsControl x:Name="detailList" Grid.Row="4" Background="#434E5B">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Label Content="{Binding}"/>

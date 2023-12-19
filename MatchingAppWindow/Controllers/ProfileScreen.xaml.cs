@@ -40,17 +40,18 @@ namespace MatchingAppWindow.Views
         private List<Diet> excludedDiets = new();
 
         private ProfileDetails profileDetails = new();
+
         public ProfileScreen()
         {
             InitializeComponent();
 
             var profileList = repo.GetProfiles(MainWindow.profile);
-
+            
             resultBox.ItemsSource = profileList;
 
-            profileDetailsFrame.Content = profileDetails;
-
             DataContext = this;
+
+            profileDetailsFrame.Content = profileDetails;
 
             int hobbyCount = repo.GetHobbies().Count;
 

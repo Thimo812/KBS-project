@@ -5,10 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MatchingAppWindow.Views"
         mc:Ignorable="d"
-        d:DesignHeight="450" d:DesignWidth="800"
+        d:DesignHeight="450" d:DesignWidth="800" Background="#1D2228"
         Title="TangoTogether" >
     <Page.Resources>
         <Style x:Key="CustomCheckBoxStyle" TargetType="{x:Type CheckBox}">
+            <Setter Property="Foreground" Value="white"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="4"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type CheckBox}">
@@ -34,113 +37,153 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style TargetType="RadioButton">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="4"/>
+        </Style>
     </Page.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MaxWidth="150" />
+            <ColumnDefinition MaxWidth="200" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0" Name="filterPanel" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Border Background="LightGray">
-            <StackPanel Name="stackFilterOptions" Margin="5" >
-                
-                <!--Filter location-->
-                <Label 
+            <Border Background="#1D2228">
+                <StackPanel Name="stackFilterOptions" Margin="5">
+
+                    <!--Filter location-->
+                    <Label 
                     Content="Locatie"
-                    FontWeight="Bold" Height="26"
+                    FontWeight="Bold"
                 />
-                <RadioButton 
+                    <RadioButton 
                     Name="Global"
                     Content="Globaal" 
                     Height="20" 
                     Checked="LocationChecked"
                 />
-                <RadioButton 
+                    <RadioButton 
                     Name="Country"
                     Content="Zelfde land" 
                     Height="20"
                     Checked="LocationChecked"
                 />
-                <RadioButton 
+                    <RadioButton 
                     Name="City"
                     Content="Zelfde woonplaats" 
                     Height="27"
                     Checked="LocationChecked"
                 />
 
-                <!--Filter hobby's-->
-                <Button Name="ExtendOrCollapseHobbies"
+                    <Rectangle Margin="5" Height="2" Fill="#434E5B"/>
+                    <!--Filter hobby's-->
+                    <Button Name="ExtendOrCollapseHobbies"
                         Content="Hobby ▲"
                         Background="Transparent"
+                        Foreground="White"
                         BorderThickness="0"
-                        Height="20"
                         FontWeight="Bold"
+                        FontSize="15"
                         HorizontalAlignment="Left"
-                        Click="ExtendOrCollapseHobbies_Click" Width="62"
+                        Click="ExtendOrCollapseHobbies_Click"
                 />
-                <StackPanel Name="HobbyCheckBoxes"/>
+                    <StackPanel Name="HobbyCheckBoxes"/>
 
-                <!--Filter diets-->
-                <Label 
+                    <Rectangle Margin="5" Height="2" Fill="#434E5B"/>
+                    <!--Filter diets-->
+                    <Label 
                     Content="Dieet"
                     FontWeight="Bold"
                     HorizontalAlignment="Left"
                 />
-                <StackPanel Name="DietCheckBoxes"/>
+                    <StackPanel Name="DietCheckBoxes"/>
 
-                <!--Filter minimum age-->
-                <Label 
+                    <Rectangle Margin="5" Height="2" Fill="#434E5B"/>
+                    <!--Filter minimum age-->
+                    <Label 
                     Content="Minimale leeftijd"
                     FontWeight="Bold"
                 />
-                <TextBox
-                    Name="MinAge"
-                    Text="18" 
-                />
-                <Button
-                    Name="saveMinAgeButton"
-                    Content="opslaan"
-                    Background="CornflowerBlue" 
-                    Click="ChangeAgeButton"
-                />
-                <!--Filter maximum age-->
-                <Label
+                    <Border CornerRadius="15">
+                        <TextBox x:Name="MinAge" HorizontalAlignment="Left" Padding="5,0,0,0" Text="18" TextWrapping="Wrap" Height="25" Width="140" FontSize="14" Background="#434E5B" BorderBrush="#434E5B" Foreground="White" Margin="5,0">
+                            <TextBox.Template>
+                                <ControlTemplate TargetType="{x:Type TextBox}">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                        <ScrollViewer x:Name="PART_ContentHost"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </TextBox.Template>
+                        </TextBox>
+                    </Border>
+                    <Border CornerRadius="15">
+                        <Button Name="saveMinAgeButton" Content="Opslaan" Height="25" HorizontalAlignment="Left" Width="140" Click="ChangeAgeButton" FontSize="14" Background="#AD0090" BorderBrush="#AD0090" Foreground="White" Margin="5">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Border>
+
+                    <Rectangle Margin="5" Height="2" Fill="#434E5B"/>
+                    <!--Filter maximum age-->
+                    <Label
                     Content="Maximale leeftijd"
                     FontWeight="Bold"
                 />
-                <TextBox
-                    Name="MaxAge"    
-                    Text="200"
-                />
-                    <Button
-                    Name="saveMaxAgeButton"
-                    Content="opslaan"
-                    Background="CornflowerBlue" 
-                    Click="ChangeAgeButton" 
-                />
+                    <Border CornerRadius="15">
+                        <TextBox x:Name="MaxAge" HorizontalAlignment="Left" Padding="5,0,0,0" Text="200" TextWrapping="Wrap" Height="25" Width="140" FontSize="14" Background="#434E5B" BorderBrush="#434E5B" Foreground="White" Margin="5,0">
+                            <TextBox.Template>
+                                <ControlTemplate TargetType="{x:Type TextBox}">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                        <ScrollViewer x:Name="PART_ContentHost"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </TextBox.Template>
+                        </TextBox>
+                    </Border>
+                    <Border CornerRadius="15">
+                        <Button Name="saveMaxAgeButton" HorizontalAlignment="Left" Content="Opslaan" Height="25" Width="140" Click="ChangeAgeButton" FontSize="14" Background="#AD0090" BorderBrush="#AD0090" Foreground="White" Margin="5">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Border>
                 </StackPanel>
             </Border>
         </ScrollViewer>
 
         <Grid Grid.Column="1">
-            <ListBox  Name="resultBox"  SelectionChanged="resultBox_SelectedIndexChanged">
+            <ListBox Background="#2C343D" Foreground="White" Name="resultBox" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="resultBox_SelectedIndexChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Height="50" >
+                        <Grid Height="70">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*" MinWidth="180" />
+                                <ColumnDefinition Width="2*" MinWidth="180"/>
                                 <ColumnDefinition Width="2*" MinWidth="100"/>
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="2*" />
+                                <RowDefinition Height="3*"/>
+                                <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0">Gebruikersnaam:</TextBlock>
-                            <TextBlock Grid.Row="1" Text="{Binding}" FontSize="25" ></TextBlock>
-                            <TextBlock Grid.Column="1" Grid.Row="1" >Info</TextBlock>
-                            <TextBlock Grid.Column="2" Grid.Row="1" >Info</TextBlock>
+                            <TextBlock Margin="2" Grid.Row="0" Text="{Binding}" FontSize="25"/>
+                            <Rectangle Grid.Row="1" Grid.ColumnSpan="3"  Margin="2" Height="2" Fill="#434E5B"/>
+                            <TextBlock Margin="2" Grid.Column="2" Grid.Row="0"></TextBlock>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
