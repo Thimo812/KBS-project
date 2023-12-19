@@ -56,7 +56,7 @@
         <!-- StackPanel for Image View -->
 
         <!--Listbox for image view-->
-        <ListBox x:Name="imageBox" ItemsSource="{Binding ImageList, Mode=TwoWay}" Height="135" VerticalAlignment="Center" Background="Black" BorderBrush="#FF000002" Grid.Column="1">
+        <ListBox x:Name="imageBox" ItemsSource="{Binding ImageList, Mode=TwoWay}" Height="135" VerticalAlignment="Center" Background="#121519" Grid.Column="1">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Image Source="{Binding}" Width="125" Height="125"/>
@@ -71,32 +71,18 @@
 
         <!--Stackpanel buttons Photos-->
         
-            <StackPanel  Grid.Row="0" Grid.Column="1" Background="Black" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" >
+        <StackPanel  Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" >
             <!--addPhotoButton-->
-            <Border CornerRadius="15">
-                <Button x:Name="AddPhotoButton" Content="Foto toevoegen" Height="30" Width="150" Click="AddPhoto" FontSize="16" Background="#AD0090" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" >
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border  Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"  CornerRadius="15">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Border>
+
+            <Button x:Name="AddPhotoButton" Click="AddPhoto" FontSize="16" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" BorderThickness="0">
+                <Image Source="/Views/PlusIcon.png" Height="30"/>
+            </Button>
+
 
             <!--deletePhotoButton-->
-            <Border CornerRadius="15">
-                <Button x:Name="deletePhotoButton" Content="Foto Verwijderen" Height="30" Width="150" Click="DeletePhoto" FontSize="16" Background="#AD0090" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" IsEnabled="False">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Border>
+            <Button x:Name="deletePhotoButton" Click="DeletePhoto" FontSize="16" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" IsEnabled="False" BorderThickness="0">
+                <Image Source="/Views/DeleteIcon.png" Height="30"/>
+            </Button>
         </StackPanel>
         
 

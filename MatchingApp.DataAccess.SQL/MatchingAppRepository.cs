@@ -866,21 +866,23 @@ namespace MatchingApp.DataAccess.SQL
                     try
                     {
                         command.ExecuteNonQuery();
-                    }
-                    catch (SqlException) { }
 
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        reader.Read();
-
-                        try
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
+                            reader.Read();
+
                             LatestTimeStamp = reader.GetDateTime(0);
+
                         }
-                        catch (InvalidOperationException)
-                        {
-                            return DateTime.MinValue;
-                        }
+                    }
+                    catch (SqlException) 
+                    {
+                        return DateTime.MinValue;
+                    }
+                    catch (InvalidOperationException ex) 
+                    { 
+                        connection.Close();
+                        return DateTime.MinValue;
                     }
                 }
                 connection.Close();

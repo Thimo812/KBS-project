@@ -37,35 +37,28 @@ namespace MatchingAppWindow.Views
 
         private Contact SelectedContact { get; set; }
 
+        private ProfileDetails ProfileDetails { get; set; } = new();
+
         private bool AutoScroll { get; set; } = true;
 
         public BackgroundWorker MessageChecker { get; private set; }
-
-        private int maxMessageBoxWidth = 400;
 
         public ChatScreen()
         {
             InitializeComponent();
 
-            DataContext = this;
-
-            messageControl.ItemsSource = Messages;
-            contactList.ItemsSource = Contacts;
-
-            Loaded += StartChecking;
-            Unloaded += StopChecking;
-
-            UpdateSendButton(this, null);
-        }
-
-        public void InitializePage()
-        {
             string userName = MainWindow.profile.UserName;
             List<string> contactNames = MainWindow.repo.GetContactNames(userName);
             List<string> incomingRequests = MainWindow.repo.GetIncomingMessageRequest(userName);
             List<string> outgoingRequests = MainWindow.repo.GetOutgoingMessageRequest(userName);
 
-            foreach(string contactName in contactNames)
+            Contacts.CollectionChanged += (sender, e) =>
+            {
+                noChatsLabel1.Visibility = Visibility.Hidden;
+                noChatsLabel2.Visibility = Visibility.Hidden;
+            };
+
+            foreach (string contactName in contactNames)
             {
                 BitmapImage contactImage = ImageConverter.ImageDataToBitmap(MainWindow.repo.GetProfileImageData(contactName));
                 Contact contact = new Contact(contactName, contactImage);
@@ -90,6 +83,17 @@ namespace MatchingAppWindow.Views
                 Contacts.Add(contact);
 
             }
+
+            DataContext = this;
+
+            messageControl.ItemsSource = Messages;
+            contactList.ItemsSource = Contacts;
+            detailFrame.Content = ProfileDetails;
+
+            Loaded += StartChecking;
+            Unloaded += StopChecking;
+
+            sendButton.IsEnabledChanged += UpdateSendButtonImage;
         }
 
         private void SelectContact(object sender, SelectionChangedEventArgs e)
@@ -116,12 +120,17 @@ namespace MatchingAppWindow.Views
 
             }
         }
+            ProfileDetails.SetProfile(SelectedContact.UserName);
+
+            chatWindow.Visibility = Visibility.Visible;
+            ProfileDetails.Visibility = Visibility.Visible;
+        }
 
         private void CheckMessages(object sender, DoWorkEventArgs e)
         {
             while (true)
             {
-                if (SelectedContact == null) continue;
+                if (SelectedContact == null || MainWindow.profile == null) continue;
 
                 DateTime localLatestMessage = Messages.Count == 0 ? DateTime.MinValue : Messages[Messages.Count - 1].TimeStamp;
                 DateTime? LatestMessage = MainWindow.repo.GetLatestTimeStamp(MainWindow.profile.UserName, SelectedContact.UserName);
@@ -185,18 +194,18 @@ namespace MatchingAppWindow.Views
             }
         }
 
+        private void UpdateSendButtonImage(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sendButton.IsEnabled == false) sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIconUnabled.png", UriKind.Relative));
+
+            else sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIcon.png", UriKind.Relative));
+        }
+
         private void UpdateSendButton(object sender, TextChangedEventArgs e)
         {
-            if (messageBox.Text.Length == 0)
-            {
-                sendButton.IsEnabled = false;
-                sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIconUnabled.png", UriKind.Relative));
-            }
-            else
-            {
-                sendButton.IsEnabled = true;
-                sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIcon.png", UriKind.Relative));
-            }
+            if (messageBox.Text.Length == 0) sendButton.IsEnabled = false;
+
+            else sendButton.IsEnabled = true;
         }
 
         private void UpdateScrollViewer(Object sender, ScrollChangedEventArgs e)
@@ -221,11 +230,13 @@ namespace MatchingAppWindow.Views
 
         private void SendButtonFocus(object? sender, MouseEventArgs e)
         {
+            if (messageBox.Text.Length == 0) return;
             sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIconFocus.png", UriKind.Relative));
         }
 
         private void SendButtonFocusLost(object? sender, MouseEventArgs e)
         {
+            if (messageBox.Text.Length == 0) return;
             sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIcon.png", UriKind.Relative));
         }
     }

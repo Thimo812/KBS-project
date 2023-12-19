@@ -8,6 +8,44 @@
         d:DesignHeight="450" d:DesignWidth="800"
         Title="TangoTogether" >
     <Page.Resources>
+        <Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem" >
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="_Border"
+                                Padding="1"
+                                SnapsToDevicePixels="true"
+                                HorizontalAlignment="Stretch"
+                                Width="auto"
+                                Margin="5"
+                                Background="#434E5B"
+                                CornerRadius="10"
+                                
+                                >
+                            <ContentPresenter Name="ContentPresenter" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="_Border" Property="Background" Value=" #6C7D92"/>
+                                <Setter Property="Foreground" Value="Red"/>
+                                <Setter TargetName="ContentPresenter" Property="TextElement.Background" Value="LightGray"/>
+
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="profileListTemplate">
+            <WrapPanel HorizontalAlignment="Left" Margin="5,0,10,5">
+                <Label Content="{Binding DateString}" Foreground="White" FontSize="12"/>
+                <Border CornerRadius="10,10,0,10" Background="#434E5B">
+                    <TextBlock Text="{Binding Content}" Foreground="White" FontSize="18" TextWrapping="Wrap" Margin="5"/>
+                </Border>
+            </WrapPanel>
+        </DataTemplate>
+        
         <Style x:Key="CustomCheckBoxStyle" TargetType="{x:Type CheckBox}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -34,37 +72,176 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="ScrollBarTrackThumb"
+    TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid x:Name="Grid">
+                            <Rectangle HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Width="Auto"
+                            Height="Auto"
+                            Fill="Transparent" />
+                            <Border x:Name="CornerScrollBarRectangle"
+                        CornerRadius="5"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Width="Auto"
+                        Height="Auto"
+                        Margin="0,1,0,1"
+                        Background="{TemplateBinding Background}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Tag"
+                            Value="Horizontal">
+                                <Setter TargetName="CornerScrollBarRectangle"
+                            Property="Width"
+                            Value="Auto" />
+                                <Setter TargetName="CornerScrollBarRectangle"
+                            Property="Height"
+                            Value="6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsFlicksEnabled"
+        Value="false" />
+            <Setter Property="Foreground"
+        Value="#3B4651" />
+            <Setter Property="Background"
+        Value="Transparent" />
+            <Setter Property="Width"
+        Value="7" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid x:Name="GridRoot"
+                    Width="10"
+                    Background="{TemplateBinding Background}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.00001*" />
+                            </Grid.RowDefinitions>
+                            <Track x:Name="PART_Track"
+                        Grid.Row="0"
+                        IsDirectionReversed="true"
+                        Focusable="false">
+                                <Track.Thumb>
+                                    <Thumb x:Name="Thumb"
+                                Background="{TemplateBinding Foreground}"
+                                Style="{DynamicResource ScrollBarTrackThumb}" />
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton x:Name="PageUp"
+                                        Command="ScrollBar.PageDownCommand"
+                                        Opacity="0"
+                                        Focusable="false" />
+                                </Track.IncreaseRepeatButton>
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton x:Name="PageDown"
+                                        Command="ScrollBar.PageUpCommand"
+                                        Opacity="0"
+                                        Focusable="false" />
+                                </Track.DecreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="Thumb"
+                            Property="IsMouseOver"
+                            Value="true">
+                                <Setter Value="{DynamicResource ButtonSelectBrush}"
+                            TargetName="Thumb"
+                            Property="Background" />
+                            </Trigger>
+                            <Trigger SourceName="Thumb"
+                            Property="IsDragging"
+                            Value="true">
+                                <Setter Value="{DynamicResource DarkBrush}"
+                            TargetName="Thumb"
+                            Property="Background" />
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled"
+                            Value="false">
+                                <Setter TargetName="Thumb"
+                            Property="Visibility"
+                            Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="Orientation"
+                            Value="Horizontal">
+                                <Setter TargetName="GridRoot"
+                            Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="PART_Track"
+                            Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Width"
+                            Value="Auto" />
+                                <Setter Property="Height"
+                            Value="8" />
+                                <Setter TargetName="Thumb"
+                            Property="Tag"
+                            Value="Horizontal" />
+                                <Setter TargetName="PageDown"
+                            Property="Command"
+                            Value="ScrollBar.PageLeftCommand" />
+                                <Setter TargetName="PageUp"
+                            Property="Command"
+                            Value="ScrollBar.PageRightCommand" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    
     </Page.Resources>
 
-    <Grid>
+    <Grid Background="#252C33" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition MaxWidth="150" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <ScrollViewer Grid.Column="0" Name="filterPanel" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top">
-            <Border Background="LightGray">
+        <ScrollViewer Grid.Column="0" Name="filterPanel" VerticalScrollBarVisibility="Auto" HorizontalAlignment="Left" VerticalAlignment="Top" Background="#252C33">
+            <Border Background="#252C33">
             <StackPanel Name="stackFilterOptions" Margin="5" >
                 
                 <!--Filter location-->
                 <Label 
                     Content="Locatie"
                     FontWeight="Bold" Height="26"
+                    Foreground="White"
                 />
                 <RadioButton 
                     Name="Global"
                     Content="Globaal" 
+                    Foreground="White"
                     Height="20" 
                     Checked="LocationChecked"
                 />
                 <RadioButton 
                     Name="Country"
                     Content="Zelfde land" 
+                    Foreground="White"
                     Height="20"
                     Checked="LocationChecked"
                 />
                 <RadioButton 
                     Name="City"
                     Content="Zelfde woonplaats" 
+                    Foreground="White"
                     Height="27"
                     Checked="LocationChecked"
                 />
@@ -73,6 +250,7 @@
                 <Button Name="ExtendOrCollapseHobbies"
                         Content="Hobby ▲"
                         Background="Transparent"
+                        Foreground="White"
                         BorderThickness="0"
                         Height="20"
                         FontWeight="Bold"
@@ -89,6 +267,7 @@
                 <!--Filter diets-->
                 <Label 
                     Content="Dieet"
+                    Foreground="White"
                     FontWeight="Bold"
                     HorizontalAlignment="Left"
                 />
@@ -97,62 +276,90 @@
                 <!--Filter minimum age-->
                 <Label 
                     Content="Minimale leeftijd"
+                    Foreground="White"
                     FontWeight="Bold"
                 />
-                <TextBox
-                    Name="MinAge"
-                    Text="18" 
-                />
-                <Button
-                    Name="saveMinAgeButton"
-                    Content="opslaan"
-                    Background="CornflowerBlue" 
-                    Click="ChangeAgeButton" 
+                    <Border CornerRadius="10" Margin="0,0,10,0">
+                        <TextBox
+                         Background="#434E5B" BorderBrush="#434E5B"
+                         Foreground="White"
+                         Name="MinAge"
+                         Text="18" >
+                            <TextBox.Template>
+                                <ControlTemplate TargetType="{x:Type TextBox}">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+                                        <ScrollViewer x:Name="PART_ContentHost"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </TextBox.Template>
+                        </TextBox>
+                    </Border>
+                   
                     
-                />
-                <!--Filter maximum age-->
-                <Label
+
+                    <!--Filter maximum age-->
+                    
+                        <Label
                     Content="Maximale leeftijd"
-                    FontWeight="Bold"
-                />
-                <TextBox
-                    Name="MaxAge"    
-                    Text="200"
-                />
-                <Button
-                    Name="saveMaxAgeButton"
-                    Content="opslaan"
-                    Background="CornflowerBlue" 
-                    Click="ChangeAgeButton" 
-                />
-               
-            </StackPanel>
+                    Foreground="White"
+                    FontWeight="Bold" 
+                            />
+                    <Border CornerRadius="10" Margin="0,0,10,0">
+                        <TextBox
+                         Background="#434E5B" BorderBrush="#434E5B"
+                         Foreground="White"
+                         Name="MaxAge"    
+                         Text="200">
+                            <TextBox.Template>
+                                <ControlTemplate TargetType="{x:Type TextBox}">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+                                        <ScrollViewer x:Name="PART_ContentHost"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </TextBox.Template>
+                        </TextBox>
+                    </Border>
+                    
+
+                    <Border CornerRadius="15">
+                        <Button
+                         Name="saveMaxAgeButton"
+                         Content="opslaan"
+                         Foreground="White"
+                         Background="#AD0090"
+                         BorderBrush="#AD0090" 
+                         Click="ChangeAgeButton"
+                         Margin="0,10,0,0">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Border>
+
+
+
+                </StackPanel>
             </Border>
         </ScrollViewer>
 
         <Grid Grid.Column="1">
-            <ListBox  Name="resultBox" BorderThickness="5,5,5,5" SelectionChanged="resultBox_SelectedIndexChanged">
+            <ListBox Name="resultBox" SelectionChanged="resultBox_SelectedIndexChanged" Background="#2C343D" BorderBrush="#2C343D" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel  Orientation="Vertical" VerticalAlignment="Stretch" ItemWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Height="50" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*" MinWidth="180" />
-                                <ColumnDefinition Width="2*" MinWidth="100"/>
-                                <ColumnDefinition Width="2*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="2*" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0">Gebruikersnaam:</TextBlock>
-                            <TextBlock Grid.Row="1" Text="{Binding}" FontSize="25" ></TextBlock>
-                            <TextBlock Grid.Column="1" Grid.Row="1" >Info</TextBlock>
-                            <TextBlock Grid.Column="2" Grid.Row="1" >Info</TextBlock>
-                        </Grid>
+                        <TextBlock Foreground="White" Grid.Row="1" Text="{Binding}" FontSize="25" HorizontalAlignment="Stretch" Margin="6"  />
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Frame Grid.Column="1" x:Name="profileDetailsFrame" HorizontalAlignment="Right" MinWidth="300" />
+            <Frame Grid.Column="1" x:Name="profileDetailsFrame" HorizontalAlignment="Right" MinWidth="200" />
         </Grid>
     </Grid>
 </Page>
