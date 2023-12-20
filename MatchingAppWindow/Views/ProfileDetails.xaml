@@ -60,7 +60,7 @@
                     <ItemsControl x:Name="interestBlock">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel Width="320"/>
+                                <WrapPanel Width="300"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
@@ -88,36 +88,43 @@
 
         
 
-        <Grid Grid.Row="2" VerticalAlignment="Bottom">
+        <Grid Grid.Row="2" VerticalAlignment="Bottom" Height="50">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            
-            
-            <Border CornerRadius="10">
-                <Button x:Name="chatrequest" Grid.Column="0" Content="ChatReq" Foreground="White" Background="#AD0090" BorderBrush="#AD0090" Margin="0,10,0,0">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Border>
 
-            <Border CornerRadius="10" Grid.Column="1">
-                <Button x:Name="likebutton" Content="Hartjuh" Foreground="White" Background="#AD0090" BorderBrush="#AD0090" Margin="3,10,0,0" >
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Border>
+
+            <Button x:Name="chatrequest" Grid.Column="0" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40">
+                <Button.Content>
+                    <Image Source="/Views/MessageIcon.png" Margin="10"/>
+                </Button.Content>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="25">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+            <Button x:Name="likebutton" Grid.Column="1" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40">
+                <Button.Content>
+                    <Image Source="/Views/LikeIcon.png" Margin="10"/>
+                </Button.Content>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="25">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#6C7D92"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
     </Grid>
 </Page>
