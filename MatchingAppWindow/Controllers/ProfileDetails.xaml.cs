@@ -26,7 +26,8 @@ namespace MatchingAppWindow.Views
     public partial class ProfileDetails : Page
     {
         Profile selectedProfile;
-
+        MatchingAppRepository repo = new MatchingAppRepository();
+        private string usr = MainWindow.profile.UserName;
         private int currentImage;
         public ProfileDetails()
         {
@@ -35,10 +36,16 @@ namespace MatchingAppWindow.Views
             DataContext = this;
 
             Visibility = Visibility.Collapsed;
+            
+
+            likebutton.Visibility = Visibility.Visible;
+            dislikebutton.Visibility = Visibility.Collapsed;         
+            
         }
 
         public List<string> GetProfileDetails()
         {
+            updatebutton();
             return new List<string>
             {
                 $"Woonplaats: {selectedProfile.City}",
@@ -48,6 +55,7 @@ namespace MatchingAppWindow.Views
                 selectedProfile.Diet != null ? $"Dieet: {selectedProfile.Diet}" : null,
                 selectedProfile.Vaccinated != null ? $"Is {((bool)selectedProfile.Vaccinated ? string.Empty : "niet")} gevaccineerd" : null
             }.Where(detail => detail != null).ToList();
+
         }
 
 
@@ -94,6 +102,32 @@ namespace MatchingAppWindow.Views
 
             currentImage++;
             profileImage.Source = ImageConverter.ImageDataToBitmap(selectedProfile.Images[currentImage]);
+        }
+
+        public void LikeProfileEvent(object sender, RoutedEventArgs e)
+        {
+            repo.LikeProfile(usr, selectedProfile.UserName);
+            updatebutton();
+        }
+
+        public void DislikeProfileEvent(object sender, RoutedEventArgs e)
+        {
+            repo.DislikeProfile(usr, selectedProfile.UserName);
+            updatebutton();
+        }
+
+        public void updatebutton()
+        {
+            if (repo.CheckLikeStatus(usr, selectedProfile.UserName) == usr)
+            {
+                dislikebutton.Visibility = Visibility.Visible;
+                likebutton.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                likebutton.Visibility = Visibility.Visible;
+                dislikebutton.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

@@ -72,7 +72,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button x:Name="chatrequest" Grid.Column="0" Content="ChatReq" />
-            <Button x:Name="likebutton" Grid.Column="1" Content="Hartjuh" />
+            <Button x:Name="likebutton" Grid.Column="1" Content="Hartjuh" Click="LikeProfileEvent"/>
+            <Button x:Name="dislikebutton" Grid.Column="1" Content="DisHartjuh" Click="DislikeProfileEvent"/>
         </Grid>
     </Grid>
 </Page>
