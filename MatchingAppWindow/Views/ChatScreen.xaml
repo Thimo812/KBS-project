@@ -207,6 +207,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition/>
+            <ColumnDefinition Width ="300"/>
         </Grid.ColumnDefinitions>
 
         <ScrollViewer Grid.Column="0" Background="#252C33">
@@ -236,9 +237,71 @@
             <Label x:Name="noChatsLabel1" Content="U heeft nog geen actieve chats" Foreground="#434E5B" FontWeight="Bold" FontSize="30" Margin="0,25,0,0"/>
             <Label x:Name="noChatsLabel2" Content="Match met mensen of stuur een chatverzoek om te beginnen" Foreground="#434E5B" FontSize="16"/>
         </StackPanel>
-        
+
+        <Grid x:Name="outRequestWindow" Grid.Column="1" Visibility="Hidden">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Content="Uitgaand chatverzoek" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="30"/>
+            <Button x:Name="cancelButton" Content="Annuleren" Height="50" Width="200" FontSize="30" Background="#AD0090" BorderBrush="#AD0090" Foreground="White" Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2" Click="CancelButtonPressed">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            
+
+        </Grid>
 
 
+        <Grid x:Name="requestWindow" Grid.Column="1" Visibility="Hidden">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Label Content="U heeft een chatverzoek ontvangen!" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="30"/>
+            <Button x:Name="denyButton" Content="Weigeren" Height="50" Width="200" FontSize="30" Background="#AD0090" BorderBrush="#AD0090" Foreground="White" Grid.Column="1" Grid.Row="2" Click="DenyButtonPressed">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button x:Name="acceptButton" Content="Accepteren" Height="50" Width="200" FontSize="30" Background="#AD0090" BorderBrush="#AD0090" Foreground="White" Grid.Column="2" Grid.Row="2" Click="AcceptButtonPressed">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+        </Grid>
         <Grid x:Name="chatWindow" Grid.Column="1" Visibility="Hidden">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -247,7 +310,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="300"/>
             </Grid.ColumnDefinitions>
 
             <Rectangle Grid.Row="1" Grid.ColumnSpan="2" Fill="#343D47"/>
@@ -274,7 +336,8 @@
             
             <Image Name="sendButton" Source="/Views/SendMessageIconUnabled.png" Grid.Row="1" Grid.Column="1" Margin="5" HorizontalAlignment="Right"  MouseEnter="SendButtonFocus" MouseLeave="SendButtonFocusLost" MouseDown="SendMessage" IsEnabled="False"/>
 
-            <Frame x:Name="detailFrame" Grid.Column="2"  Grid.RowSpan="2" MinWidth="300"/>
+
         </Grid>
+        <Frame x:Name="detailFrame" Grid.Column="2" MinWidth="300"/>
     </Grid>
 </Page>

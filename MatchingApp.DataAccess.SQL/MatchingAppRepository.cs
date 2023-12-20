@@ -565,7 +565,7 @@ namespace MatchingApp.DataAccess.SQL
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT Sender FROM MessageRequests WHERE Receiver = @Receiver";
+                var sql = "SELECT Sender FROM MessageRequests WHERE Receiver = @Receiver AND Status = 0";
 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -594,7 +594,7 @@ namespace MatchingApp.DataAccess.SQL
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    var sql = "SELECT Receiver FROM MessageRequests WHERE Sender = @Sender";
+                    var sql = "SELECT Receiver FROM MessageRequests WHERE Sender = @Sender AND Status = 0";
 
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(sql, connection))
@@ -636,6 +636,23 @@ namespace MatchingApp.DataAccess.SQL
                     connection.Close();
                 }
             }
+
+        public void CancelMessageRequest(string sender, string receiver)
+        {
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "DELETE FROM MessageRequests WHERE Receiver = @receiver AND Sender = @Sender";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("Receiver", receiver);
+                    command.Parameters.AddWithValue("Sender", sender);
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
 
         public bool ValidateUserName(string userName)
         {
@@ -774,7 +791,7 @@ namespace MatchingApp.DataAccess.SQL
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT Gebruiker1 FROM Conversatie WHERE Gebruiker2 = @userName AND IsActief = 1 UNION SELECT Gebruiker2 FROM Conversatie WHERE Gebruiker1 = @userName AND IsActief = 1";
+                var sql = "SELECT Sender FROM MessageRequests WHERE Receiver = @userName AND Status = 1 UNION SELECT Receiver FROM MessageRequests WHERE Sender = @userName AND Status = 1";
 
                 connection.Open();
 
