@@ -61,13 +61,12 @@ namespace MatchingAppWindow.Views
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
             messageButton.Click += (s, e) => contentFrame.Content = ChatScreen;
+            profileEditScreen.cancelButton.Click += (s, e) => contentFrame.Content = profileScreen;
 
-            //profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
-
-            editProfileButton.Click += ToggleProfileButtons;
             editProfileButton.Click += (sender, e) => contentFrame.Content = profileEditScreen;
-            editAccountButton.Click += ToggleProfileButtons;
             editAccountButton.Click += (sender, e) => contentFrame.Content = accountEditScreen;
+
+            contentFrame.ContentRendered += HideProfileButton;
 
             matchingQuiz.ExitPage += (sender, e) => contentFrame.Content = profileEditScreen;
 
@@ -97,6 +96,12 @@ namespace MatchingAppWindow.Views
                 editProfileButton.Visibility = Visibility.Hidden;
                 editAccountButton.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void HideProfileButton(object? sender, EventArgs e)
+        {
+            editProfileButton.Visibility = Visibility.Hidden;
+            editAccountButton.Visibility = Visibility.Hidden;
         }
 
         private void LogoutButtonFocus(object? sender, MouseEventArgs e)

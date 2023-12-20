@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MatchingAppWindow.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="1000"
       Title="Navigation"
       Background="White">
 
@@ -64,13 +64,11 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="293*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Rectangle Fill="#1D2228" Grid.Column="0"/>
         <StackPanel Grid.Column="0">
-            <Image x:Name="profileButton" Source="/Views/AccountIcon.png" Margin="20" MouseEnter="ProfileButtonFocus" MouseLeave="ProfileButtonFocusLost" MouseDown="ToggleProfileButtons">
-                <!--<Image.Source>/Views/AccountIcon.png</Image.Source>-->
-            </Image>
+            <Image x:Name="profileButton" Source="/Views/AccountIcon.png" Margin="20" MouseEnter="ProfileButtonFocus" MouseLeave="ProfileButtonFocusLost" MouseDown="ToggleProfileButtons"/>
             <Button x:Name="profilesButton" Content="Profielen" Style="{StaticResource navButtonStyle}" FontSize="15"/>
             <Button x:Name="matchesButton" Content="Matches" Style="{StaticResource navButtonStyle}" FontSize="15"/>
             <Button x:Name="messageButton" Content="Berichten" Style="{StaticResource navButtonStyle}" FontSize="15"/>

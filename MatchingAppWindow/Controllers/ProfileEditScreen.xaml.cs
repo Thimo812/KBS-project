@@ -29,6 +29,8 @@ namespace MatchingAppWindow.Views
 
         public ObservableCollection<Interest> AvailableInterests {  get; set; } = new();
 
+        private ProfileDetails ProfilePreview { get; set; } = new();
+
         public ProfileEditScreen()
         {
             InitializeComponent();
@@ -42,7 +44,7 @@ namespace MatchingAppWindow.Views
             degreeBox.Text = MainWindow.profile.Degree;
             schoolBox.Text = MainWindow.profile.School;
             workPlaceBox.Text = MainWindow.profile.WorkPlace;
-            //SetDiet(MainWindow.profile.Diet);
+            dietBox.SelectedIndex = (int) MainWindow.profile.Diet;
 
             Interests.Clear();
             AvailableInterests.Clear();
@@ -61,12 +63,34 @@ namespace MatchingAppWindow.Views
             }
             hobbyBox.ItemsSource = Interests;
             availableHobbyBox.ItemsSource = AvailableInterests;
+
+            ProfilePreview.SetProfile(MainWindow.profile.UserName);
+            profilePreviewFrame.Content = ProfilePreview;
+            ProfilePreview.likebutton.Visibility = Visibility.Hidden;
+            ProfilePreview.chatrequest.Visibility = Visibility.Hidden;
+
+            SizeChanged += (sender, e) =>
+            {
+                if (ActualWidth >= 1100) ProfilePreview.Visibility = Visibility.Visible;
+                else ProfilePreview.Visibility = Visibility.Collapsed;
+            };
+
+            LinkProfilePreview();
         }
 
         private void InitializePage(object sender, RoutedEventArgs e)
         {
             InitializePage();
         } 
+
+        private void LinkProfilePreview()
+        {
+            descriptionBox.TextChanged += (sender, e) => ProfilePreview.descriptionBlock.Text = descriptionBox.Text;
+            schoolBox.TextChanged += (sender, e) => ProfilePreview.ProfileInfo[1] = $"School: {schoolBox.Text}";
+            degreeBox.TextChanged += (sender, e) => ProfilePreview.ProfileInfo[2] = $"Opleiding: {degreeBox.Text}";
+            workPlaceBox.TextChanged += (sender, e) => ProfilePreview.ProfileInfo[3] = $"Werkplek: {workPlaceBox.Text}";
+            Interests.CollectionChanged += (sender, e) => ProfilePreview.interestBlock.ItemsSource = Interests;
+        }
 
         public void InterestSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -107,7 +131,7 @@ namespace MatchingAppWindow.Views
                 MainWindow.profile.Degree = degreeBox.Text;
                 MainWindow.profile.School = schoolBox.Text;
                 MainWindow.profile.WorkPlace = workPlaceBox.Text;
-                //MainWindow.profile.Diet = GetDiet();
+                MainWindow.profile.Diet = (Diet) dietBox.SelectedIndex;
                 MainWindow.profile.Interests = Interests.ToList();
 
                 MainWindow.repo.UpdateProfile(MainWindow.profile);

@@ -9,14 +9,12 @@
       Title="ProfileDetails"
       Background="White">
 
+    
     <Grid d:Name="Grid" Background="#252C33">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -42,43 +40,55 @@
 
         </Grid>
 
-
         <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center"   Background="#252C33" Foreground="White" Height="auto"/>
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                
+                <Border CornerRadius="10" Grid.Row="0" Background="#434E5B"  Margin="3" >
+                    <TextBlock x:Name="descriptionBlock" Text="" TextWrapping="Wrap"  HorizontalAlignment="Stretch" Margin="5" Foreground="White" Padding="4"/>
+                </Border>
+
+
+                <Border Grid.Row="1" BorderBrush="#252C33" Background="#434E5B" CornerRadius="10" Margin="3">
+                    <ItemsControl x:Name="interestBlock">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Width="320"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="10" Background="#AD0090" BorderBrush="#AD0090" Margin="3">
+                                    <Label Content="{Binding}" Foreground="White" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+
+                <Border Grid.Row="2" CornerRadius="10" Background="#434E5B" BorderBrush="#434E5B" Margin="3">
+                    <ItemsControl x:Name="detailList" Grid.Row="4" BorderThickness="2"  Foreground="White">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding}" Foreground="White"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+
+
         
-        <Border CornerRadius="10" Grid.Row="2" Background="#434E5B"  Margin="3" >
-            <TextBlock x:Name="descriptionBlock" Text="" TextWrapping="Wrap"  HorizontalAlignment="Stretch" Margin="5" Foreground="White" Padding="4"/>
-        </Border>
 
-
-        <Border Grid.Row="3" BorderBrush="#252C33" Background="#434E5B" CornerRadius="10" Margin="3">
-            <ItemsControl x:Name="interestBlock">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border CornerRadius="10" Background="#AD0090" BorderBrush="#AD0090" Margin="3">
-                            <Label Content="{Binding}" Foreground="White" />
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Border>
-
-
-        <Border Grid.Row="4" CornerRadius="10" Background="#434E5B" BorderBrush="#434E5B" Margin="3">
-            <ItemsControl x:Name="detailList" Grid.Row="4" BorderThickness="2"  Foreground="White">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding}" Foreground="White"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Border>
-
-        <Grid Grid.Row="5" VerticalAlignment="Bottom">
+        <Grid Grid.Row="2" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -108,7 +118,6 @@
                     </Button.Template>
                 </Button>
             </Border>
-            
         </Grid>
     </Grid>
 </Page>

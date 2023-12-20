@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MatchingAppWindow.Views" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-      mc:Ignorable="d" d:DesignWidth="700"
+      mc:Ignorable="d" d:DesignWidth="900"
       Title="ProfileEditScreen" MinHeight="595">
 
     <Page.Resources>
@@ -227,17 +227,15 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="10"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate>
+                    <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}"
-                                SnapsToDevicePixels="true"
-                                CornerRadius="15"
-                                Margin="5">
-                            <ItemsPresenter/>
+                                CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -381,48 +379,56 @@
 
     <Grid Background="#2C343D">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="175"/>
-            <ColumnDefinition Width="175"/>
-            <ColumnDefinition Width="175"/>
-            <ColumnDefinition Width="175"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="105"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="35"/>
             <RowDefinition Height="60"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="2*" MaxHeight="100"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <Label Content="Beschrijving" Grid.Row="0" Grid.Column="0" VerticalAlignment="Bottom"/>
-        <TextBox x:Name="descriptionBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" TextWrapping="Wrap"/>
+        <Label Content="Beschrijving" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="descriptionBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" TextWrapping="Wrap"/>
 
-        <Label Content="Opleiding" Grid.Row="2" Grid.Column="1"/>
-        <TextBox x:Name="degreeBox" Grid.Row="3" Grid.Column="1"/>
+        <Label Content="Opleiding" Grid.Row="2" Grid.Column="2"/>
+        <TextBox x:Name="degreeBox" Grid.Row="3" Grid.Column="2"/>
 
-        <Label Content="School" Grid.Row="2" Grid.Column="0"/>
-        <TextBox x:Name="schoolBox" Grid.Row="3" Grid.Column="0"/>
+        <Label Content="School" Grid.Row="2" Grid.Column="1"/>
+        <TextBox x:Name="schoolBox" Grid.Row="3" Grid.Column="1"/>
 
-        <Label Content="Werkplek" Grid.Row="2" Grid.Column="2"/>
-        <TextBox x:Name="workPlaceBox" Grid.Row="3" Grid.Column="2"/>
+        <Label Content="Werkplek" Grid.Row="2" Grid.Column="3"/>
+        <TextBox x:Name="workPlaceBox" Grid.Row="3" Grid.Column="3"/>
 
-        <Label Content="Dieet" Grid.Row="2" Grid.Column="3"/>
-        <ComboBox x:Name="dietBox" Grid.Row="3" Grid.Column="3" Foreground="White" FontSize="18">
-            <ComboBoxItem Content="Keto"/>
+        <Label Content="Dieet" Grid.Row="2" Grid.Column="4"/>
+        <ComboBox x:Name="dietBox" Grid.Row="3" Grid.Column="4" Foreground="White" FontSize="18">
+            <ComboBoxItem Content="Geen"/>
             <ComboBoxItem Content="Vegetarisch"/>
+            <ComboBoxItem Content="Veganistisch"/>
+            <ComboBoxItem Content="Keto"/>
+            <ComboBoxItem Content="Anders"/>
         </ComboBox>
 
-        <Label Content="Geselecteerde hobbies" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"/>
-        <Label Content="Beschikbare hobbies" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2"/>
+        <Label Content="Geselecteerde hobbies" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
+        <Label Content="Beschikbare hobbies" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2"/>
 
-        <ListBox x:Name="hobbyBox" ItemsSource="{Binding Interests, Mode=TwoWay}" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="InterestSelectionChanged"/>
-        <ListBox x:Name="availableHobbyBox"  ItemsSource="{Binding AvailableInterests, Mode=TwoWay}" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="AvailableInterestSelectionChanged"/>
+        <ListBox x:Name="hobbyBox" ItemsSource="{Binding Interests, Mode=TwoWay}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="InterestSelectionChanged"/>
+        <ListBox x:Name="availableHobbyBox"  ItemsSource="{Binding AvailableInterests, Mode=TwoWay}" Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="AvailableInterestSelectionChanged"/>
 
-        <Button x:Name="confirmButton" Content="Opslaan" Grid.Row="6" Grid.Column="1"/>
-        <Button x:Name="cancelButton" Content="annuleren" Grid.Row="6" Grid.Column="2"/>
+        <Button x:Name="confirmButton" Content="Opslaan" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" Height="45" Click="ConfirmChanges"/>
+        <Button x:Name="cancelButton" Content="annuleren" Grid.Row="6" Grid.Column="3" VerticalAlignment="Center" Height="45" Click="InitializePage"/>
+
+        <Frame x:Name="profilePreviewFrame" Grid.Column="7" Grid.RowSpan="8" HorizontalAlignment="Right" VerticalAlignment="Stretch" MinWidth="200"/>
     </Grid>
 </Page>
