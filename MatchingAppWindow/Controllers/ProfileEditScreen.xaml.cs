@@ -44,7 +44,7 @@ namespace MatchingAppWindow.Views
             degreeBox.Text = MainWindow.profile.Degree;
             schoolBox.Text = MainWindow.profile.School;
             workPlaceBox.Text = MainWindow.profile.WorkPlace;
-            dietBox.SelectedIndex = (int) MainWindow.profile.Diet;
+            if (MainWindow.profile.Diet != null) dietBox.SelectedIndex = (int)MainWindow.profile.Diet;
 
             Interests.Clear();
             AvailableInterests.Clear();
