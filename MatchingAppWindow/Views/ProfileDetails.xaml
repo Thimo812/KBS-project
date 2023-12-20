@@ -5,26 +5,26 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MatchingAppWindow.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="200"
+      d:DesignHeight="450" d:DesignWidth="300"
       Title="ProfileDetails"
       Background="White">
 
     
-    <Grid d:Name="Grid" Background="#252C33">
+    <Grid d:Name="Grid" Background="#252C33" Width="300">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
+        <Grid x:Name="profileDetailGrid" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
 
-            <Image x:Name="profileImage" Grid.ColumnSpan="3" Width="300"/>
+            <Image x:Name="profileImage" Grid.ColumnSpan="3" Width="{Binding ActualWidth, ElementName=profileDetailGrid}" />
 
             <Button x:Name="previousImage" Content="&lt;" Grid.Column="0" Height="30" BorderBrush="Transparent" FontSize="15" Click="PreviousImage">
                 <Button.Background>
@@ -43,7 +43,7 @@
         <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center"   Background="#252C33" Foreground="White" Height="auto"/>
 
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
-            <Grid>
+            <Grid Width="300">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
@@ -57,10 +57,10 @@
 
 
                 <Border Grid.Row="1" BorderBrush="#252C33" Background="#434E5B" CornerRadius="10" Margin="3">
-                    <ItemsControl x:Name="interestBlock">
+                    <ItemsControl x:Name="interestBlock" d:ItemsSource="{d:SampleData ItemCount=5}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel Width="300"/>
+                                <WrapPanel Width="300" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
