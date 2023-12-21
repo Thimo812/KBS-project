@@ -5,12 +5,13 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MatchingAppWindow.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="1000"
       Title="Navigation"
       Background="White">
 
     <Page.Resources>
         <Style TargetType="Button" x:Key="navButtonStyle">
+            <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="Template">
@@ -25,7 +26,32 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="LightGray"/>
+                                <Setter Property="Background" Value="#434E5B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="Button" x:Key="profileEditButtons">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#AD0090"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="true"
+                            CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#434E5B"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -38,25 +64,22 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="293*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Rectangle Fill="Gray" Grid.Column="0"/>
+        <Rectangle Fill="#1D2228" Grid.Column="0"/>
         <StackPanel Grid.Column="0">
-            <Image x:Name="profileButton" Source="/Views/AccountIcon.png" Margin="20" MouseEnter="ProfileButtonFocus" MouseLeave="ProfileButtonFocusLost" MouseDown="ToggleProfileButtons">
-                <!--<Image.Source>/Views/AccountIcon.png</Image.Source>-->
-            </Image>
+            <Image x:Name="profileButton" Source="/Views/AccountIcon.png" Margin="20" MouseEnter="ProfileButtonFocus" MouseLeave="ProfileButtonFocusLost" MouseDown="ToggleProfileButtons"/>
             <Button x:Name="profilesButton" Content="Profielen" Style="{StaticResource navButtonStyle}" FontSize="15"/>
             <Button x:Name="matchesButton" Content="Matches" Style="{StaticResource navButtonStyle}" FontSize="15"/>
             <Button x:Name="messageButton" Content="Berichten" Style="{StaticResource navButtonStyle}" FontSize="15"/>
         </StackPanel>
-        <Image x:Name="logoutButton" Source="/Views/LogoutIcon.png" Margin="10" Width="25" Height="25" MouseEnter="LogoutButtonFocus" MouseLeave="LogoutButtonFocusLost" VerticalAlignment="Bottom"/>
-
+        <Image x:Name="logoutButton" Source="/Views/LogoutIcon.png" Margin="0,0,0,20" Width="25" Height="25" MouseEnter="LogoutButtonFocus" MouseLeave="LogoutButtonFocusLost" VerticalAlignment="Bottom"/>
 
         <Frame x:Name="contentFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2"/>
 
         <StackPanel Grid.Column="1">
-            <Button x:Name="editProfileButton" Content="Profiel" Margin="5,27,5,0" Visibility="Hidden"/>
-            <Button x:Name="editAccountButton" Content="Account" Margin="5,6,5,0" Visibility="Hidden"/>
+            <Button x:Name="editProfileButton" Style="{StaticResource profileEditButtons}" Content="Profiel" Margin="5,27,5,0" Visibility="Hidden"/>
+            <Button x:Name="editAccountButton" Style="{StaticResource profileEditButtons}" Content="Account" Margin="5,6,5,0" Visibility="Hidden"/>
         </StackPanel>
     </Grid>
 </Page>

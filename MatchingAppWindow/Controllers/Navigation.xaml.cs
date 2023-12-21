@@ -28,7 +28,7 @@ namespace MatchingAppWindow.Views
         private LikesMatchesScreen matchScreen;
         private ProfileEditScreen profileEditScreen = new();
         private AccountEditScreen accountEditScreen = new();
-        public ChatScreen ChatScreen { get; set; } = new();
+        public ChatScreen ChatScreen { get; private set; }
 
         public Navigation()
         {
@@ -51,25 +51,23 @@ namespace MatchingAppWindow.Views
 
         public void InitScreens()
         {
+            ChatScreen = new ChatScreen();
+
             profileEditScreen.InitializePage();
             accountEditScreen.InitializePage();
 
-            if (ChatScreen == null) ChatScreen = new();
-            ChatScreen.InitializePage();
-
-            profileEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
+            profileEditScreen.confirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
             accountEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
             matchesButton.Click += (s, e) => contentFrame.Content = matchScreen;
             messageButton.Click += (s, e) => contentFrame.Content = ChatScreen;
+            profileEditScreen.cancelButton.Click += (s, e) => contentFrame.Content = profileScreen;
 
-            profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
-
-            editProfileButton.Click += ToggleProfileButtons;
             editProfileButton.Click += (sender, e) => contentFrame.Content = profileEditScreen;
-            editAccountButton.Click += ToggleProfileButtons;
             editAccountButton.Click += (sender, e) => contentFrame.Content = accountEditScreen;
+
+            contentFrame.ContentRendered += HideProfileButton;
 
             matchingQuiz.ExitPage += (sender, e) => contentFrame.Content = profileEditScreen;
 
@@ -104,6 +102,12 @@ namespace MatchingAppWindow.Views
                 editProfileButton.Visibility = Visibility.Hidden;
                 editAccountButton.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void HideProfileButton(object? sender, EventArgs e)
+        {
+            editProfileButton.Visibility = Visibility.Hidden;
+            editAccountButton.Visibility = Visibility.Hidden;
         }
 
         private void LogoutButtonFocus(object? sender, MouseEventArgs e)

@@ -2,6 +2,7 @@
 using MatchingApp.DataAccess.SQL;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -29,6 +30,8 @@ namespace MatchingAppWindow.Views
         MatchingAppRepository repo = new MatchingAppRepository();
         private string usr = MainWindow.profile.UserName;
         private int currentImage;
+
+        public ObservableCollection<string> ProfileInfo { get; set; }
         public ProfileDetails()
         {
             InitializeComponent();
@@ -64,6 +67,8 @@ namespace MatchingAppWindow.Views
             currentImage = 0;
             selectedProfile = MainWindow.repo.GetProfile(profileName);
 
+            ProfileInfo = new(GetProfileDetails());
+
             try
             {
                 profileImage.Source = ImageConverter.ImageDataToBitmap(selectedProfile.Images[0]);
@@ -80,7 +85,7 @@ namespace MatchingAppWindow.Views
             nameLabel.Content = $"{selectedProfile.FirstName} {selectedProfile.LastName}, {selectedProfile.Age()}";
             descriptionBlock.Text = selectedProfile.Description;
             interestBlock.ItemsSource = selectedProfile.Interests;
-            detailList.ItemsSource = GetProfileDetails();
+            detailList.ItemsSource = ProfileInfo;
         }
 
         public void NewChatRequest(object sender, RoutedEventArgs e)

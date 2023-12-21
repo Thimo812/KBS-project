@@ -46,6 +46,7 @@ namespace MatchingAppWindow.Views
             SetGender(MainWindow.profile.Gender);
             SetPreference(MainWindow.profile.SexualPreference);
 
+            Images.Clear();
             foreach (byte[] imageData in MainWindow.profile.Images)
             {
                 Images.Add(ImageConverter.ImageDataToBitmap(imageData));

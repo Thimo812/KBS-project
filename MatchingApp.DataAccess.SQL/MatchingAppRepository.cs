@@ -835,36 +835,37 @@ namespace MatchingApp.DataAccess.SQL
 
         public DateTime? GetLatestTimeStamp(string user, string contact)
         {
-                DateTime LatestTimeStamp;
+            DateTime LatestTimeStamp;
 
-                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+            {
+                var sql = "SELECT TOP 1 Tijdstip FROM Bericht WHERE (Verzender = @user AND Ontvanger = @contact) OR (Verzender = @contact AND Ontvanger = @user) ORDER BY Tijdstip DESC";
+
+                connection.Open();
+                using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    var sql = "SELECT TOP 1 Tijdstip FROM Bericht WHERE (Verzender = @user AND Ontvanger = @contact) OR (Verzender = @contact AND Ontvanger = @user) ORDER BY Tijdstip DESC";
-
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    command.Parameters.AddWithValue("user", user);
+                    command.Parameters.AddWithValue("contact", contact);
+                    try
                     {
-                        command.Parameters.AddWithValue("user", user);
-                        command.Parameters.AddWithValue("contact", contact);
-                        try
-                        {
-                            command.ExecuteNonQuery();
-                        }
-                        catch (SqlException) { }
+                        command.ExecuteNonQuery();
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
                             reader.Read();
 
-                            try
-                            {
-                                LatestTimeStamp = reader.GetDateTime(0);
-                            }
-                            catch (InvalidOperationException)
-                            {
-                                return DateTime.MinValue;
-                            }
+                            LatestTimeStamp = reader.GetDateTime(0);
+
                         }
+                    }
+                    catch (SqlException) 
+                    {
+                        return DateTime.MinValue;
+                    }
+                    catch (InvalidOperationException ex) 
+                    { 
+                        connection.Close();
+                        return DateTime.MinValue;
                     }
                     connection.Close();
                 }

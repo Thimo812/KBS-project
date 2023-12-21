@@ -20,6 +20,7 @@ using System.Security.Policy;
 using System.Data.SqlClient;
 using System.Windows.Controls.Primitives;
 using System.Net;
+using System.Xml;
 
 namespace MatchingAppWindow.Views
 {
@@ -66,6 +67,7 @@ namespace MatchingAppWindow.Views
                 checkBox.Checked += HobbyChecked;
                 checkBox.Unchecked += HobbyUnchecked;
                 checkBox.Indeterminate += HobbyIndeterminate;
+                checkBox.Foreground = Brushes.White;
 
                 HobbyCheckBoxes.Children.Add(checkBox);
             }
@@ -81,6 +83,7 @@ namespace MatchingAppWindow.Views
                 checkBox.Checked += DietChecked;
                 checkBox.Unchecked += DietUnchecked;
                 checkBox.Indeterminate += DietIndeterminate;
+                checkBox.Foreground = Brushes.White;
 
                 DietCheckBoxes.Children.Add(checkBox);
             }
@@ -164,22 +167,26 @@ namespace MatchingAppWindow.Views
             {
                 if (minAge >= 18 && minAge <= 200 && minAge <= maxAge)
                 {
-                    MinAge.Background = Brushes.White;
+                    MinAge.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#434E5B");
+                    MinAge.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#434E5B");
                     minimumAge = minAge;
                 }
                 else
                 {
-                    MinAge.Background = Brushes.PaleVioletRed;
+                    MinAge.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff6666");
+                    MinAge.BorderBrush = Brushes.Red;
                 }
 
                 if (maxAge >= 18 && maxAge <= 200 && maxAge >= minAge)
                 {
-                    MaxAge.Background = Brushes.White;
+                    MaxAge.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#434E5B");
+                    MaxAge.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#434E5B");
                     maximumAge = maxAge;
                 }
                 else
                 {
-                    MaxAge.Background = Brushes.PaleVioletRed;
+                    MaxAge.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff6666");
+                    MaxAge.BorderBrush = Brushes.Red; ;
                 }
             }
             else

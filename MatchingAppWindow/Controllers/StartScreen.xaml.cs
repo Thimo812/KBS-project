@@ -42,6 +42,13 @@ namespace MatchingAppWindow.Views
             errorMessage.Visibility = Visibility.Visible;
         }
 
+        private void ClearErrors()
+        {
+            userNameField.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#434E5B");
+            userNameField.BorderBrush = Brushes.Transparent;
+            errorMessage.Visibility = Visibility.Hidden;
+        }
+
         private void TryLogin(object sender, RoutedEventArgs e)
         {
             string enteredUserName = userNameField.Text;
@@ -50,6 +57,7 @@ namespace MatchingAppWindow.Views
             {
                 MainWindow.profile = MainWindow.repo.GetProfile(enteredUserName);
                 LoginSuccessful?.Invoke(this, EventArgs.Empty);
+                ClearErrors();
             }
             else
             {

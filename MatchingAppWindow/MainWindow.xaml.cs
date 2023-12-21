@@ -57,7 +57,11 @@ namespace MatchingAppWindow
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
-            if(navigation != null) if (navigation.ChatScreen.MessageChecker != null) navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
+            try
+            {
+                navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
+            }
+            catch (NullReferenceException) { }
 
             // Controleren of de SSH-verbinding open is voordat we proberen deze te sluiten
             if (sshClient != null && sshClient.IsConnected)
@@ -86,20 +90,21 @@ namespace MatchingAppWindow
 
             startScreen.registerButton.Click += (sender, e) => Content = registerScreen;
 
+            navigation.logoutButton.MouseDown += LogoutButton_Click;
+
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
 
             Content = startScreen;
         }
 
-
         private void LogoutButton_Click(object? sender, RoutedEventArgs e)
         {
+            if (navigation.contentFrame.Content is ChatScreen) navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
             Content = startScreen;
+            profile = null;
+            navigation.profileScreen = null;
             startScreen.userNameField.Text = string.Empty;
-            if (navigation.ChatScreen.MessageChecker != null) navigation.ChatScreen.StopChecking(this, new RoutedEventArgs());
-            navigation.ChatScreen = null;
-            navigation = null;
         }
     }
 }
