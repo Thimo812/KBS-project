@@ -871,7 +871,6 @@ namespace MatchingApp.DataAccess.SQL
                 return LatestTimeStamp;
         }
 
-        private void LikeProfile(string liker, string liked)
         private (string, bool, string, bool) RetrieveLikeStatus(SqlConnection connection, string liker, string liked)
         {
             string gbr1, gbr2;

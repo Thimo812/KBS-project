@@ -61,6 +61,7 @@ namespace MatchingAppWindow.Views
             accountEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
+            matchesButton.Click += (s, e) => contentFrame.Content = matchScreen;
             messageButton.Click += (s, e) => contentFrame.Content = ChatScreen;
 
             profileEditScreen.matchingQuizButton.Click += (s, e) => contentFrame.Content = matchingQuiz;
@@ -74,6 +75,11 @@ namespace MatchingAppWindow.Views
 
             SwitchToLikesMatchesScreen(this, EventArgs.Empty);
             SwitchToProfileScreen(this, EventArgs.Empty);
+        }
+
+        private void MatchesButton_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void ProfileButtonFocus(object? sender, MouseEventArgs e)
