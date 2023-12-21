@@ -90,8 +90,6 @@ namespace MatchingAppWindow
 
             startScreen.registerButton.Click += (sender, e) => Content = registerScreen;
 
-            navigation.logoutButton.MouseDown += LogoutButton_Click;
-
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
 

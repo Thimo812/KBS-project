@@ -560,7 +560,7 @@ namespace MatchingApp.DataAccess.SQL
         {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "INSERT INTO MessageRequests (Sender, Receiver, Status) " +
+                var sql = "INSERT INTO ChatVerzoek (Verzender, Ontvanger, Status) " +
                         "VALUES (@Sender, @Receiver, @Status)";
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -581,7 +581,7 @@ namespace MatchingApp.DataAccess.SQL
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT Sender FROM MessageRequests WHERE Receiver = @Receiver";
+                var sql = "SELECT Verzender FROM ChatVerzoek WHERE Ontvanger = @Receiver";
 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -606,7 +606,7 @@ namespace MatchingApp.DataAccess.SQL
         {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "UPDATE MessageRequests SET Status = @Status WHERE Receiver = @receiver AND Sender = @Sender";
+                var sql = "UPDATE ChatVerzoek SET Status = @Status WHERE Ontvanger = @receiver AND Verzender = @Sender";
 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -757,7 +757,7 @@ namespace MatchingApp.DataAccess.SQL
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT Gebruiker1 FROM Conversatie WHERE Gebruiker2 = @userName AND IsActief = 1 UNION SELECT Gebruiker2 FROM Conversatie WHERE Gebruiker1 = @userName AND IsActief = 1";
+                var sql = "SELECT Verzender FROM ChatVerzoek WHERE Ontvanger = @userName AND Status = 1 UNION SELECT Ontvanger FROM ChatVerzoek WHERE Verzender = @userName AND Status = 1";
 
                 connection.Open();
 
