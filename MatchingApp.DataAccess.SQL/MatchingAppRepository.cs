@@ -858,18 +858,19 @@ namespace MatchingApp.DataAccess.SQL
 
                         }
                     }
-                    catch (SqlException) 
+                    catch (SqlException)
                     {
                         return DateTime.MinValue;
                     }
-                    catch (InvalidOperationException ex) 
-                    { 
+                    catch (InvalidOperationException ex)
+                    {
                         connection.Close();
                         return DateTime.MinValue;
                     }
                     connection.Close();
                 }
                 return LatestTimeStamp;
+            }
         }
 
         private (string, bool, string, bool) RetrieveLikeStatus(SqlConnection connection, string liker, string liked)
