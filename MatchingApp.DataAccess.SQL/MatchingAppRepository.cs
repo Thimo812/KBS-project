@@ -122,30 +122,23 @@ namespace MatchingApp.DataAccess.SQL
         }
 
         public List<string> GetProfiles(Profile profile, LocationFilter location, int minimumAge, int maximumAge,
-            List<int> includedHobbies, List<int> excludedHobbies, List<Diet> includedDiets, List<Diet> excludedDiets, bool likebutt, bool matchbutt)
+            List<int> includedHobbies, List<int> excludedHobbies, List<Diet> includedDiets, List<Diet> excludedDiets, bool likebutt)
         {
             List<string> results = new List<string>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = new StringBuilder("SELECT DISTINCT Profiel.Gebruikersnaam FROM Profiel ");
+                var sql = new StringBuilder("SELECT Profiel.Gebruikersnaam FROM Profiel ");
                 if (likebutt)
                 {
                     sql.Append("JOIN MatchingDB.dbo.[Like] ON Profiel.Gebruikersnaam = [Like].Gebruiker1 OR Profiel.Gebruikersnaam = [Like].Gebruiker2 "
                     + $"WHERE (Gebruiker1 = '{profile.UserName}' OR Gebruiker2 = '{profile.UserName}') "
-                    + "AND (Gebruiker1Liked = 'true' OR Gebruiker2Liked = 'true') ");
-                }
-                else if (matchbutt)
-                {
-                    sql.Append("JOIN MatchingDB.dbo.[Like] ON Profiel.Gebruikersnaam = [Like].Gebruiker1 OR Profiel.Gebruikersnaam = [Like].Gebruiker2 "
-                    + $"WHERE (Gebruiker1 = '{profile.UserName}' OR Gebruiker2 = '{profile.UserName}') "
-                    + "AND (Gebruiker1Liked = 'true' AND Gebruiker2Liked = 'true') ");
+                    + "AND ((Gebruiker1Liked = 'true' OR Gebruiker2Liked = 'true') OR (Gebruiker1Liked = 'true' AND Gebruiker2Liked = 'true'))" );
                 }
                 else
                 {
                     sql.Append($"WHERE 1 = 1 ");
                 }
-
 
                 // Location
                 if (location != LocationFilter.Global)
@@ -179,6 +172,8 @@ namespace MatchingApp.DataAccess.SQL
                     : "");
 
                 sql.Append($" AND Gebruikersnaam != '{profile.UserName}'");
+                sql.Append($"ORDER BY CASE WHEN (Gebruiker1Liked = 'true' AND Gebruiker2Liked = 'true') THEN 1 "
+                           + $"WHEN ((Gebruiker1 = '{profile.UserName}' AND Gebruiker1Liked = 'true') OR (Gebruiker2 = '{profile.UserName}' AND Gebruiker2Liked = 'true')) THEN 2 ELSE 3 END");
 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql.ToString(), connection))
@@ -1037,9 +1032,10 @@ namespace MatchingApp.DataAccess.SQL
             List<string> profiles = new List<string>();
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT Profiel.* FROM MatchingDB.dbo.Profiel JOIN MatchingDB.dbo.[Like] ON [Like].Gebruiker1 = Profiel.Gebruikersnaam OR [Like].Gebruiker2 = Profiel.Gebruikersnaam "
-                    + "WHERE (Gebruiker1 = @Gebruiker OR Gebruiker2 = @Gebruiker)"
-                    + "AND (Gebruiker1Liked = 'true' OR Gebruiker2Liked = 'true') AND Profiel.Gebruikersnaam != @Gebruiker";
+                var sql = "SELECT Profiel.Gebruikersnaam " +
+                    "FROM MatchingDB.dbo.Profiel JOIN MatchingDB.dbo.[Like] ON Profiel.Gebruikersnaam = [Like].Gebruiker1 OR Profiel.Gebruikersnaam = [Like].Gebruiker2 " +
+                    $"WHERE (Gebruiker1 = '{profile.UserName}' OR Gebruiker2 = '{profile.UserName}') AND ((Gebruiker1Liked = 'true' OR Gebruiker2Liked = 'true') OR (Gebruiker1Liked = 'true' AND Gebruiker2Liked = 'true')) AND Profiel.Gebruikersnaam != '{profile.UserName}' " +
+                    $"ORDER BY CASE WHEN (Gebruiker1Liked = 'true' AND Gebruiker2Liked = 'true') THEN 1 WHEN ((Gebruiker1 = '{profile.UserName}' AND Gebruiker1Liked = 'true') OR (Gebruiker2 = '{profile.UserName}' AND Gebruiker2Liked = 'true')) THEN 2 ELSE 3 END";
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -1057,32 +1053,5 @@ namespace MatchingApp.DataAccess.SQL
             }
             return profiles;
         }
-
-        public List<string> FilterMatch(Profile profile)
-        {
-            List<string> profiles = new List<string>();
-            using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
-            {
-                var sql = "SELECT Profiel.* FROM MatchingDB.dbo.Profiel JOIN MatchingDB.dbo.[Like] ON Profiel.Gebruikersnaam = [Like].Gebruiker1 OR Profiel.Gebruikersnaam = [Like].Gebruiker2 "
-                    + "WHERE (Gebruiker1 = @Gebruiker OR Gebruiker2 = @Gebruiker)"
-                    + "AND (Gebruiker1Liked = 'true' AND Gebruiker2Liked = 'true') AND Profiel.Gebruikersnaam != @Gebruiker;";
-                connection.Open();
-                using (SqlCommand command = new SqlCommand(sql, connection))
-                {
-                    command.Parameters.AddWithValue("Gebruiker", profile.UserName);
-                    command.ExecuteNonQuery();
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            profiles.Add(reader.GetString(0));
-                        }
-                    }
-                }
-                connection.Close();
-            }
-            return profiles;
-        }
-
     }
 }

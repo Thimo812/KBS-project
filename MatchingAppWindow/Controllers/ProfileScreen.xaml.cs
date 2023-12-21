@@ -46,6 +46,7 @@ namespace MatchingAppWindow.Views
             InitializeComponent();
 
             var profileList = repo.GetProfiles(MainWindow.profile);
+            profileList.Sort();
 
             resultBox.ItemsSource = profileList;
 
@@ -201,7 +202,7 @@ namespace MatchingAppWindow.Views
         //Save the filteroptions and show the matching profiles
         private void Filter()
         {
-            List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets, false, false);
+            List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets, false);
 
             resultBox.ItemsSource = results;
         }
