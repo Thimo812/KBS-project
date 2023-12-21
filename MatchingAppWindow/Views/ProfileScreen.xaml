@@ -48,12 +48,33 @@
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Margin" Value="4"/>
         </Style>
+
+        <Style x:Key="_ListBoxItemStyle" TargetType="ListBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Name="_Border"
+                                Padding="2"
+                                SnapsToDevicePixels="true"
+                                Opacity="0.8">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="_Border" Property="Background" Value="#242a30"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MaxWidth="200" />
-            <ColumnDefinition />
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition/>
+            <ColumnDefinition MinWidth="300"/>
         </Grid.ColumnDefinitions>
         <ScrollViewer Grid.Column="0" Name="filterPanel" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Border Background="#1D2228">
@@ -167,28 +188,27 @@
             </Border>
         </ScrollViewer>
 
-        <Grid Grid.Column="1">
-            <ListBox Background="#2C343D" Foreground="White" Name="resultBox" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="resultBox_SelectedIndexChanged">
+        <Grid Grid.Column="1" Grid.ColumnSpan="2">
+            <ListBox ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" Background="#2C343D" Foreground="White" Name="resultBox" ScrollViewer.VerticalScrollBarVisibility="Visible" SelectionChanged="resultBox_SelectedIndexChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid Height="70">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" MinWidth="180"/>
                                 <ColumnDefinition Width="2*" MinWidth="100"/>
-                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="3*"/>
                                 <RowDefinition Height="1*"/>
                             </Grid.RowDefinitions>
-                            <TextBlock Margin="2" Grid.Row="0" Text="{Binding}" FontSize="25"/>
-                            <Rectangle Grid.Row="1" Grid.ColumnSpan="3"  Margin="2" Height="2" Fill="#434E5B"/>
-                            <TextBlock Margin="2" Grid.Column="2" Grid.Row="0"></TextBlock>
+                            <TextBlock Margin="10" Grid.Row="0" Text="{Binding}" FontSize="25"/>
+                            <Rectangle Grid.Row="1" Grid.ColumnSpan="3" VerticalAlignment="Bottom" Margin="8,8,8,0" Height="2" Fill="#434E5B"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Frame Grid.Column="1" x:Name="profileDetailsFrame" HorizontalAlignment="Right" MinWidth="300" />
         </Grid>
+        <Frame Grid.Column="2" x:Name="profileDetailsFrame" HorizontalAlignment="Right"/>
     </Grid>
 </Page>

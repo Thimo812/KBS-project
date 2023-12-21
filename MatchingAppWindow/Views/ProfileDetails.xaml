@@ -64,17 +64,17 @@
 
 
         <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center" Background="#434E5B" Height="auto"/>
-        <TextBlock x:Name="descriptionBlock" Grid.Row="2" Text="" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="5" Width="300"/>
-        <ItemsControl x:Name="interestBlock" Grid.Row="3" Background="#434E5B">
+        <TextBlock x:Name="descriptionBlock" Grid.Row="2" Foreground="White" TextWrapping="Wrap" HorizontalAlignment="Center" Margin="5" Width="300"/>
+        <ItemsControl x:Name="interestBlock" Grid.Row="3" Background="LightGray">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel />
+                    <WrapPanel/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Border CornerRadius="10" Margin="1,1,1,1">
-                        <Label Content="{Binding}"  />
+                        <Label Content="{Binding}" Background="#1D2228"/>
                     </Border>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -89,10 +89,10 @@
         <Grid Grid.Row="5" VerticalAlignment="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="chatrequest" Grid.Column="0" Content="ChatReq" />
-            <Button x:Name="likebutton" Grid.Column="1" Content="Hartjuh" />
+            <Image Name="chatrequest" Source="/Views/ChatRequestIcon.png" Grid.Column="0" Margin="10" HorizontalAlignment="Right" Height="30"/>
+            <Image Name="likebutton" Source="/Views/LikeIcon.png" Grid.Column="1" Margin="10" HorizontalAlignment="Right" Height="30" MouseDown="LikedProfile"/>
         </Grid>
     </Grid>
 </Page>

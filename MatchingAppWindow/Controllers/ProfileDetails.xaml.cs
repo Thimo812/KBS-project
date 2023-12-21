@@ -95,5 +95,10 @@ namespace MatchingAppWindow.Views
             currentImage++;
             profileImage.Source = ImageConverter.ImageDataToBitmap(selectedProfile.Images[currentImage]);
         }
+
+        public void LikedProfile(object sender, RoutedEventArgs e)
+        {
+            likebutton.Source = new BitmapImage(new Uri("/Views/LikedIcon.png", UriKind.Relative));
+        }
     }
 }
