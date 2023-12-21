@@ -95,7 +95,7 @@
             </Grid.ColumnDefinitions>
 
 
-            <Button x:Name="chatrequest" Grid.Column="0" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40">
+            <Button x:Name="chatrequest" Grid.Column="0" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40" Click="NewChatRequest">
                 <Button.Content>
                     <Image Source="/Views/MessageIcon.png" Margin="10"/>
                 </Button.Content>
