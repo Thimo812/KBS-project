@@ -121,7 +121,10 @@ namespace MatchingAppWindow.Views
 
         public void StopChecking(object sender, RoutedEventArgs e)
         {
-            if (MessageChecker.IsBusy) MessageChecker.CancelAsync();
+            if (MessageChecker != null)
+            {
+                if (MessageChecker.IsBusy) MessageChecker.CancelAsync();
+            }
         }
 
         private void StartChecking(object sender, RoutedEventArgs e)
