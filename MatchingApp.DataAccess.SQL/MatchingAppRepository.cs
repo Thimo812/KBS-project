@@ -1032,12 +1032,14 @@ namespace MatchingApp.DataAccess.SQL
         }
 
 
-        public List<string> FilterLikes(Profile profile)
+        public (List<string>, List<bool>, List<bool>) FilterLikes(Profile profile)
         {
             List<string> profiles = new List<string>();
+            List<bool> likes = new List<bool>();
+            List<bool> isLiked = new List<bool>();
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT Profiel.* FROM MatchingDB.dbo.Profiel JOIN MatchingDB.dbo.[Like] ON [Like].Gebruiker1 = Profiel.Gebruikersnaam OR [Like].Gebruiker2 = Profiel.Gebruikersnaam "
+                var sql = "SELECT Profiel.Gebruikersnaam, Gebruiker1, Gebruiker1Liked, Gebruiker2Liked FROM Profiel JOIN [Like] ON [Like].Gebruiker1 = Profiel.Gebruikersnaam OR [Like].Gebruiker2 = Profiel.Gebruikersnaam "
                     + "WHERE (Gebruiker1 = @Gebruiker OR Gebruiker2 = @Gebruiker)"
                     + "AND (Gebruiker1Liked = 'true' OR Gebruiker2Liked = 'true') AND Profiel.Gebruikersnaam != @Gebruiker";
                 connection.Open();
@@ -1050,12 +1052,23 @@ namespace MatchingApp.DataAccess.SQL
                         while (reader.Read())
                         {
                             profiles.Add(reader.GetString(0));
+                            if(reader.GetString(1) == profile.UserName)
+                            {
+                                likes.Add(reader.GetBoolean(2));
+                                isLiked.Add(reader.GetBoolean(3));
+                            }
+                            else
+                            {
+                                likes.Add(reader.GetBoolean(3));
+                                isLiked.Add(reader.GetBoolean(2));
+                            }
+                            
                         }
                     }
                 }
                 connection.Close();
             }
-            return profiles;
+            return (profiles, likes, isLiked);
         }
 
         public List<string> FilterMatch(Profile profile)

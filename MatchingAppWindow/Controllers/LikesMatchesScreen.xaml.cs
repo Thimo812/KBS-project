@@ -47,9 +47,17 @@ namespace MatchingAppWindow.Views
         {
             InitializeComponent();
 
-            var profileList = repo.FilterLikes(MainWindow.profile);
+            var (profileList, likes, isLiked) = repo.FilterLikes(MainWindow.profile);
+            int counter = 0;
+            List<Match> matches = new List<Match>();
 
-            resultBox.ItemsSource = profileList;
+            foreach (string profile in profileList)
+            {
+                matches.Add(new Match(profile, likes[counter], isLiked[counter]));
+                counter++;
+            }
+
+            resultBox.ItemsSource = matches;
 
             profileDetailsFrame.Content = profileDetails;
 
@@ -253,7 +261,11 @@ namespace MatchingAppWindow.Views
             // Get the currently selected item in the ListBox.
             if (resultBox.SelectedItem != null)
             {
-                string curItem = resultBox.SelectedItem.ToString();
+                string curItem = "";
+                if (resultBox.SelectedItem is Match match)
+                {
+                     curItem = match.UserName.ToString();
+                }
                 profileDetails.SetProfile(curItem);
                 profileDetails.Visibility = Visibility.Visible;
             }
@@ -263,9 +275,17 @@ namespace MatchingAppWindow.Views
         {
             likebutt = true;
             matchbutt = false;
-            var profileList = repo.FilterLikes(MainWindow.profile);
+            var (profileList, likes, isLiked) = repo.FilterLikes(MainWindow.profile);
+            int counter = 0;
+            List<Match> matches = new List<Match>();
 
-            resultBox.ItemsSource = profileList;
+            foreach (string profile in profileList)
+            {
+                matches.Add(new Match(profile, likes[counter], isLiked[counter]));
+                counter++;
+            }
+
+            resultBox.ItemsSource = matches;
         }
 
         private void filterMatchButton(object s, System.EventArgs e)
