@@ -42,7 +42,7 @@ namespace MatchingAppWindow.Views
             
 
             likebutton.Visibility = Visibility.Visible;
-            //dislikebutton.Visibility = Visibility.Collapsed;         
+            dislikebutton.Visibility = Visibility.Collapsed;         
             
         }
 
@@ -125,13 +125,13 @@ namespace MatchingAppWindow.Views
         {
             if (repo.CheckLikeStatus(usr, selectedProfile.UserName) == usr)
             {
-                //dislikebutton.Visibility = Visibility.Visible;
+                dislikebutton.Visibility = Visibility.Visible;
                 likebutton.Visibility = Visibility.Collapsed;
             }
             else
             {
                 likebutton.Visibility = Visibility.Visible;
-                //dislikebutton.Visibility = Visibility.Collapsed;
+                dislikebutton.Visibility = Visibility.Collapsed;
             }
         }
     }

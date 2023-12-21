@@ -13,6 +13,7 @@
     <None Remove="Views\AccountIconFocus.png" />
     <None Remove="Views\DeleteIcon.png" />
     <None Remove="Views\LikeIcon.png" />
+    <None Remove="Views\LikeIcon2.png" />
     <None Remove="Views\LogoutIcon.png" />
     <None Remove="Views\LogoutIconFocus.png" />
     <None Remove="Views\MessageIcon.png" />
@@ -35,6 +36,7 @@
     </Resource>
     <Resource Include="Views\DeleteIcon.png" />
     <Resource Include="Views\LikeIcon.png" />
+    <Resource Include="Views\LikeIcon2.png" />
     <Resource Include="Views\LogoutIcon.png" />
     <Resource Include="Views\LogoutIconFocus.png" />
     <Resource Include="Views\MessageIcon.png" />
