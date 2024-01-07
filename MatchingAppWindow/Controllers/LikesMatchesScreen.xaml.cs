@@ -38,7 +38,6 @@ namespace MatchingAppWindow.Views
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
         bool likebutt = true;
-        bool matchbutt = false;
 
         private ProfileDetails profileDetails = new();
         private Navigation navigation = new();
@@ -214,10 +213,8 @@ namespace MatchingAppWindow.Views
         //Save the filteroptions and show the matching profiles
         private void Filter()
         {
-            List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets, likebutt, matchbutt);
-
+            List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets, likebutt);
             resultBox.ItemsSource = results;
-
         }
 
         private void ClearUncheckedHobbies(int item)
@@ -269,32 +266,6 @@ namespace MatchingAppWindow.Views
                 profileDetails.SetProfile(curItem);
                 profileDetails.Visibility = Visibility.Visible;
             }
-        }
-
-        private void filterLikesButton(object s, System.EventArgs e)
-        {
-            likebutt = true;
-            matchbutt = false;
-            var (profileList, likes, isLiked) = repo.FilterLikes(MainWindow.profile);
-            int counter = 0;
-            List<Match> matches = new List<Match>();
-
-            foreach (string profile in profileList)
-            {
-                matches.Add(new Match(profile, likes[counter], isLiked[counter]));
-                counter++;
-            }
-
-            resultBox.ItemsSource = matches;
-        }
-
-        private void filterMatchButton(object s, System.EventArgs e)
-        {
-            matchbutt = true;
-            likebutt = false;
-            var profileList = repo.FilterMatch(MainWindow.profile);
-
-            resultBox.ItemsSource = profileList;
         }
 
     }

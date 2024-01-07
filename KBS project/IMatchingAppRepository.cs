@@ -13,7 +13,7 @@ namespace KBS_project
 		public List<string> GetProfiles();
 
 		public List<string> GetProfiles(Profile profile, LocationFilter location, int minimumAge, int maximumAge,
-			List<int> includedHobbys, List<int> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets, bool likebutt, bool matchbutt);
+			List<int> includedHobbys, List<int> excludedHobbys, List<Diet> includedDiets, List<Diet> excludedDiets, bool likebutt);
 
 		public Profile GetProfile(string userName);
 

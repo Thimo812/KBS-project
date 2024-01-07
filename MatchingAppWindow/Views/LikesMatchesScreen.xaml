@@ -95,25 +95,6 @@
     <ScrollViewer Grid.Column="0" Name="filterPanel" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" VerticalAlignment="Top">
         <Border Background="LightGray">
             <StackPanel Name="stackFilterOptions" Margin="5" >
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="61"/>
-                        <ColumnDefinition Width="61"/>
-                    </Grid.ColumnDefinitions>
-                    <Button
-                        Content="Likes"
-                        FontWeight="Bold"
-                        Grid.Column="0"
-                        Click="filterLikesButton"
-                    />
-                    <Button
-                        Content="Matches"
-                        FontWeight="Bold"
-                        Grid.Column="1"
-                        Click="filterMatchButton"
-                    />
-                </Grid>
-
                 <!--Filter location-->
                 <Label 
                     Content="Locatie"
