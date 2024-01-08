@@ -9,11 +9,158 @@
 	  d:DesignHeight="450" d:DesignWidth="800"
 	  Title="Register">
 
+    <Page.Resources>
+        <Style TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="#434E5B"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="{TemplateBinding Padding}"
+                        CornerRadius="15">
+                            <ScrollViewer HorizontalScrollBarVisibility="Hidden">
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Border
+    x:Name="Border"
+    Grid.ColumnSpan="2"
+    CornerRadius="15"
+    Background="#434E5B"
+    BorderThickness="0"/>
+                <Border
+    Grid.Column="0"
+    CornerRadius="15,0,0,15"
+    Margin="1"
+    Background="#434E5B"
+    BorderBrush="#4F5C6B"
+    BorderThickness="0,0,1,0"/>
+                <Path
+    x:Name="Arrow"
+    Grid.Column="1"
+    Fill="White"
+    HorizontalAlignment="Center"
+    VerticalAlignment="Center"
+    Data="M 0 0 L 4 4 L 8 0 Z"/>
+            </Grid>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="#DDD"/>
+                </Trigger>
+                <Trigger Property="ToggleButton.IsChecked" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="#CCC"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="Border" Property="Background" Value="#EEE"/>
+                    <Setter TargetName="Border" Property="BorderBrush" Value="#AAA"/>
+                    <Setter Property="Foreground" Value="#888888"/>
+                    <Setter TargetName="Arrow" Property="Fill" Value="#888888"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Border BorderThickness="0" CornerRadius="15">
+                            <Grid>
+                                <ToggleButton
+                            Name="ToggleButton"
+                            Template="{StaticResource ComboBoxToggleButton}"
+                            Grid.Column="2"
+                            Focusable="false"
+                            ClickMode="Press"
+                            IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                </ToggleButton>
+                                <ContentPresenter
+                            Name="ContentSite"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding SelectionBoxItem}"
+                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                            Margin="3,3,23,3"/>
+                                <TextBox
+                            x:Name="PART_EditableTextBox"
+                            HorizontalAlignment="Left"
+                            Foreground="White"
+                            VerticalAlignment="Top"
+                            Margin="3,3,23,3"
+                            Focusable="True"
+                            Background="Transparent"
+                            Visibility="Hidden"/>
+                                <Popup
+                            Name="Popup"
+                            Placement="Bottom"
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            AllowsTransparency="True"
+                            Focusable="False"
+                            PopupAnimation="Slide">
+                                    <Grid
+                                Name="DropDown"
+                                SnapsToDevicePixels="True"
+                                MinWidth="{TemplateBinding ActualWidth}"
+                                MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <Border x:Name="DropDownBorder" Background="#434E5B" BorderThickness="0" CornerRadius="10" Margin="0,10,0,0"/>
+                                        <ScrollViewer SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0,10,0,0"/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                                <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="4"/>
+                                <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable" Value="true">
+                                <Setter Property="IsTabStop" Value="false"/>
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Page.Resources>    
 
     <Grid Background="Black">
         <Grid.RowDefinitions>
-            <RowDefinition Height="115"/>
+            <RowDefinition Height="135"/>
             <RowDefinition Height="140"/>
             <RowDefinition Height="120"/>
             <RowDefinition/>
@@ -47,7 +194,7 @@
         </Rectangle>
 
         <!--Rectangle for background-->
-        <Rectangle HorizontalAlignment="Stretch"  Grid.Row="1" Grid.RowSpan="3"  Grid.ColumnSpan="1" Grid.Column="1">
+        <Rectangle HorizontalAlignment="Stretch"  Grid.Row="0" Grid.RowSpan="4"  Grid.ColumnSpan="1" Grid.Column="1">
             <Rectangle.Fill>
                 <SolidColorBrush Color="#1D2228" ></SolidColorBrush>
             </Rectangle.Fill>
@@ -56,18 +203,20 @@
         <!-- StackPanel for Image View -->
 
         <!--Listbox for image view-->
-        <ListBox x:Name="imageBox" ItemsSource="{Binding ImageList, Mode=TwoWay}" Height="135" VerticalAlignment="Center" Background="#121519" Grid.Column="1">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Image Source="{Binding}" Width="125" Height="125"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListBox>
+        <Border Grid.Column="1" CornerRadius="10">
+            <ListBox x:Name="imageBox" ItemsSource="{Binding ImageList, Mode=TwoWay}" Background="#2C343D">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding}" Width="125" Height="125"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Border>
 
         <!--Stackpanel buttons Photos-->
         
@@ -195,17 +344,21 @@
 
         <!--Sexuality-->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1">
-            <Label Content="Seksuele preferentie:" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32"  Foreground="White"/>
-            <RadioButton x:Name="heteroSexual" GroupName="Sexuality" Content="Hetero"  Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20"  FontSize="15" Foreground="White"/>
-            <RadioButton x:Name="homoSexual" GroupName="Sexuality" Content="Homosexueel"  Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="112" Height="20"  FontSize="15" Foreground="White"/>
-            <RadioButton x:Name="biSexual" GroupName="Sexuality" Content="Bisexueel"  Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20"  FontSize="15" Foreground="White"  />
+            <Label Content="Seksuele voorkeur:" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32"  Foreground="White"/>
+            <ComboBox x:Name="preferenceBox" Width="150">
+                <ComboBoxItem Content="Heterosexueel"/>
+                <ComboBoxItem Content="homosexueel"/>
+                <ComboBoxItem Content="bisexueel"/>
+            </ComboBox>
         </StackPanel>
         <!--Gender-->
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1">
             <Label Content="Geslacht:"  FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" Foreground="White"/>
-            <RadioButton x:Name="femaleGender" GroupName="Gender" Content="Vrouw"  Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="86" Height="20"  FontSize="15" Foreground="White"/>
-            <RadioButton x:Name="maleGender" GroupName="Gender" Content="Man" Checked="RadioButton_Checked" HorizontalAlignment="Center" Width="86" Height="20"  FontSize="15" Foreground="White"/>
-            <RadioButton x:Name="nonBinaryGender" GroupName="Gender" Content="Non-binair"  Checked="RadioButton_Checked" HorizontalAlignment="Left" Width="98" Height="20"  FontSize="15" Foreground="White"/>
+            <ComboBox x:Name="genderBox" Width="150">
+                <ComboBoxItem Content="Man"/>
+                <ComboBoxItem Content="Vrouw"/>
+                <ComboBoxItem Content="Non-binair"/>
+            </ComboBox>
         </StackPanel>
 
         <!--birthDateePicker-->
