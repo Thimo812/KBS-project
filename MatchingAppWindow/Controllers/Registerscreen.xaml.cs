@@ -175,11 +175,11 @@ namespace MatchingAppWindow.Views
         {
             if (imageBox.SelectedItem != null)
             {
-                deletePhotoButton.IsEnabled = true;
+                deletePhotoButton.Visibility = Visibility.Visible;
             }
             else
             {
-                deletePhotoButton.IsEnabled = false;
+                deletePhotoButton.Visibility = Visibility.Hidden;
             }
 
 
@@ -189,11 +189,11 @@ namespace MatchingAppWindow.Views
         {
             if (ImageList.Count >= 5)
             {
-                AddPhotoButton.IsEnabled = false;
+                AddPhotoButton.Visibility = Visibility.Hidden;
             }
             else
             {
-                AddPhotoButton.IsEnabled = true;
+                AddPhotoButton.Visibility = Visibility.Visible;
             }
         }
 

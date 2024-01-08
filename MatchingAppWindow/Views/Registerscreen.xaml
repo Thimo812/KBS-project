@@ -6,10 +6,44 @@
 	  xmlns:local="clr-namespace:MatchingAppWindow.Views"
 	  xmlns:Enums="clr-namespace:KBS_project.Enums;assembly=MatchingAppCore" x:Class="MatchingAppWindow.Views.RegisterScreen"
 	  mc:Ignorable="d" 
-	  d:DesignHeight="450" d:DesignWidth="800"
+	  d:DesignHeight="600" d:DesignWidth="800"
 	  Title="Register">
 
     <Page.Resources>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+
+        <Style TargetType="{x:Type DatePickerTextBox}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="11"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border Background="#434E5B" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}" 
+                        CornerRadius="15"
+                        Margin="5">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style TargetType="{x:Type ListBox}">
             <Setter Property="Background" Value="#434E5B"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -156,29 +190,60 @@
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="Foreground" Value="White"/>
         </Style>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#AD0090"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#434E5B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>    
 
     <Grid Background="Black">
         <Grid.RowDefinitions>
             <RowDefinition Height="135"/>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="120"/>
-            <RowDefinition/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <!-- First column -->
-            <ColumnDefinition Width="800"/>
-            <!-- Second column -->
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="175"/>
+            <ColumnDefinition Width="175"/>
+            <ColumnDefinition Width="175"/>
+            <ColumnDefinition Width="175"/>
+            <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="*" />
-            <!-- Third column -->
-
         </Grid.ColumnDefinitions>
 
-        
 
-        <Rectangle Grid.Row="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch" Grid.RowSpan="4" >
+
+        <Rectangle Grid.Row="0" Grid.ColumnSpan="8" HorizontalAlignment="Stretch" Grid.RowSpan="9" >
             <Rectangle.Fill>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                     <GradientStop Color="red" Offset="0"/>
@@ -187,24 +252,16 @@
             </Rectangle.Fill>
         </Rectangle>
 
-        <Rectangle  Stroke="Black" Grid.Row="0" Grid.Column="1" Width="200" >
-            <Rectangle.Fill>
-                <SolidColorBrush Color="Black"/>
-            </Rectangle.Fill>
-        </Rectangle>
-
         <!--Rectangle for background-->
-        <Rectangle HorizontalAlignment="Stretch"  Grid.Row="0" Grid.RowSpan="4"  Grid.ColumnSpan="1" Grid.Column="1">
+        <Rectangle HorizontalAlignment="Stretch"  Grid.Row="0" Grid.RowSpan="9"  Grid.ColumnSpan="6" Grid.Column="1">
             <Rectangle.Fill>
                 <SolidColorBrush Color="#1D2228" ></SolidColorBrush>
             </Rectangle.Fill>
         </Rectangle>
 
-        <!-- StackPanel for Image View -->
-
         <!--Listbox for image view-->
-        <Border Grid.Column="1" CornerRadius="10">
-            <ListBox x:Name="imageBox" ItemsSource="{Binding ImageList, Mode=TwoWay}" Background="#2C343D">
+        <Border Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="6" CornerRadius="10">
+            <ListBox x:Name="imageBox" ItemsSource="{Binding ImageList, Mode=TwoWay}" Background="#2C343D" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Image Source="{Binding}" Width="125" Height="125"/>
@@ -220,7 +277,7 @@
 
         <!--Stackpanel buttons Photos-->
         
-        <StackPanel  Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,10,10" >
+        <StackPanel  Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" HorizontalAlignment="Right">
             <!--addPhotoButton-->
 
             <Button x:Name="AddPhotoButton" Click="AddPhoto" FontSize="16" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" BorderThickness="0">
@@ -229,173 +286,50 @@
 
 
             <!--deletePhotoButton-->
-            <Button x:Name="deletePhotoButton" Click="DeletePhoto" FontSize="16" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" IsEnabled="False" BorderThickness="0">
+            <Button x:Name="deletePhotoButton" Click="DeletePhoto" FontSize="16" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" BorderThickness="0" Visibility="Hidden">
                 <Image Source="/Views/DeleteIcon.png" Height="30"/>
             </Button>
         </StackPanel>
-        
 
-        <!--Stackpanel user Input-->
+        <Label Content="Gebruikersnaam" Grid.Column="2" Grid.Row="1"/>
+        <Label Content="Voornaam" Grid.Column="2" Grid.Row="2"/>
+        <Label Content="Achternaam" Grid.Column="2" Grid.Row="3"/>
+        <Label Content="Geslacht" Grid.Column="2" Grid.Row="4"/>
+        <Label Content="Geboortedatum" Grid.Column="2" Grid.Row="5"/>
 
-        <!-- userNameInput -->
-        <StackPanel Orientation="Horizontal" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1">
-            <Label Content="Gebruikersnaam:"  FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Center" Grid.Row="1" Foreground="White"/>
-            <Border CornerRadius="15"  Grid.Row="1" HorizontalAlignment="Center" Height="30" Width="150" >
-                <TextBox x:Name="userNameInput" TextWrapping="Wrap"  Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White">
-                    <TextBox.Template>
-                        <ControlTemplate TargetType="{x:Type TextBox}">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                                <ScrollViewer x:Name="PART_ContentHost"/>
-                            </Border>
-                        </ControlTemplate>
-                    </TextBox.Template>
-                </TextBox>
-            </Border>
+        <TextBox x:Name="userNameInput" Grid.Column="3" Grid.Row="1"/>
+        <StackPanel Grid.Column="3" Grid.Row="2" Orientation="Horizontal">
+            <TextBox x:Name="firstNameInput" Width="120"/>
+            <TextBox x:Name="infixInput" Width="50"/>
         </StackPanel>
+        <TextBox x:Name="lastNameInput" Grid.Column="3" Grid.Row="3"/>
+        <ComboBox x:Name="genderBox" Grid.Column="3" Grid.Row="4">
+            <ComboBoxItem Content="Man"/>
+            <ComboBoxItem Content="Vrouw"/>
+            <ComboBoxItem Content="Non-binair"/>
+        </ComboBox>
 
-        <!--city Input-->
-        <StackPanel Margin="400,10,0,0" Width="300" HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Horizontal" Grid.Row="1" Grid.Column="1" >
-            <Label Content="Woonplaats:"  Height="30" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Center" Width="132" Grid.Row="1" Foreground="White" />
-            <Border CornerRadius="15" Grid.Row="1" >
-                <TextBox x:Name="cityInput" TextWrapping="Wrap"  Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White" >
-                    <TextBox.Template>
-                        <ControlTemplate TargetType="{x:Type TextBox}">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                                <ScrollViewer x:Name="PART_ContentHost"/>
-                            </Border>
-                        </ControlTemplate>
-                    </TextBox.Template>
-                </TextBox>
-            </Border>
-        </StackPanel>
-        <!--firstNameInput & infixInput-->
-        <StackPanel Orientation="Horizontal" Margin="10,10,0,0" Grid.Row="1" Grid.Column="1" >
-            <Label Content="Voornaam:"  FontSize="15" Width="123" Height="32" Grid.Row="1" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-            <Border CornerRadius="15" Grid.Row="1" >
-                <TextBox x:Name="firstNameInput"  TextWrapping="Wrap"  Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center">
-                    <TextBox.Template>
-                        <ControlTemplate TargetType="{x:Type TextBox}">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                                <ScrollViewer x:Name="PART_ContentHost"/>
-                            </Border>
-                        </ControlTemplate>
-                    </TextBox.Template>
-                </TextBox>
-            </Border>
-            <Border CornerRadius="15"  Grid.Row="1" >
-                <TextBox x:Name="infixInput" TextWrapping="Wrap"  Height="30" Width="50" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White" Margin="10,0,90,0">
-                    <TextBox.Template>
-                        <ControlTemplate TargetType="{x:Type TextBox}">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                                <ScrollViewer x:Name="PART_ContentHost"/>
-                            </Border>
-                        </ControlTemplate>
-                    </TextBox.Template>
-                </TextBox>
-            </Border>
-        </StackPanel>
-        <!--country Input-->
-        <StackPanel Margin="400,10,0,0" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-            <Label Content="Land:"  Height="30" VerticalAlignment="Center" FontSize="15" HorizontalAlignment="Right" Width="132" Grid.Row="1" Foreground="White"/>
-            <Border CornerRadius="15" Grid.Row="1">
-                <TextBox x:Name="countryInput" TextWrapping="Wrap"  Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White">
-                    <TextBox.Template>
-                        <ControlTemplate TargetType="{x:Type TextBox}">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                                <ScrollViewer x:Name="PART_ContentHost"/>
-                            </Border>
-                        </ControlTemplate>
-                    </TextBox.Template>
-                </TextBox>
-            </Border>
-        </StackPanel>
+        <Border Grid.Column="3" Grid.Row="5" Background="#434E5B" CornerRadius="10" Margin="5">
+            <DatePicker x:Name="birthDatePicker" BorderThickness="0" VerticalAlignment="Center" Foreground="White"/>
+        </Border>
 
-        <!--lastName Input-->
-        <StackPanel Orientation="Horizontal" Margin="10,100,0,0" Grid.Row="1" Grid.Column="1">
-            <Label Content="Achternaam:" FontSize="15" HorizontalAlignment="Left" Width="123" Height="32" VerticalAlignment="Center" Grid.Row="1" Foreground="White"/>
-            <Border CornerRadius="15" Grid.Row="1">
-                <TextBox x:Name="lastNameInput" TextWrapping="Wrap"  HorizontalAlignment="Left" VerticalAlignment="Center" Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White">
-                    <TextBox.Template>
-                        <ControlTemplate TargetType="{x:Type TextBox}">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                                <ScrollViewer x:Name="PART_ContentHost"/>
-                            </Border>
-                        </ControlTemplate>
-                    </TextBox.Template>
-                </TextBox>
-            </Border>
-        </StackPanel>
-        <!--postalCode Input-->
-        <StackPanel Margin="400,10,0,0"  Width="300" HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
-            <Label Content="Postcode:"  Height="30" VerticalAlignment="Bottom" FontSize="15" HorizontalAlignment="Right" Width="132" Grid.Row="1" Foreground="White"/>
-            <Border CornerRadius="15"  Grid.Row="1">
-                <TextBox x:Name="postalCodeInput" TextWrapping="Wrap"  Height="30" Width="150" TextChanged="TextBox_TextChanged" FontSize="16" Background="#434E5B" BorderBrush="#434E5B" Foreground="White">
-                    <TextBox.Template>
-                        <ControlTemplate TargetType="{x:Type TextBox}">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                                <ScrollViewer x:Name="PART_ContentHost"/>
-                            </Border>
-                        </ControlTemplate>
-                    </TextBox.Template>
-                </TextBox>
-            </Border>
-        </StackPanel>
+        <Label Content="Postcode" Grid.Column="4" Grid.Row="1"/>
+        <Label Content="Woonplaats" Grid.Column="4" Grid.Row="2"/>
+        <Label Content="Land" Grid.Column="4" Grid.Row="3"/>
+        <Label Content="Seksuele voorkeur" Grid.Column="4" Grid.Row="4"/>
 
+        <TextBox x:Name="postalCodeInput" Grid.Column="5" Grid.Row="1"/>
+        <TextBox x:Name="cityInput" Grid.Column="5" Grid.Row="2"/>
+        <TextBox x:Name="countryInput" Grid.Column="5" Grid.Row="3"/>
+        <ComboBox x:Name="preferenceBox" Grid.Column="5" Grid.Row="4">
+            <ComboBoxItem Content="Heterosexueel"/>
+            <ComboBoxItem Content="Homosexueel"/>
+            <ComboBoxItem Content="Bisexueel"/>
+        </ComboBox>
 
-        <!--Sexuality-->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1">
-            <Label Content="Seksuele voorkeur:" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32"  Foreground="White"/>
-            <ComboBox x:Name="preferenceBox" Width="150">
-                <ComboBoxItem Content="Heterosexueel"/>
-                <ComboBoxItem Content="homosexueel"/>
-                <ComboBoxItem Content="bisexueel"/>
-            </ComboBox>
-        </StackPanel>
-        <!--Gender-->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="1">
-            <Label Content="Geslacht:"  FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" Foreground="White"/>
-            <ComboBox x:Name="genderBox" Width="150">
-                <ComboBoxItem Content="Man"/>
-                <ComboBoxItem Content="Vrouw"/>
-                <ComboBoxItem Content="Non-binair"/>
-            </ComboBox>
-        </StackPanel>
+        <Button x:Name="createAccountButton" Content="Account aanmaken" Click="RegisterAccount" Grid.Column="3" Grid.Row="7"/>
+        <Button x:Name="loginButton" Content="Of log in" Grid.Column="4" Grid.Row="7"/>
 
-        <!--birthDateePicker-->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1">
-            <Label Content="Geboortedatum:"  FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" Foreground="White"/>
-            <DatePicker x:Name="birthDatePicker"  FirstDayOfWeek="Monday" HorizontalAlignment="Left" Width="142" Height="32" BorderThickness="2,2,2,2" BorderBrush="#FFA3AEB9" Background="White" />
-        </StackPanel>
-
-        <!--createAccountButton-->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Center" Grid.Column="1" >
-            <Border CornerRadius="15"  >
-                <Button x:Name="CreateAccountButton" Content="Account aanmaken" Height="30" Width="150" Click="RegisterAccount" FontSize="16" Background="#AD0090" BorderBrush="#AD0090" Foreground="White" Margin="0,0,10,0">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Border>
-
-            <!--loginButton-->
-            <Border CornerRadius="15" >
-                <Button x:Name="loginButton" Content="Of log in" Height="30" Width="100" FontSize="16" Background="#AD0090" BorderBrush="#AD0090" Foreground="White">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Border>
-
-            <!--errorMessage-->
-            <Label x:Name="errorMessage" Content="Voer alle verplichte velden in" Margin="0,0,0,10" Foreground="Red" FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" Width="224" Height="30" VerticalAlignment="Bottom" Visibility="Hidden" Grid.Column="1"/>
-        </StackPanel>
+        <Label x:Name="errorMessage" Content="Voer alle verplichte velden in" Foreground="Red" FontWeight="Bold" Grid.Column="3" Grid.Row="8" Grid.ColumnSpan="2" VerticalAlignment="Top" Visibility="Hidden"/>
     </Grid>
 </Page>
