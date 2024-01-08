@@ -81,23 +81,11 @@ namespace MatchingAppWindow.Views
             SexualPreference sexualPreference = new();
             DateTime birthDate = new();
 
-            try
-            {
-                gender = RegistrationFieldsExtensions.ValidateGender(new List<bool?>() { maleGender.IsChecked, femaleGender.IsChecked, nonBinaryGender.IsChecked });
-            }
-            catch (InvalidFieldException)
-            {
-                invalidFields.AddRange(new List<Control>() {maleGender, femaleGender, nonBinaryGender } );
-            }
+            if (genderBox.SelectedIndex != -1) gender = (Gender)genderBox.SelectedIndex;
+            else invalidFields.Add(genderBox);
 
-            try
-            {
-                sexualPreference = RegistrationFieldsExtensions.ValidateSexuality(new List<bool?>() { heteroSexual.IsChecked, homoSexual.IsChecked, biSexual.IsChecked });
-            }
-            catch (InvalidFieldException)
-            {
-                invalidFields.AddRange(new List<Control>() { heteroSexual, homoSexual, biSexual });
-            }
+            if (preferenceBox.SelectedIndex != -1) sexualPreference = (SexualPreference)preferenceBox.SelectedIndex;
+            else invalidFields.Add(preferenceBox);
 
             try
             {
@@ -154,12 +142,8 @@ namespace MatchingAppWindow.Views
                 countryInput,
                 postalCodeInput,
                 birthDatePicker,
-                maleGender,
-                femaleGender,
-                nonBinaryGender,
-                heteroSexual,
-                homoSexual,
-                biSexual
+                genderBox,
+                preferenceBox
             };
 
             foreach (Control field in fields)
