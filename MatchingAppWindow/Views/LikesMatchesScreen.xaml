@@ -38,55 +38,50 @@
         <DataTemplate x:Key="isLiked">
             <Grid Height="50" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" MinWidth="180" />
-                    <ColumnDefinition Width="2*" MinWidth="100"/>
-                    <ColumnDefinition Width="2*" MinWidth="100"/>
+                    <ColumnDefinition Width="100" MinWidth="180" />
+                    <ColumnDefinition Width="50" MinWidth="100"/>
+                    <ColumnDefinition Width="50" MinWidth="100"/>
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
-                    <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0">Gebruikersnaam:</TextBlock>
-                <TextBlock Grid.Row="1" Text="{Binding UserName}" FontSize="25" ></TextBlock>
-                <Image Grid.Column="2" Grid.Row="1" Source="/Views/LikeIcon.png" Visibility="Hidden"></Image>
-                <Image Grid.Column="3" Grid.Row="1" Source="/Views/LikeIcon2.png"></Image>
+                <TextBlock Grid.Row="0" Text="{Binding UserName}" FontSize="25" Foreground="White" Margin="6" ></TextBlock>
+                <Image Grid.Column="1" Grid.Row="1" Source="/Views/LikeIcon.png" Visibility="Hidden" Margin="6" ></Image>
+                <Image Grid.Column="2" Grid.Row="1" Source="/Views/LikeIcon2.png" Margin="6" ></Image>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="likes">
             <Grid Height="50" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" MinWidth="180" />
-                    <ColumnDefinition Width="2*" MinWidth="100"/>
-                    <ColumnDefinition Width="2*" MinWidth="100"/>
+                    <ColumnDefinition Width="100" MinWidth="180" />
+                    <ColumnDefinition Width="50" MinWidth="100"/>
+                    <ColumnDefinition Width="50" MinWidth="100"/>
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
-                    <RowDefinition Height="2*" />
+                   
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0">Gebruikersnaam:</TextBlock>
-                <TextBlock Grid.Row="1" Text="{Binding UserName}" FontSize="25" ></TextBlock>
-                <Image Grid.Column="2" Grid.Row="1" Source="/Views/LikeIcon.png"></Image>
-                <Image Grid.Column="3" Grid.Row="1" Source="/Views/LikeIcon2.png" Visibility="Hidden"></Image>
+                <TextBlock Grid.Row="0" Margin="6" Foreground="White" Text="{Binding UserName}" FontSize="25"  HorizontalAlignment="Stretch"></TextBlock>
+                <Image Grid.Column="1" Grid.Row="1" Source="/Views/LikeIcon.png" Margin="6" ></Image>
+                <Image Grid.Column="2" Grid.Row="1" Source="/Views/LikeIcon2.png" Visibility="Hidden" Margin="6" ></Image>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="match">
             <Grid Height="50" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" MinWidth="180" />
-                    <ColumnDefinition Width="2*" MinWidth="100"/>
-                    <ColumnDefinition Width="2*" MinWidth="100"/>
+                    <ColumnDefinition Width="100" MinWidth="180" />
+                    <ColumnDefinition Width="50" MinWidth="100"/>
+                    <ColumnDefinition Width="50" MinWidth="100"/>
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*" />
-                    <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0">Gebruikersnaam:</TextBlock>
-                <TextBlock Grid.Row="1" Text="{Binding UserName}" FontSize="25" ></TextBlock>
-                <Image Grid.Column="2" Grid.Row="1" Source="/Views/LikeIcon.png"></Image>
-                <Image Grid.Column="3" Grid.Row="1" Source="/Views/LikeIcon2.png"></Image>
+                <TextBlock Grid.Row="0" Margin="6" Foreground="White" Text="{Binding UserName}" FontSize="25"  HorizontalAlignment="Stretch" ></TextBlock>
+                <Image Grid.Column="1" Grid.Row="1" Source="/Views/LikeIcon.png" Margin="6"></Image>
+                <Image Grid.Column="2" Grid.Row="1" Source="/Views/LikeIcon2.png" Margin="6"></Image>
             </Grid>
         </DataTemplate>
         <local:MatchesDataTemplateSelector x:Key="templateSelector" IsLikedTemplate="{StaticResource isLiked}" LikesTemplate="{StaticResource likes}" MatchTemplate="{StaticResource match}"/>
@@ -248,7 +243,7 @@
             </ScrollViewer>
 
             <Grid Grid.Column="1">
-            <ListBox Name="resultBox" SelectionChanged="resultBox_SelectedIndexChanged" Background="#2C343D" BorderBrush="#2C343D" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ItemTemplateSelector="{StaticResource templateSelector}">
+            <ListBox Name="resultBox" SelectionChanged="resultBox_SelectedIndexChanged" Background="#2C343D" BorderBrush="#2C343D" ItemContainerStyle="{DynamicResource _ListBoxItemStyle}" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ItemTemplateSelector="{StaticResource templateSelector}" d:ItemsSource="{d:SampleData ItemCount=5}">
             </ListBox>
                 <Frame Grid.Column="1" x:Name="profileDetailsFrame" HorizontalAlignment="Right" MinWidth="200"/>
             </Grid>
