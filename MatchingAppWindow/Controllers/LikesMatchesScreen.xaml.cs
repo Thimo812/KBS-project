@@ -37,6 +37,7 @@ namespace MatchingAppWindow.Views
         private List<int> excludedHobbies = new();
         private List<Diet> includedDiets = new();
         private List<Diet> excludedDiets = new();
+        bool likebutt = true;
 
         private ProfileDetails profileDetails = new();
         private Navigation navigation = new();
@@ -45,9 +46,17 @@ namespace MatchingAppWindow.Views
         {
             InitializeComponent();
 
-            var profileList = repo.GetProfiles(MainWindow.profile);
+            var (profileList, likes, isLiked) = repo.FilterLikes(MainWindow.profile);
+            int counter = 0;
+            List<Match> matches = new List<Match>();
 
-            resultBox.ItemsSource = profileList;
+            foreach (string profile in profileList)
+            {
+                matches.Add(new Match(profile, likes[counter], isLiked[counter]));
+                counter++;
+            }
+
+            resultBox.ItemsSource = matches;
 
             profileDetailsFrame.Content = profileDetails;
 
@@ -204,10 +213,8 @@ namespace MatchingAppWindow.Views
         //Save the filteroptions and show the matching profiles
         private void Filter()
         {
-            List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets);
-
+            List<string> results = repo.GetProfiles(MainWindow.profile, location, minimumAge, maximumAge, includedHobbies, excludedHobbies, includedDiets, excludedDiets, likebutt);
             resultBox.ItemsSource = results;
-
         }
 
         private void ClearUncheckedHobbies(int item)
@@ -251,22 +258,15 @@ namespace MatchingAppWindow.Views
             // Get the currently selected item in the ListBox.
             if (resultBox.SelectedItem != null)
             {
-                string curItem = resultBox.SelectedItem.ToString();
+                string curItem = "";
+                if (resultBox.SelectedItem is Match match)
+                {
+                     curItem = match.UserName.ToString();
+                }
                 profileDetails.SetProfile(curItem);
                 profileDetails.Visibility = Visibility.Visible;
             }
         }
-
-        private void filterLkes()
-        {
-
-        }
-
-        private void filterMatch()
-        {
-
-        }
-
 
     }
 }

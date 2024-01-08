@@ -3,71 +3,437 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:MatchingAppWindow.Views" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-      mc:Ignorable="d" d:DesignWidth="800"
-      Title="ProfileEditScreen" Height="595">
+      xmlns:local="clr-namespace:MatchingAppWindow.Views" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:local1="clr-namespace:MatchingAppWindow"
+      mc:Ignorable="d" d:DesignWidth="900"
+      Title="ProfileEditScreen" MinHeight="595">
 
-    <Grid Background="White">
+    <Page.Resources>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="11"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border Background="#434E5B" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="15"
+                                Margin="5">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Border
+            x:Name="Border"
+            Grid.ColumnSpan="2"
+            CornerRadius="15"
+            Background="#434E5B"
+            BorderThickness="0"/>
+                <Border
+            Grid.Column="0"
+            CornerRadius="15,0,0,15"
+            Margin="1"
+            Background="#434E5B"
+            BorderBrush="#4F5C6B"
+            BorderThickness="0,0,1,0"/>
+                <Path
+            x:Name="Arrow"
+            Grid.Column="1"
+            Fill="White"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Data="M 0 0 L 4 4 L 8 0 Z"/>
+            </Grid>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="#DDD"/>
+                </Trigger>
+                <Trigger Property="ToggleButton.IsChecked" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="#CCC"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="Border" Property="Background" Value="#EEE"/>
+                    <Setter TargetName="Border" Property="BorderBrush" Value="#AAA"/>
+                    <Setter Property="Foreground" Value="#888888"/>
+                    <Setter TargetName="Arrow" Property="Fill" Value="#888888"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Border BorderThickness="0" CornerRadius="15">
+                            <Grid>
+                                <ToggleButton
+                                    Name="ToggleButton"
+                                    Template="{StaticResource ComboBoxToggleButton}"
+                                    Grid.Column="2"
+                                    Focusable="false"
+                                    ClickMode="Press"
+                                    IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                </ToggleButton>
+                                <ContentPresenter
+                                    Name="ContentSite"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding SelectionBoxItem}"
+                                    ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                    ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                    Margin="3,3,23,3"/>
+                                <TextBox
+                                    x:Name="PART_EditableTextBox"
+                                    HorizontalAlignment="Left"
+                                    Foreground="White"
+                                    VerticalAlignment="Top"
+                                    Margin="3,3,23,3"
+                                    Focusable="True"
+                                    Background="Transparent"
+                                    Visibility="Hidden"/>
+                                <Popup
+                                    Name="Popup"
+                                    Placement="Bottom"
+                                    IsOpen="{TemplateBinding IsDropDownOpen}"
+                                    AllowsTransparency="True"
+                                    Focusable="False"
+                                    PopupAnimation="Slide">
+                                    <Grid
+                                        Name="DropDown"
+                                        SnapsToDevicePixels="True"
+                                        MinWidth="{TemplateBinding ActualWidth}"
+                                        MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <Border x:Name="DropDownBorder" Background="#434E5B" BorderThickness="0" CornerRadius="10" Margin="0,10,0,0"/>
+                                        <ScrollViewer SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0,10,0,0"/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                                <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="4"/>
+                                <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable" Value="true">
+                                <Setter Property="IsTabStop" Value="false"/>
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        
+        <Style TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="#434E5B"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="15">
+                            <ScrollViewer HorizontalScrollBarVisibility="Hidden">
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Label Content="{Binding}" FontSize="18"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border Name="_Border"
+                                            Padding="1"
+                                            SnapsToDevicePixels="true"
+                                            HorizontalAlignment="Stretch"
+                                            Margin="5"
+                                            Background="#AD0090"
+                                            CornerRadius="10">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="_Border" Property="Background" Value="#2C343D"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#AD0090"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#434E5B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ScrollBarTrackThumb"
+                TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid x:Name="Grid">
+                            <Rectangle HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Width="Auto"
+                        Height="Auto"
+                        Fill="Transparent" />
+                            <Border x:Name="CornerScrollBarRectangle"
+                                    CornerRadius="5"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Width="Auto"
+                                    Height="Auto"
+                                    Margin="0,1,0,1"
+                                    Background="{TemplateBinding Background}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Tag"
+                        Value="Horizontal">
+                                <Setter TargetName="CornerScrollBarRectangle"
+                        Property="Width"
+                        Value="Auto" />
+                                <Setter TargetName="CornerScrollBarRectangle"
+                        Property="Height"
+                        Value="6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsFlicksEnabled"
+                    Value="false" />
+            <Setter Property="Foreground"
+                    Value="#3B4651" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Width"
+                    Value="7" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid x:Name="GridRoot"
+                                Width="10"
+                                Background="{TemplateBinding Background}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.00001*" />
+                            </Grid.RowDefinitions>
+                            <Track x:Name="PART_Track"
+                    Grid.Row="0"
+                    IsDirectionReversed="true"
+                    Focusable="false">
+                                <Track.Thumb>
+                                    <Thumb x:Name="Thumb"
+                            Background="{TemplateBinding Foreground}"
+                            Style="{DynamicResource ScrollBarTrackThumb}" />
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton x:Name="PageUp"
+                                    Command="ScrollBar.PageDownCommand"
+                                    Opacity="0"
+                                    Focusable="false" />
+                                </Track.IncreaseRepeatButton>
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton x:Name="PageDown"
+                                    Command="ScrollBar.PageUpCommand"
+                                    Opacity="0"
+                                    Focusable="false" />
+                                </Track.DecreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="Thumb"
+                        Property="IsMouseOver"
+                        Value="true">
+                                <Setter Value="{DynamicResource ButtonSelectBrush}"
+                        TargetName="Thumb"
+                        Property="Background" />
+                            </Trigger>
+                            <Trigger SourceName="Thumb"
+                        Property="IsDragging"
+                        Value="true">
+                                <Setter Value="{DynamicResource DarkBrush}"
+                        TargetName="Thumb"
+                        Property="Background" />
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled"
+                        Value="false">
+                                <Setter TargetName="Thumb"
+                        Property="Visibility"
+                        Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="Orientation"
+                        Value="Horizontal">
+                                <Setter TargetName="GridRoot"
+                        Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="PART_Track"
+                        Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Width"
+                        Value="Auto" />
+                                <Setter Property="Height"
+                        Value="8" />
+                                <Setter TargetName="Thumb"
+                        Property="Tag"
+                        Value="Horizontal" />
+                                <Setter TargetName="PageDown"
+                        Property="Command"
+                        Value="ScrollBar.PageLeftCommand" />
+                                <Setter TargetName="PageUp"
+                        Property="Command"
+                        Value="ScrollBar.PageRightCommand" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+
+    <Grid Background="#2C343D">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="135"/>
-            <RowDefinition/>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="2*" MaxHeight="100"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        
+        <Label Content="Beschrijving" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="descriptionBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" TextWrapping="Wrap"/>
 
-        <Label Grid.Row="1" Content="Beschrijving:" Margin="102,10,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top"/>
-        <TextBox Grid.Row="1" x:Name="BeschrijvingBox" Margin="252,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="64" FontSize="15" HorizontalAlignment="Left" Width="395"/>
+        <Label Content="School" Grid.Row="2" Grid.Column="1"/>
+        <TextBox x:Name="schoolBox" Grid.Row="3" Grid.Column="1"/>
 
-        <Label Grid.Row="1" Content="Opleiding:" Margin="102,77,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <TextBox Grid.Row="1" x:Name="OpleidingBox" Margin="252,77,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
+        <Label Content="Opleiding" Grid.Row="2" Grid.Column="2"/>
+        <TextBox x:Name="degreeBox" Grid.Row="3" Grid.Column="2"/>
 
-        <Label Grid.Row="1" Content="School:" Margin="102,114,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="31" VerticalAlignment="Top"/>
-        <TextBox Grid.Row="1" x:Name="SchoolBox" Margin="252,114,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="31" VerticalAlignment="Top"/>
+        <Label Content="Werkplek" Grid.Row="2" Grid.Column="3"/>
+        <TextBox x:Name="workPlaceBox" Grid.Row="3" Grid.Column="3"/>
 
-        <Label Grid.Row="1" Content="Werkplek:" Margin="102,151,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <TextBox Grid.Row="1" x:Name="WerkplekBox" Margin="252,151,0,0" TextWrapping="Wrap" Text="" FontSize="15" RenderTransformOrigin="0.292,0.316" HorizontalAlignment="Left" Width="395" Height="32" VerticalAlignment="Top"/>
+        <Label Content="Dieet" Grid.Row="2" Grid.Column="4"/>
+        <ComboBox x:Name="dietBox" Grid.Row="3" Grid.Column="4" Foreground="White" FontSize="18">
+            <ComboBoxItem Content="Geen"/>
+            <ComboBoxItem Content="Vegetarisch"/>
+            <ComboBoxItem Content="Veganistisch"/>
+            <ComboBoxItem Content="Keto"/>
+            <ComboBoxItem Content="Anders"/>
+        </ComboBox>
 
-        <Label Grid.Row="1" Content="Dieet:" Margin="102,187,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <RadioButton Grid.Row="1" Content="Geen" Name="NoDiet" GroupName="Diet" Margin="251,195,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Grid.Row="1" Content="Vegetarisch" Name="VegieDiet" GroupName="Diet" Margin="322,195,0,0" HorizontalAlignment="Left" Width="98" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Grid.Row="1" Content="Veganistisch" Name="VeganDiet" GroupName="Diet" Margin="425,195,0,0" HorizontalAlignment="Left" Width="108" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Grid.Row="1" Content="Keto" Name="KetoDiet" GroupName="Diet" Margin="538,195,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Grid.Row="1" Content="Anders" Name="OtherDiet" GroupName="Diet" Margin="604,195,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
+        <Label Content="Geselecteerde hobbies" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
+        <Label Content="Beschikbare hobbies" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2"/>
 
+        <ListBox x:Name="hobbyBox" ItemsSource="{Binding Interests, Mode=TwoWay}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="InterestSelectionChanged"/>
+        <ListBox x:Name="availableHobbyBox"  ItemsSource="{Binding AvailableInterests, Mode=TwoWay}" Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="AvailableInterestSelectionChanged"/>
 
+        <Button x:Name="confirmButton" Content="Opslaan" Grid.Row="6" Grid.Column="2" VerticalAlignment="Center" Height="45" Click="ConfirmChanges"/>
+        <Button x:Name="cancelButton" Content="annuleren" Grid.Row="6" Grid.Column="3" VerticalAlignment="Center" Height="45" Click="InitializePage"/>
 
-        <Button x:Name="ConfirmButton" Content="Opslaan" Margin="143,387,0,0" FontSize="15" Height="36" VerticalAlignment="Top" HorizontalAlignment="Left" Width="262" Click="ConfirmChanges" Grid.Row="1"/>
-
-        <ListBox x:Name="hobbyPanel" ItemsSource="{Binding Interests, Mode=TwoWay}" Margin="77,238,0,0" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="261" Height="100" VerticalAlignment="Top" SelectionChanged="InterestSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Row="1">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel MaxWidth="261"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border CornerRadius="10" Background="Gray" Margin="1,1,1,1">
-                        <Label Content="{Binding}"  />
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-
-        <ListBox x:Name="availableHobbyList" ItemsSource="{Binding AvailableInterests, Mode=TwoWay}" Margin="400,239,0,0" HorizontalAlignment="Left" Width="262" Height="99" VerticalAlignment="Top" SelectionChanged="AvailableInterestSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Grid.Row="1">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel MaxWidth="261"/>
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border CornerRadius="10" Background="Gray" Margin="1,1,1,1">
-                        <Label Content="{Binding}"  />
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <Button Visibility="Hidden" Name="PhotoScreenButton" Content="Foto's aanpassen" HorizontalAlignment="Left" Height="32" Margin="10,150,0,0" VerticalAlignment="Top" Width="125" />
-        <Button x:Name="matchingQuizButton" Content="Maak de matching quiz!" HorizontalAlignment="Left" Margin="425,385,0,0" VerticalAlignment="Top" Height="38" Width="188" FontSize="15" Grid.Row="1"/>
+        <Frame x:Name="profilePreviewFrame" Grid.Column="7" Grid.RowSpan="8" HorizontalAlignment="Right" VerticalAlignment="Stretch" MinWidth="200"/>
     </Grid>
 </Page>

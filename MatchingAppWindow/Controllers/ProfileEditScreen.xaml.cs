@@ -25,61 +25,111 @@ namespace MatchingAppWindow.Views
     public partial class ProfileEditScreen : Page
     {
 
-        public ObservableCollection<Interest> Interests { get; set; } = new();
+        public ObservableCollection<string> Interests { get; set; } = new();
 
-        public ObservableCollection<Interest> AvailableInterests {  get; set; } = new();
+        public ObservableCollection<string> AvailableInterests {  get; set; } = new();
+
+        private ProfileDetails ProfilePreview { get; set; } = new();
 
         public ProfileEditScreen()
         {
             InitializeComponent();
 
             DataContext = this;
+
+            SizeChanged += (sender, e) =>
+            {
+                if (ActualWidth >= 1100) ProfilePreview.Visibility = Visibility.Visible;
+                else ProfilePreview.Visibility = Visibility.Collapsed;
+            };
+
+            hobbyBox.ItemsSource = Interests;
+            availableHobbyBox.ItemsSource = AvailableInterests;
         }
 
         public void InitializePage()
         {
-            BeschrijvingBox.Text = MainWindow.profile.Description;
-            OpleidingBox.Text = MainWindow.profile.Degree;
-            SchoolBox.Text = MainWindow.profile.School;
-            WerkplekBox.Text = MainWindow.profile.WorkPlace;
-            SetDiet(MainWindow.profile.Diet);
+            descriptionBox.Text = MainWindow.profile.Description;
+            degreeBox.Text = MainWindow.profile.Degree;
+            schoolBox.Text = MainWindow.profile.School;
+            workPlaceBox.Text = MainWindow.profile.WorkPlace;
+            if (MainWindow.profile.Diet != null) dietBox.SelectedIndex = (int)MainWindow.profile.Diet;
+
+            Interests.Clear();
+            AvailableInterests.Clear();
 
             foreach (var item in MainWindow.profile.Interests)
             {
-                Interests.Add(item);
+                Interests.Add(InterestExtensions.GetString((int)item));
             }
 
             for (int i = 0;  i < InterestExtensions.count; i++)
             {
-                if (!Interests.Contains((Interest)i))
-                {
-                    AvailableInterests.Add((Interest)i);
-                }
+                string interestString = InterestExtensions.GetString(i);
+                if (!Interests.Contains(interestString)) AvailableInterests.Add(interestString);
             }
+
+            ProfilePreview.SetProfile(MainWindow.profile.UserName);
+            profilePreviewFrame.Content = ProfilePreview;
+            ProfilePreview.likebutton.Visibility = Visibility.Hidden;
+            ProfilePreview.chatrequest.Visibility = Visibility.Hidden;
+
+
+
+            LinkProfilePreview();
+        }
+
+        private void InitializePage(object sender, RoutedEventArgs e)
+        {
+            InitializePage();
+        } 
+
+        private void LinkProfilePreview()
+        {
+            descriptionBox.TextChanged += (sender, e) => ProfilePreview.descriptionBlock.Text = descriptionBox.Text;
+            schoolBox.TextChanged += UpdateProfileInfo;
+            degreeBox.TextChanged += UpdateProfileInfo;
+            workPlaceBox.TextChanged += UpdateProfileInfo;
+            dietBox.SelectionChanged += UpdateProfileInfo;
+            Interests.CollectionChanged += (sender, e) => ProfilePreview.interestBlock.ItemsSource = Interests;
+        }
+
+        private void UpdateProfileInfo(object sender, TextChangedEventArgs e) => UpdateProfileInfo();
+
+        private void UpdateProfileInfo(object sender, SelectionChangedEventArgs e) => UpdateProfileInfo();
+
+        private void UpdateProfileInfo()
+        {
+            ProfilePreview.ProfileInfo.Clear();
+            ProfilePreview.ProfileInfo.Add($"Woonplaats: {MainWindow.profile.City}");
+            ProfilePreview.ProfileInfo.Add(schoolBox == null || schoolBox.Text == string.Empty ? null : $"School: {schoolBox.Text}");
+            ProfilePreview.ProfileInfo.Add(degreeBox == null || degreeBox.Text == string.Empty ? null : $"Opleiding: {degreeBox.Text}");
+            ProfilePreview.ProfileInfo.Add(workPlaceBox == null || workPlaceBox.Text == string.Empty ? null : $"Werkplek: {workPlaceBox.Text}");
+            ProfilePreview.ProfileInfo.Add(dietBox.SelectedIndex == -1 ? null : $"Dieet: {(Diet)dietBox.SelectedIndex}");
+            ProfilePreview.ProfileInfo.Add(MainWindow.profile.Vaccinated != null ? $"Is {((bool)MainWindow.profile.Vaccinated ? string.Empty : "niet")} gevaccineerd" : null);
         }
 
         public void InterestSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (hobbyPanel.SelectedIndex == -1)
-            {
-                return;
-            }
+            if (hobbyBox.SelectedIndex == -1) return;
 
-            var selectedInterest = Interests[hobbyPanel.SelectedIndex];
+            var selectedInterest = Interests[hobbyBox.SelectedIndex];
 
             AvailableInterests.Add(selectedInterest);
             Interests.Remove(selectedInterest);
 
+            AvailableInterests = new(AvailableInterests.OrderBy(x => x));
+            availableHobbyBox.ItemsSource = AvailableInterests;
         }
 
         public void AvailableInterestSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (availableHobbyList.SelectedIndex == -1)
+            if (availableHobbyBox.SelectedIndex == -1)
             {
                 return;
             }
 
-            var selectedInterest = AvailableInterests[availableHobbyList.SelectedIndex];
+            var selectedInterest = AvailableInterests[availableHobbyBox.SelectedIndex];
 
             Interests.Add(selectedInterest);
             AvailableInterests.Remove(selectedInterest);
@@ -97,58 +147,15 @@ namespace MatchingAppWindow.Views
         {
             if (MainWindow.profile != null)
             {
-                MainWindow.profile.Description = BeschrijvingBox.Text;
-                MainWindow.profile.Degree = OpleidingBox.Text;
-                MainWindow.profile.School = SchoolBox.Text;
-                MainWindow.profile.WorkPlace = WerkplekBox.Text;
-                MainWindow.profile.Diet = GetDiet();
-                MainWindow.profile.Interests = Interests.ToList();
+                MainWindow.profile.Description = descriptionBox.Text;
+                MainWindow.profile.Degree = degreeBox.Text;
+                MainWindow.profile.School = schoolBox.Text;
+                MainWindow.profile.WorkPlace = workPlaceBox.Text;
+                MainWindow.profile.Diet = (Diet) dietBox.SelectedIndex;
+                MainWindow.profile.Interests = Interests.Select(x => InterestExtensions.getEnumFromString(x)).ToList();
 
                 MainWindow.repo.UpdateProfile(MainWindow.profile);
             }
-        }
-
-        public void SetDiet(Diet? diet)
-        {
-            switch(diet)
-            {
-                case Diet.Geen:
-                    NoDiet.IsChecked = true;
-                    break;
-                case Diet.Vegetarisch:
-                    VegieDiet.IsChecked = true;
-                    break;
-                case Diet.Veganistisch:
-                    VeganDiet.IsChecked = true;
-                    break;
-                case Diet.Keto:
-                    KetoDiet.IsChecked = true;
-                    break;
-                default:
-                    OtherDiet.IsChecked = true;
-                    break;
-            }
-        }
-
-        public Diet GetDiet()
-        {
-            if ((bool)NoDiet.IsChecked)
-            {
-                return Diet.Geen;
-            }
-            else if ((bool)VegieDiet.IsChecked)
-            {
-                return Diet.Vegetarisch;
-            }
-            else if ((bool)VeganDiet.IsChecked)
-            {
-                return Diet.Veganistisch;
-            }
-            else if ((bool)KetoDiet.IsChecked)
-            {
-                return Diet.Keto;
-            }
-            return Diet.Anders;
         }
     }
 }

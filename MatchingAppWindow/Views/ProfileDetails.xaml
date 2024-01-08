@@ -1,36 +1,33 @@
-﻿<Page x:Class="MatchingAppWindow.Views.ProfileDetails"
+<Page x:Class="MatchingAppWindow.Views.ProfileDetails"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MatchingAppWindow.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="200"
+      d:DesignHeight="450" d:DesignWidth="300"
       Title="ProfileDetails"
       Background="White">
 
-    <Grid d:Name="Grid" Background="#252C33">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="43*"/>
-            <ColumnDefinition Width="57*"/>
-        </Grid.ColumnDefinitions>
+
+    
+    <Grid d:Name="Grid" Background="#252C33" Width="300">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+
+        <Grid x:Name="profileDetailGrid" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="20"/>
             </Grid.ColumnDefinitions>
 
-            <Image x:Name="profileImage" Grid.ColumnSpan="3" Width="300"/>
+            <Image x:Name="profileImage" Grid.ColumnSpan="3" Width="{Binding ActualWidth, ElementName=profileDetailGrid}" />
 
             <Button x:Name="previousImage" Content="&lt;" Grid.Column="0" Height="30" BorderBrush="Transparent" FontSize="15" Click="PreviousImage">
                 <Button.Background>
@@ -47,72 +44,109 @@
         </Grid>
 
 
-        <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center"   Background="#252C33" Foreground="White" Height="auto" Grid.ColumnSpan="2"/>
+        <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center"   Background="#252C33" Foreground="White" Height="auto"/>
 
-        <Border CornerRadius="10" Grid.Row="2" Background="#434E5B"  Margin="3,3,3,3" Grid.ColumnSpan="2" >
-            <TextBlock x:Name="descriptionBlock" Text="" TextWrapping="Wrap"  HorizontalAlignment="Stretch" Margin="5" Foreground="White" Padding="4"/>
-        </Border>
-
-
-        <Border Grid.Row="3" BorderBrush="#252C33" Background="#434E5B" CornerRadius="10" Margin="3,3,3,3" Grid.ColumnSpan="2">
-            <ItemsControl x:Name="interestBlock">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border CornerRadius="10" Background="#AD0090" BorderBrush="#AD0090" Margin="3">
-                            <Label Content="{Binding}" Foreground="White" />
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Border>
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+            <Grid Width="300">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                
+                <Border CornerRadius="10" Grid.Row="0" Background="#434E5B"  Margin="3" >
+                    <TextBlock x:Name="descriptionBlock" Text="" TextWrapping="Wrap"  HorizontalAlignment="Stretch" Margin="5" Foreground="White" Padding="4"/>
+                </Border>
 
 
-        <Border Grid.Row="4" CornerRadius="10" Background="#434E5B" BorderBrush="#434E5B" Margin="3,3,3,3" Grid.ColumnSpan="2">
-            <ItemsControl x:Name="detailList" Grid.Row="4" BorderThickness="2"  Foreground="White">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding}" Foreground="White"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </Border>
+                <Border Grid.Row="1" BorderBrush="#252C33" Background="#434E5B" CornerRadius="10" Margin="3">
+                    <ItemsControl x:Name="interestBlock" d:ItemsSource="{d:SampleData ItemCount=5}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Width="300" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="10" Background="#AD0090" BorderBrush="#AD0090" Margin="3">
+                                    <Label Content="{Binding}" Foreground="White" />
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
 
-        <Grid Grid.Row="5" VerticalAlignment="Bottom" Grid.ColumnSpan="2">
+                <Border Grid.Row="2" CornerRadius="10" Background="#434E5B" BorderBrush="#434E5B" Margin="3">
+                    <ItemsControl x:Name="detailList" Grid.Row="4" BorderThickness="2"  Foreground="White">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Label Content="{Binding}" Foreground="White"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+
+
+        
+
+        <Grid Grid.Row="2" VerticalAlignment="Bottom" Height="50">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
 
-            <Border CornerRadius="10">
-                <Button x:Name="chatrequest" Grid.Column="0" Content="ChatReq" Foreground="White" Background="#AD0090" BorderBrush="#AD0090" Margin="0,10,0,0" Click="NewChatRequest">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Border>
 
-            <Border CornerRadius="10" Grid.Column="1">
-                <Button x:Name="likebutton" Content="Hartjuh" Foreground="White" Background="#AD0090" BorderBrush="#AD0090" Margin="3,10,0,0" >
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Border>
+            <Button x:Name="chatrequest" Grid.Column="0" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40" Click="NewChatRequest">
+                <Button.Content>
+                    <Image Source="/Views/MessageIcon.png" Margin="10"/>
+                </Button.Content>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="25">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
 
+            <Button x:Name="likebutton" Grid.Column="1" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40" Click="LikeProfileEvent">
+                <Button.Content>
+                    <Image Source="/Views/LikeIcon2.png" Margin="10"/>
+                </Button.Content>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="25">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#6C7D92"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button x:Name="dislikebutton" Grid.Column="1" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40" Click="DislikeProfileEvent">
+                <Button.Content>
+                    <Image Source="/Views/LikeIcon.png" Margin="10"/>
+                </Button.Content>
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="25">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#6C7D92"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
         </Grid>
     </Grid>
 </Page>

@@ -27,7 +27,7 @@ namespace MatchingAppWindow
         private static ForwardedPortLocal tunnel;
 
         private StartScreen startScreen = new();
-        private Navigation navigation = new();
+        private Navigation navigation;
         private RegisterScreen registerScreen = new();
 
         public MainWindow()
@@ -79,16 +79,21 @@ namespace MatchingAppWindow
         {
             startScreen.LoginSuccessful += (sender, e) =>
             {
+                navigation = new();
+                navigation.logoutButton.MouseDown += LogoutButton_Click;
                 navigation.InitScreens();
                 Content = navigation;
             };
 
             registerScreen.loginButton.Click += (sender, e) => Content = startScreen;
-            registerScreen.ExitPage += (sender, e) => Content = navigation;
+
+            registerScreen.ExitPage += (sender, e) =>
+            {
+                navigation = new();
+                Content = navigation;
+            };
 
             startScreen.registerButton.Click += (sender, e) => Content = registerScreen;
-
-            navigation.logoutButton.MouseDown += LogoutButton_Click;
 
             Loaded += MainWindow_Loaded;
             Closed += MainWindow_Closed;
