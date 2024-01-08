@@ -46,17 +46,7 @@ namespace MatchingAppWindow.Views
         {
             InitializeComponent();
 
-            var (profileList, likes, isLiked) = repo.FilterLikes(MainWindow.profile);
-            int counter = 0;
-            List<Match> matches = new List<Match>();
-
-            foreach (string profile in profileList)
-            {
-                matches.Add(new Match(profile, likes[counter], isLiked[counter]));
-                counter++;
-            }
-
-            resultBox.ItemsSource = matches;
+            UpdateLikes();
 
             profileDetailsFrame.Content = profileDetails;
 
@@ -92,6 +82,21 @@ namespace MatchingAppWindow.Views
 
                 DietCheckBoxes.Children.Add(checkBox);
             }
+        }
+
+        public void UpdateLikes()
+        {
+            var (profileList, likes, isLiked) = repo.FilterLikes(MainWindow.profile);
+            int counter = 0;
+            List<Match> matches = new List<Match>();
+
+            foreach (string profile in profileList)
+            {
+                matches.Add(new Match(profile, likes[counter], isLiked[counter]));
+                counter++;
+            }
+
+            resultBox.ItemsSource = matches;
         }
 
         //RadioButtons to filter on location

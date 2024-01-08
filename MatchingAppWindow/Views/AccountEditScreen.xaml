@@ -16,6 +16,13 @@
             <Setter Property="FontSize" Value="18"/>
         </Style>
 
+        <Style TargetType="{x:Type DatePickerTextBox}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Foreground" Value="White"/>
@@ -451,7 +458,7 @@
 
         <Label Content="Seksuele voorkeur:" Width="160" Grid.Row="3"  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="3" />
        
-        <ComboBox x:Name="sexuelPreferenceBox" Grid.Row="4" Grid.Column="3" Foreground="White" FontSize="18">
+        <ComboBox x:Name="sexualPreferenceBox" Grid.Row="4" Grid.Column="3" Foreground="White" FontSize="18">
             <ComboBoxItem Content="Hetero"/>
             <ComboBoxItem Content="Homosexueel"/>
             <ComboBoxItem Content="Bisexueel"/>
@@ -467,16 +474,15 @@
         </ComboBox>
 
         <Label Grid.Row="3" Grid.Column="4" Content="Geboortedatum:"   HorizontalAlignment="Left" Width="155" Height="32" />
-        <DatePicker Grid.Row="4" Grid.Column="4" x:Name="BirthDatePicker"  FirstDayOfWeek="Monday"  Width="138" Height="40"/>
 
+        <Border Grid.Column="4" Grid.Row="4" Background="#434E5B" CornerRadius="10" Margin="5">
+            <DatePicker x:Name="birthDatePicker" BorderThickness="0" VerticalAlignment="Center" Foreground="White"/>
+        </Border>
 
-
-
-
-        <Button x:Name="ConfirmButton" Content="Opslaan" Grid.Row="7" Grid.Column="3" VerticalAlignment="Center"  Height="30" Click="ConfirmChanges"/>
+        <Button x:Name="ConfirmButton" Content="Opslaan" Grid.Row="6" Grid.Column="3" VerticalAlignment="Center"  Height="30" Click="ConfirmChanges"/>
 
         <Frame x:Name="profilePreviewFrame" Grid.Column="7" Grid.RowSpan="8" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Stretch" MinWidth="200" Visibility="Visible" IsEnabled="True"/>
 
-
+        <Label x:Name="errorMessage" Content="ongeldige waarden ingevoerd" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="5" Foreground="Red" FontWeight="Bold" Visibility="Hidden"/>
     </Grid>
 </Page>

@@ -60,12 +60,13 @@ namespace MatchingAppWindow.Views
             profileEditScreen.cancelButton.Click += (sender, e) => contentFrame.Content = profileScreen;
             profileEditScreen.quizButton.Click += (sender, e) => contentFrame.Content = matchingQuiz;
 
-            accountEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
-
-            profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
-            matchesButton.Click += (s, e) => contentFrame.Content = matchScreen;
             messageButton.Click += (s, e) => contentFrame.Content = ChatScreen;
-            
+            profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
+            matchesButton.Click += (s, e) =>
+            {
+                matchScreen.UpdateLikes();
+                contentFrame.Content = matchScreen;
+            };
 
             editProfileButton.Click += (sender, e) => contentFrame.Content = profileEditScreen;
             editAccountButton.Click += (sender, e) => contentFrame.Content = accountEditScreen;
@@ -73,6 +74,7 @@ namespace MatchingAppWindow.Views
             contentFrame.ContentRendered += HideProfileButton;
 
             matchingQuiz.ExitPage += (sender, e) => contentFrame.Content = profileEditScreen;
+            accountEditScreen.ExitPage += (sender, e) => contentFrame.Content = profileScreen;
 
             SwitchToLikesMatchesScreen(this, EventArgs.Empty);
             SwitchToProfileScreen(this, EventArgs.Empty);

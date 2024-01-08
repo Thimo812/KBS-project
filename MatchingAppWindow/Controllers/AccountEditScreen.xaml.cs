@@ -1,5 +1,6 @@
 ﻿using KBS_project;
 using KBS_project.Enums;
+using KBS_project.Exceptions;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,13 @@ namespace MatchingAppWindow.Views
     public partial class AccountEditScreen : Page
     {
         public ObservableCollection<BitmapImage> Images { get; set; } = new();
+
         private ProfileDetails ProfilePreview { get; set; } = new();
+
+        private List<Control> invalidFields;
+
+        public event EventHandler ExitPage;
+
         public AccountEditScreen()
         {
             InitializeComponent();
@@ -36,6 +43,8 @@ namespace MatchingAppWindow.Views
 
             imageBox.SelectionChanged += UpdateDeletePhotoButton;
             Images.CollectionChanged += UpdateAddPhotoButton;
+
+            ExitPage += (sender, e) => ClearErrorFields();
 
             SizeChanged += (sender, e) =>
             {
@@ -46,12 +55,12 @@ namespace MatchingAppWindow.Views
 
         public void InitializePage()
         {
-            BirthDatePicker.Text = MainWindow.profile.BirthDate.ToString();
+            birthDatePicker.Text = MainWindow.profile.BirthDate.ToString();
             CountryBox.Text = MainWindow.profile.Country;
             CityBox.Text = MainWindow.profile.City;
             PostalCodeBox.Text = MainWindow.profile.PostalCode;
             genderBox.SelectedIndex = (int)MainWindow.profile.Gender;
-            sexuelPreferenceBox.SelectedIndex = (int)MainWindow.profile.SexualPreference;
+            sexualPreferenceBox.SelectedIndex = (int)MainWindow.profile.SexualPreference;
 
             ProfilePreview.SetProfile(MainWindow.profile.UserName);
             profilePreviewFrame.Content = ProfilePreview;
@@ -117,24 +126,112 @@ namespace MatchingAppWindow.Views
 
         private void ConfirmChanges(object sender, RoutedEventArgs e)
         {
-            if (MainWindow.profile != null)
+            if (MainWindow.profile == null) return;
+
+            invalidFields = new();
+
+            if (Images.Count != 0)
             {
                 List<byte[]> imageData = Images.Select(x => ImageConverter.BitmapImageToData(x)).ToList();
-
-                MainWindow.profile.BirthDate = BirthDatePicker.DisplayDate;
-                MainWindow.profile.Country = CountryBox.Text;
-                MainWindow.profile.City = CityBox.Text;
-                MainWindow.profile.PostalCode = PostalCodeBox.Text;
-                MainWindow.profile.Gender = (Gender)genderBox.SelectedIndex;
-                MainWindow.profile.SexualPreference = (SexualPreference)sexuelPreferenceBox.SelectedIndex;
                 MainWindow.profile.Images = imageData;
-
-                MainWindow.repo.UpdateProfile(MainWindow.profile);
             }
+            else 
+            {
+                invalidFields.Add(imageBox);
+            }
+
+            if (genderBox.SelectedIndex != -1)
+            {
+                MainWindow.profile.Gender = (Gender)genderBox.SelectedIndex;
+            }
+            else
+            {
+                invalidFields.Add(genderBox);
+            }
+
+            if (sexualPreferenceBox.SelectedIndex != -1)
+            {
+                MainWindow.profile.SexualPreference = (SexualPreference)sexualPreferenceBox.SelectedIndex;
+            }
+            else
+            {
+                invalidFields.Add(sexualPreferenceBox);
+            }
+
+            try
+            {
+                MainWindow.profile.BirthDate = RegistrationFieldsExtensions.Validate(birthDatePicker.SelectedDate);
+            } 
+            catch (InvalidFieldException)
+            {
+                invalidFields.Add(birthDatePicker);
+            }
+
+            MainWindow.profile.Country = CheckField(CountryBox, RegistrationFields.Country);
+            MainWindow.profile.City = CheckField(CityBox, RegistrationFields.City);
+            MainWindow.profile.PostalCode = CheckField(PostalCodeBox, RegistrationFields.PostalCode);
+
+            if (invalidFields.Count > 0)
+            {
+                ShowErrors();
+                return;
+            }
+            else ClearErrorFields();
+
+            MainWindow.repo.UpdateProfile(MainWindow.profile);
+
+            ExitPage?.Invoke(this, new EventArgs());
         }
 
-       
+        private string CheckField(TextBox textBox, RegistrationFields field)
+        {
+            try
+            {
+                return RegistrationFieldsExtensions.Validate(textBox.Text, field, MainWindow.repo);
+            }
+            catch (InvalidFieldException)
+            {
+                invalidFields.Add(textBox);
+            }
 
-       
+            return String.Empty;
+        }
+
+        private void ShowErrors()
+        {
+            foreach (var field in invalidFields)
+            {
+                DisplayFieldError(field);
+            }
+
+            errorMessage.Visibility = Visibility.Visible;
+        }
+
+        private void DisplayFieldError(Control inputField)
+        {
+            inputField.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#ff6666");
+            inputField.BorderBrush = Brushes.Red;
+        }
+
+        private void ClearErrorFields()
+        {
+            var fields = new List<Control>()
+            {
+                CityBox,
+                CountryBox,
+                PostalCodeBox,
+                genderBox,
+                sexualPreferenceBox,
+                birthDatePicker,
+            };
+
+            foreach (Control field in fields)
+            {
+                field.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#434E5B");
+                field.BorderBrush = (SolidColorBrush)new BrushConverter().ConvertFrom("#434E5B");
+            }
+
+            errorMessage.Visibility = Visibility.Hidden;
+        }
     }
 }
