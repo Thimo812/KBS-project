@@ -79,14 +79,19 @@ namespace MatchingAppWindow
         {
             startScreen.LoginSuccessful += (sender, e) =>
             {
-                if (navigation == null) navigation = new();
+                navigation = new();
                 navigation.logoutButton.MouseDown += LogoutButton_Click;
                 navigation.InitScreens();
                 Content = navigation;
             };
 
             registerScreen.loginButton.Click += (sender, e) => Content = startScreen;
-            registerScreen.ExitPage += (sender, e) => Content = navigation;
+
+            registerScreen.ExitPage += (sender, e) =>
+            {
+                navigation = new();
+                Content = navigation;
+            };
 
             startScreen.registerButton.Click += (sender, e) => Content = registerScreen;
 

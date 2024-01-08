@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:MatchingAppWindow.Views" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      xmlns:local="clr-namespace:MatchingAppWindow.Views" xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:local1="clr-namespace:MatchingAppWindow"
       mc:Ignorable="d" d:DesignWidth="900"
       Title="ProfileEditScreen" MinHeight="595">
 
@@ -379,7 +379,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
     </Page.Resources>
 
     <Grid Background="#2C343D">
@@ -407,11 +407,11 @@
         <Label Content="Beschrijving" Grid.Row="0" Grid.Column="1" VerticalAlignment="Bottom"/>
         <TextBox x:Name="descriptionBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" TextWrapping="Wrap"/>
 
-        <Label Content="Opleiding" Grid.Row="2" Grid.Column="2"/>
-        <TextBox x:Name="degreeBox" Grid.Row="3" Grid.Column="2"/>
-
         <Label Content="School" Grid.Row="2" Grid.Column="1"/>
         <TextBox x:Name="schoolBox" Grid.Row="3" Grid.Column="1"/>
+
+        <Label Content="Opleiding" Grid.Row="2" Grid.Column="2"/>
+        <TextBox x:Name="degreeBox" Grid.Row="3" Grid.Column="2"/>
 
         <Label Content="Werkplek" Grid.Row="2" Grid.Column="3"/>
         <TextBox x:Name="workPlaceBox" Grid.Row="3" Grid.Column="3"/>

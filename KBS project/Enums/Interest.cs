@@ -9,46 +9,46 @@ namespace KBS_project.Enums
 {
     public enum Interest
     {
-        Reizen, // Traveling
-        Buitensport, // OutdoorActivities
+        Astrology,
+        Astronomie,
+        Bordspellen,
+        Buitensport,
+        Dansen,
+        Dieren,
+        DIY_Huisdecoratie,
+        DIY_Projecten,
+        Duurzaamheid,
+        Fietsen,
+        Films_en_TV,
         Fitness,
-        Lezen, // Reading
-        Muziek, // Music
-        Films_en_TV, // MoviesTVShows
-        Koken_en_bakken, // CookingBaking
-        Kunst_en_creativiteit, // ArtCreativity
-        Vrijwilligers, // VolunteerWork
+        Fotografie,
         Gaming,
-        Technologie, // TechnologyProgramming
+        Gezondheid_en_welzijn,
+        Geschiedenis,
+        Houtsnijden,
+        Koken_en_bakken,
+        Koffie,
+        Kunst_en_creativiteit,
+        Lezen,
+        Mode_en_stijl,
+        Motorrijden,
+        Muziek,
+        Reizen,
+        Schrijven_en_poëzie,
+        Sciencefiction,
+        Skydiven,
         Sport,
-        Dansen, // Dancing
-        Talen, // Languages
-        Dieren, // Animals
-        Tuinieren, // Gardening
-        Mode_en_stijl, // FashionStyle
-        DIY_Projecten, // DIYProjects
-        Wetenschap, // ScienceTechnology
-        Bordspellen, // BoardGamesCardGames
-        Astrology, // AstrologySpirituality
-        TheaterKunst, // TheaterPerformingArts
-        Sciencefiction, // ScienceFictionFantasy
-        Koffie, // CoffeeEnthusiast
-        Thee, // TeaEnthusiast
-        Motorrijden, // Motorcycling
-        Wijnproeven, // WineBeerTasting
-        Vissen, // Fishing
-        Geschiedenis, // HistoryBuff
-        Schrijven_en_poëzie, // WritingPoetry
-        Fietsen, // Cycling
-        Skydiven, // SkydivingAdrenalineJunkie
-        Verzamelen, // Collecting
-        DIY_Huisdecoratie, // DIYHomeDecor
-        Vechtsporten, // MartialArts
-        Fotografie, // Photography
-        Houtsnijden, // WhittlingWoodworking
-        Gezondheid_en_welzijn, // HealthWellness
-        Duurzaamheid, // Sustainability
-        Astronomie // AstronomyStargazing
+        Talen,
+        Technologie,
+        TheaterKunst,
+        Thee,
+        Tuinieren,
+        Verzamelen,
+        Vechtsporten,
+        Vissen,
+        Vrijwilligers,
+        Wetenschap,
+        Wijnproeven
     }
 }
 
@@ -63,5 +63,16 @@ public static class InterestExtensions
         string result = interest.ToString();
 
         return result.Replace('_', ' ');
+    }
+
+    public static Interest getEnumFromString(string interestString)
+    {
+        interestString = interestString.Replace(' ', '_');
+
+        Interest interest;
+
+        if (Enum.TryParse(interestString, out interest)) return interest;
+        
+        throw new InvalidCastException(interestString);
     }
 }
