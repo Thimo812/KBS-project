@@ -57,12 +57,15 @@ namespace MatchingAppWindow.Views
             accountEditScreen.InitializePage();
 
             profileEditScreen.confirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
+            profileEditScreen.cancelButton.Click += (sender, e) => contentFrame.Content = profileScreen;
+            profileEditScreen.quizButton.Click += (sender, e) => contentFrame.Content = matchingQuiz;
+
             accountEditScreen.ConfirmButton.Click += (sender, e) => contentFrame.Content = profileScreen;
 
             profilesButton.Click += (s, e) => contentFrame.Content = profileScreen;
             matchesButton.Click += (s, e) => contentFrame.Content = matchScreen;
             messageButton.Click += (s, e) => contentFrame.Content = ChatScreen;
-            profileEditScreen.cancelButton.Click += (s, e) => contentFrame.Content = profileScreen;
+            
 
             editProfileButton.Click += (sender, e) => contentFrame.Content = profileEditScreen;
             editAccountButton.Click += (sender, e) => contentFrame.Content = accountEditScreen;
