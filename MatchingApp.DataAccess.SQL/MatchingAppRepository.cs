@@ -542,20 +542,45 @@ namespace MatchingApp.DataAccess.SQL
         //creates a new message request with a status of 0 (Sent)
         public void CreateMessageRequest(string sender, string receiver)
         {
+            if (!CheckForMessageRequest(sender, receiver)) {
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    var sql = "INSERT INTO ChatVerzoek (Verzender, Ontvanger, Status) " +
+                            "VALUES (@Sender, @Receiver, @Status)";
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("Sender", sender);
+                        command.Parameters.AddWithValue("Receiver", receiver);
+                        command.Parameters.AddWithValue("Status", 0);
+                        command.ExecuteNonQuery();
+                    }
+                    connection.Close();
+                }
+            }
+        }
+
+        public bool CheckForMessageRequest(string sender, string receiver)
+        {
+            bool returner;
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "INSERT INTO ChatVerzoek (Verzender, Ontvanger, Status) " +
-                        "VALUES (@Sender, @Receiver, @Status)";
+                var sql = "SELECT * FROM ChatVerzoek WHERE Verzender = @Sender AND Ontvanger = @Receiver";
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("Sender", sender);
                     command.Parameters.AddWithValue("Receiver", receiver);
-                    command.Parameters.AddWithValue("Status", 0);
                     command.ExecuteNonQuery();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        returner = reader.HasRows;
+                    }
                 }
                 connection.Close();
             }
+
+            return returner;
         }
 
             // gets a list of every message request send to the receiver
