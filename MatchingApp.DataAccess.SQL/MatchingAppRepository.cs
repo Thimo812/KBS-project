@@ -544,7 +544,7 @@ namespace MatchingApp.DataAccess.SQL
         {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "INSERT INTO MessageRequests (Sender, Receiver, Status) " +
+                var sql = "INSERT INTO ChatVerzoek (Verzender, Ontvanger, Status) " +
                         "VALUES (@Sender, @Receiver, @Status)";
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -565,7 +565,7 @@ namespace MatchingApp.DataAccess.SQL
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT Sender FROM MessageRequests WHERE Receiver = @Receiver AND Status = 0";
+                var sql = "SELECT Verzender FROM ChatVerzoek WHERE Ontvanger = @Receiver AND Status = 0";
 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -594,7 +594,7 @@ namespace MatchingApp.DataAccess.SQL
 
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 {
-                    var sql = "SELECT Receiver FROM MessageRequests WHERE Sender = @Sender AND Status = 0";
+                    var sql = "SELECT Ontvanger FROM ChatVerzoek WHERE Verzender = @Sender AND Status = 0";
 
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(sql, connection))
@@ -623,7 +623,7 @@ namespace MatchingApp.DataAccess.SQL
             {
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 { 
-                    var sql = "UPDATE MessageRequests SET Status = @Status WHERE Receiver = @receiver AND Sender = @Sender";
+                    var sql = "UPDATE ChatVerzoek SET Status = @Status WHERE Ontvanger = @receiver AND Verzender = @Sender";
                 
                     connection.Open();
                     using (SqlCommand command = new SqlCommand(sql, connection))
@@ -641,7 +641,7 @@ namespace MatchingApp.DataAccess.SQL
         {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "DELETE FROM MessageRequests WHERE Receiver = @receiver AND Sender = @Sender";
+                var sql = "DELETE FROM ChatVerzoek WHERE Ontvanger = @receiver AND Verzender = @Sender";
 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -791,7 +791,7 @@ namespace MatchingApp.DataAccess.SQL
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT Sender FROM MessageRequests WHERE Receiver = @userName AND Status = 1 UNION SELECT Receiver FROM MessageRequests WHERE Sender = @userName AND Status = 1";
+                var sql = "SELECT Verzender FROM ChatVerzoek WHERE Ontvanger = @userName AND Status = 1 UNION SELECT Ontvanger FROM ChatVerzoek WHERE Verzender = @userName AND Status = 1";
 
                 connection.Open();
 
