@@ -555,30 +555,57 @@ namespace MatchingApp.DataAccess.SQL
         //creates a new message request with a status of 0 (Sent)
         public void CreateMessageRequest(string sender, string receiver)
         {
+            if (!CheckForMessageRequest(sender, receiver)) {
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    var sql = "INSERT INTO ChatVerzoek (Verzender, Ontvanger, Status) " +
+                            "VALUES (@Sender, @Receiver, @Status)";
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("Sender", sender);
+                        command.Parameters.AddWithValue("Receiver", receiver);
+                        command.Parameters.AddWithValue("Status", 0);
+                        command.ExecuteNonQuery();
+                    }
+                    connection.Close();
+                }
+            }
+        }
+
+        public bool CheckForMessageRequest(string sender, string receiver)
+        {
+            bool returner;
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "INSERT INTO ChatVerzoek (Verzender, Ontvanger, Status) " +
-                        "VALUES (@Sender, @Receiver, @Status)";
+                var sql = "SELECT * FROM ChatVerzoek WHERE Verzender = @Sender AND Ontvanger = @Receiver";
+
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.Parameters.AddWithValue("Sender", sender);
                     command.Parameters.AddWithValue("Receiver", receiver);
-                    command.Parameters.AddWithValue("Status", 0);
                     command.ExecuteNonQuery();
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        returner = reader.HasRows;
+                    }
                 }
                 connection.Close();
             }
+
+            return returner;
         }
 
-        // gets a list of every message request send to the receiver
-        public List<string> GetMessageRequest(string receiver)
-        {
-            List<string> requests = new List<string>();
+            // gets a list of every message request send to the receiver
+            public List<string> GetIncomingMessageRequest(string receiver)
+            {
+                List<string> requests = new List<string>();
 
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "SELECT Verzender FROM ChatVerzoek WHERE Ontvanger = @Receiver";
+                var sql = "SELECT Verzender FROM ChatVerzoek WHERE Ontvanger = @Receiver AND Status = 0";
+
 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -586,29 +613,79 @@ namespace MatchingApp.DataAccess.SQL
                     command.Parameters.AddWithValue("Receiver", receiver);
                     command.ExecuteNonQuery();
 
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
-                            requests.Add(reader.GetString(0));
+                            if (reader.HasRows) {
+                                while (reader.Read())
+                                {
+                                    requests.Add(reader.GetString(0));
+                                }
+                            }
                         }
                     }
+                    connection.Close();
                 }
-                connection.Close();
+                return requests;
             }
-            return requests;
-        }
 
-        public void UpdateMessageRequest(int status, string receiver, string sender)
+            public List<string> GetOutgoingMessageRequest(string sender)
+            {
+                List<string> requests = new List<string>();
+
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                {
+                    var sql = "SELECT Ontvanger FROM ChatVerzoek WHERE Verzender = @Sender AND Status = 0";
+
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("Sender", sender);
+                        command.ExecuteNonQuery();
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+                                    requests.Add(reader.GetString(0));
+                                }
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+                return requests;
+            }
+
+
+            public void UpdateMessageRequest(int status, string receiver, string sender)
+            {
+                using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
+                { 
+                    var sql = "UPDATE ChatVerzoek SET Status = @Status WHERE Ontvanger = @receiver AND Verzender = @Sender";
+                
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("Status", status);
+                        command.Parameters.AddWithValue("Receiver", receiver);
+                        command.Parameters.AddWithValue("Sender", sender);
+                        command.ExecuteNonQuery();
+                    }
+                    connection.Close();
+                }
+            }
+
+        public void CancelMessageRequest(string sender, string receiver)
         {
             using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
             {
-                var sql = "UPDATE ChatVerzoek SET Status = @Status WHERE Ontvanger = @receiver AND Verzender = @Sender";
+                var sql = "DELETE FROM ChatVerzoek WHERE Ontvanger = @receiver AND Verzender = @Sender";
 
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
-                    command.Parameters.AddWithValue("Status", status);
                     command.Parameters.AddWithValue("Receiver", receiver);
                     command.Parameters.AddWithValue("Sender", sender);
                     command.ExecuteNonQuery();

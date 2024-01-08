@@ -35,13 +35,13 @@ namespace MatchingAppWindow.Views
 
         private ObservableCollection<Message> Messages { get; set; } = new();
 
-        private Contact SelectedContact { get; set; }
+        private Contact? SelectedContact { get; set; }
 
         private ProfileDetails ProfileDetails { get; set; } = new();
 
         private bool AutoScroll { get; set; } = true;
 
-        public BackgroundWorker MessageChecker { get; private set; }
+        public BackgroundWorker? MessageChecker { get; private set; }
 
         public ChatScreen()
         {
@@ -49,6 +49,8 @@ namespace MatchingAppWindow.Views
 
             string userName = MainWindow.profile.UserName;
             List<string> contactNames = MainWindow.repo.GetContactNames(userName);
+            List<string> incomingRequests = MainWindow.repo.GetIncomingMessageRequest(userName);
+            List<string> outgoingRequests = MainWindow.repo.GetOutgoingMessageRequest(userName);
 
             Contacts.CollectionChanged += (sender, e) =>
             {
@@ -64,6 +66,22 @@ namespace MatchingAppWindow.Views
                 Contacts.Add(contact);
             }
 
+            foreach(string incRequest in incomingRequests)
+            {
+                BitmapImage contactImage = ImageConverter.ImageDataToBitmap(MainWindow.repo.GetProfileImageData(incRequest));
+                Contact contact = new Contact(incRequest, contactImage, true, false);
+
+                Contacts.Add(contact);
+            }
+
+            foreach (string outRequest in outgoingRequests)
+            {
+                BitmapImage contactImage = ImageConverter.ImageDataToBitmap(MainWindow.repo.GetProfileImageData(outRequest));
+                Contact contact = new Contact(outRequest, contactImage, false, true);
+
+                Contacts.Add(contact);
+            }
+
             DataContext = this;
 
             messageControl.ItemsSource = Messages;
@@ -71,6 +89,7 @@ namespace MatchingAppWindow.Views
             detailFrame.Content = ProfileDetails;
 
             Loaded += StartChecking;
+            Loaded += RefreshContacts;
             Unloaded += StopChecking;
 
             sendButton.IsEnabledChanged += UpdateSendButtonImage;
@@ -81,11 +100,33 @@ namespace MatchingAppWindow.Views
             if (contactList.SelectedItem == null) return;
 
             SelectedContact = Contacts[contactList.SelectedIndex];
-
             ProfileDetails.SetProfile(SelectedContact.UserName);
-
-            chatWindow.Visibility = Visibility.Visible;
             ProfileDetails.Visibility = Visibility.Visible;
+
+
+
+            if (SelectedContact.IsOutgoingRequest == SelectedContact.IsIncomingRequest)
+            {
+                requestWindow.Visibility = Visibility.Hidden;
+                outRequestWindow.Visibility = Visibility.Hidden;
+                chatWindow.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                chatWindow.Visibility = Visibility.Hidden;
+
+                if (SelectedContact.IsIncomingRequest == true)
+                {
+                    outRequestWindow.Visibility = Visibility.Hidden;
+                    requestWindow.Visibility = Visibility.Visible;
+                }
+                else // IsOutgoingRequest == true
+                {
+                    requestWindow.Visibility = Visibility.Hidden;
+                    outRequestWindow.Visibility = Visibility.Visible; 
+                }
+
+            }
         }
 
         private void CheckMessages(object sender, DoWorkEventArgs e)
@@ -203,6 +244,61 @@ namespace MatchingAppWindow.Views
         {
             if (messageBox.Text.Length == 0) return;
             sendButton.Source = new BitmapImage(new Uri("/Views/SendMessageIcon.png", UriKind.Relative));
+        }
+
+        public void CancelButtonPressed(object sender, RoutedEventArgs e)
+        {
+            MainWindow.repo.CancelMessageRequest(MainWindow.profile.UserName, SelectedContact.UserName);
+            Contacts.Remove(SelectedContact);
+            outRequestWindow.Visibility = Visibility.Hidden;
+        }
+
+        public void AcceptButtonPressed(object sender, RoutedEventArgs e)
+        {
+            MainWindow.repo.UpdateMessageRequest(1, MainWindow.profile.UserName, SelectedContact.UserName);
+            SelectedContact.IsIncomingRequest = false;
+            requestWindow.Visibility = Visibility.Hidden;
+            chatWindow.Visibility = Visibility.Visible;
+        }
+
+        public void DenyButtonPressed(object sender, RoutedEventArgs e)
+        {
+            MainWindow.repo.UpdateMessageRequest(2, MainWindow.profile.UserName, SelectedContact.UserName);
+            Contacts.Remove(SelectedContact);
+            requestWindow.Visibility = Visibility.Hidden;
+        }
+        public void RefreshContacts(object sender, RoutedEventArgs e)
+        {
+            Contacts.Clear();
+
+            string userName = MainWindow.profile.UserName;
+            List<string> contactNames = MainWindow.repo.GetContactNames(userName);
+            List<string> incomingRequests = MainWindow.repo.GetIncomingMessageRequest(userName);
+            List<string> outgoingRequests = MainWindow.repo.GetOutgoingMessageRequest(userName);
+
+            foreach (string contactName in contactNames)
+            {
+                BitmapImage contactImage = ImageConverter.ImageDataToBitmap(MainWindow.repo.GetProfileImageData(contactName));
+                Contact contact = new Contact(contactName, contactImage);
+
+                Contacts.Add(contact);
+            }
+
+            foreach (string incRequest in incomingRequests)
+            {
+                BitmapImage contactImage = ImageConverter.ImageDataToBitmap(MainWindow.repo.GetProfileImageData(incRequest));
+                Contact contact = new Contact(incRequest, contactImage, true, false);
+
+                Contacts.Add(contact);
+            }
+
+            foreach (string outRequest in outgoingRequests)
+            {
+                BitmapImage contactImage = ImageConverter.ImageDataToBitmap(MainWindow.repo.GetProfileImageData(outRequest));
+                Contact contact = new Contact(outRequest, contactImage, false, true);
+
+                Contacts.Add(contact);
+            }
         }
     }
 }

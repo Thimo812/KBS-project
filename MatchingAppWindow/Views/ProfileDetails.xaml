@@ -9,13 +9,16 @@
       Title="ProfileDetails"
       Background="White">
 
+
     
     <Grid d:Name="Grid" Background="#252C33" Width="300">
+
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
 
         <Grid x:Name="profileDetailGrid" Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -39,6 +42,7 @@
             </Button>
 
         </Grid>
+
 
         <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center"   Background="#252C33" Foreground="White" Height="auto"/>
 
@@ -93,6 +97,7 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
+
 
 
             <Button x:Name="chatrequest" Grid.Column="0" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40" Click="NewChatRequest">
