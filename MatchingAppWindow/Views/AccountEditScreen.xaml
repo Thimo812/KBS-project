@@ -8,70 +8,475 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AccountEditScreen">
 
-    <Grid Background="White">
+    <Page.Resources>
+        <Style TargetType="{x:Type Label}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Padding" Value="11"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border Background="#434E5B" 
+                             BorderBrush="{TemplateBinding BorderBrush}" 
+                             BorderThickness="{TemplateBinding BorderThickness}" 
+                             CornerRadius="15"
+                             Margin="5">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="ToggleButton">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Border
+         x:Name="Border"
+         Grid.ColumnSpan="2"
+         CornerRadius="15"
+         Background="#434E5B"
+         BorderThickness="0"/>
+                <Border
+         Grid.Column="0"
+         CornerRadius="15,0,0,15"
+         Margin="1"
+         Background="#434E5B"
+         BorderBrush="#4F5C6B"
+         BorderThickness="0,0,1,0"/>
+                <Path
+         x:Name="Arrow"
+         Grid.Column="1"
+         Fill="White"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Center"
+         Data="M 0 0 L 4 4 L 8 0 Z"/>
+            </Grid>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="#DDD"/>
+                </Trigger>
+                <Trigger Property="ToggleButton.IsChecked" Value="true">
+                    <Setter TargetName="Border" Property="Background" Value="#CCC"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter TargetName="Border" Property="Background" Value="#EEE"/>
+                    <Setter TargetName="Border" Property="BorderBrush" Value="#AAA"/>
+                    <Setter Property="Foreground" Value="#888888"/>
+                    <Setter TargetName="Arrow" Property="Fill" Value="#888888"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Border BorderThickness="0" CornerRadius="15">
+                            <Grid>
+                                <ToggleButton
+                                 Name="ToggleButton"
+                                 Template="{StaticResource ComboBoxToggleButton}"
+                                 Grid.Column="2"
+                                 Focusable="false"
+                                 ClickMode="Press"
+                                 IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                                </ToggleButton>
+                                <ContentPresenter
+                                 Name="ContentSite"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center"
+                                 Content="{TemplateBinding SelectionBoxItem}"
+                                 ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                 ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                 Margin="3,3,23,3"/>
+                                <TextBox
+                                 x:Name="PART_EditableTextBox"
+                                 HorizontalAlignment="Left"
+                                 Foreground="White"
+                                 VerticalAlignment="Top"
+                                 Margin="3,3,23,3"
+                                 Focusable="True"
+                                 Background="Transparent"
+                                 Visibility="Hidden"/>
+                                <Popup
+                                 Name="Popup"
+                                 Placement="Bottom"
+                                 IsOpen="{TemplateBinding IsDropDownOpen}"
+                                 AllowsTransparency="True"
+                                 Focusable="False"
+                                 PopupAnimation="Slide">
+                                    <Grid
+                                     Name="DropDown"
+                                     SnapsToDevicePixels="True"
+                                     MinWidth="{TemplateBinding ActualWidth}"
+                                     MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                        <Border x:Name="DropDownBorder" Background="#434E5B" BorderThickness="0" CornerRadius="10" Margin="0,10,0,0"/>
+                                        <ScrollViewer SnapsToDevicePixels="True">
+                                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" Margin="0,10,0,0"/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                                <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="4"/>
+                                <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable" Value="true">
+                                <Setter Property="IsTabStop" Value="false"/>
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style TargetType="{x:Type ListBox}">
+            <Setter Property="Background" Value="#434E5B"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBox">
+                        <Border Background="{TemplateBinding Background}"
+                             BorderBrush="{TemplateBinding BorderBrush}"
+                             BorderThickness="{TemplateBinding BorderThickness}"
+                             Padding="{TemplateBinding Padding}"
+                             CornerRadius="15">
+                            <ScrollViewer HorizontalScrollBarVisibility="Hidden">
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Label Content="{Binding}" FontSize="18"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <WrapPanel MaxWidth="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ItemContainerStyle">
+                <Setter.Value>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <Border Name="_Border"
+                                         Padding="1"
+                                         SnapsToDevicePixels="true"
+                                         HorizontalAlignment="Stretch"
+                                         Margin="5"
+                                         Background="#AD0090"
+                                         CornerRadius="10">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="_Border" Property="Background" Value="#2C343D"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#AD0090"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                             BorderBrush="{TemplateBinding BorderBrush}"
+                             BorderThickness="{TemplateBinding BorderThickness}"
+                             CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#434E5B"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ScrollBarTrackThumb"
+             TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid x:Name="Grid">
+                            <Rectangle HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch"
+                     Width="Auto"
+                     Height="Auto"
+                     Fill="Transparent" />
+                            <Border x:Name="CornerScrollBarRectangle"
+                                 CornerRadius="5"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Stretch"
+                                 Width="Auto"
+                                 Height="Auto"
+                                 Margin="0,1,0,1"
+                                 Background="{TemplateBinding Background}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Tag"
+                     Value="Horizontal">
+                                <Setter TargetName="CornerScrollBarRectangle"
+                     Property="Width"
+                     Value="Auto" />
+                                <Setter TargetName="CornerScrollBarRectangle"
+                     Property="Height"
+                     Value="6" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsFlicksEnabled"
+                 Value="false" />
+            <Setter Property="Foreground"
+                 Value="#3B4651" />
+            <Setter Property="Background"
+                 Value="Transparent" />
+            <Setter Property="Width"
+                 Value="7" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid x:Name="GridRoot"
+                             Width="10"
+                             Background="{TemplateBinding Background}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.00001*" />
+                            </Grid.RowDefinitions>
+                            <Track x:Name="PART_Track"
+                 Grid.Row="0"
+                 IsDirectionReversed="true"
+                 Focusable="false">
+                                <Track.Thumb>
+                                    <Thumb x:Name="Thumb"
+                         Background="{TemplateBinding Foreground}"
+                         Style="{DynamicResource ScrollBarTrackThumb}" />
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton x:Name="PageUp"
+                                 Command="ScrollBar.PageDownCommand"
+                                 Opacity="0"
+                                 Focusable="false" />
+                                </Track.IncreaseRepeatButton>
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton x:Name="PageDown"
+                                 Command="ScrollBar.PageUpCommand"
+                                 Opacity="0"
+                                 Focusable="false" />
+                                </Track.DecreaseRepeatButton>
+                            </Track>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="Thumb"
+                     Property="IsMouseOver"
+                     Value="true">
+                                <Setter Value="{DynamicResource ButtonSelectBrush}"
+                     TargetName="Thumb"
+                     Property="Background" />
+                            </Trigger>
+                            <Trigger SourceName="Thumb"
+                     Property="IsDragging"
+                     Value="true">
+                                <Setter Value="{DynamicResource DarkBrush}"
+                     TargetName="Thumb"
+                     Property="Background" />
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled"
+                     Value="false">
+                                <Setter TargetName="Thumb"
+                     Property="Visibility"
+                     Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="Orientation"
+                     Value="Horizontal">
+                                <Setter TargetName="GridRoot"
+                     Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="PART_Track"
+                     Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Width"
+                     Value="Auto" />
+                                <Setter Property="Height"
+                     Value="8" />
+                                <Setter TargetName="Thumb"
+                     Property="Tag"
+                     Value="Horizontal" />
+                                <Setter TargetName="PageDown"
+                     Property="Command"
+                     Value="ScrollBar.PageLeftCommand" />
+                                <Setter TargetName="PageUp"
+                     Property="Command"
+                     Value="ScrollBar.PageRightCommand" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
+
+
+    <Grid Background="#2C343D">
         <Grid.RowDefinitions>
-            <RowDefinition Height="135"/>
-            <RowDefinition/>
+            <RowDefinition Height="150"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="2*"/>
+            
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="67"/>
-            </Grid.ColumnDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="160" />
+            <ColumnDefinition Width="155"/>
+            <ColumnDefinition Width="158" />
+            <ColumnDefinition Width="155" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+        <ListBox x:Name="imageBox"  ItemsSource="{Binding Images, Mode=TwoWay}" Grid.Column="1" Grid.ColumnSpan="5" Height="140">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
 
-            <ListBox x:Name="imageBox" Grid.RowSpan="2" Grid.ColumnSpan="2" ItemsSource="{Binding Images, Mode=TwoWay}">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Image Source="{Binding}" Height="125" Width="125"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Image Source="{Binding}" Height="125" Width="125"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-            <Button x:Name="addPhotoButton" Grid.Row="0" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" Click="AddPhoto">
-                <Image Source="/Views/PlusIcon.png" Margin="5"/>
+        <StackPanel  Grid.Row="0" Grid.Column="7" HorizontalAlignment="Left" Margin="0,15,10,0" >
+            <Button x:Name="addPhotoButton"  Background="Transparent" BorderBrush="Transparent" Click="AddPhoto" FontSize="16">
+                <Image Source="/Views/PlusIcon.png"  Height="35"/>
             </Button>
 
-            <Button x:Name="deletePhotoButton" Grid.Row="1" Grid.Column="1" Background="Transparent" BorderBrush="Transparent" Click="DeletePhoto">
-                <Image Source="/Views/DeleteIcon.png" Margin="5"/>
+            <Button x:Name="deletePhotoButton"  Background="Transparent" BorderBrush="Transparent" Click="DeletePhoto" FontSize="16">
+                <Image Source="/Views/DeleteIcon.png" Height="35"/>
             </Button>
-        </Grid>
-
-        <Label Grid.Row="1" Content="Geboortedatum:" Margin="408,26,0,0" FontSize="15" HorizontalAlignment="Left" Width="155" Height="32" VerticalAlignment="Top"/>
-        <DatePicker Grid.Row="1" x:Name="BirthDatePicker" Margin="558,26,0,0" VerticalAlignment="Top" FirstDayOfWeek="Monday" HorizontalAlignment="Left" Width="138" Height="32"/>
-
-        <Label Grid.Row="1" Content="Land:" Margin="408,64,0,0" Height="26" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132"/>
-        <TextBox Grid.Row="1" x:Name="CountryBox" Margin="558,64,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="26" FontSize="15" HorizontalAlignment="Left" Width="138"/>
-
-        <Label Grid.Row="1" Content="Woonplaats:" Margin="99,27,0,0" Height="25" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132"/>
-        <TextBox Grid.Row="1" x:Name="CityBox" Margin="249,27,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="25" FontSize="15" HorizontalAlignment="Left" Width="138"/>
-
-        <Label Grid.Row="1" Content="Postcode:" Margin="99,64,0,0" Height="26" VerticalAlignment="Top" FontSize="15" HorizontalAlignment="Left" Width="132"/>
-        <TextBox Grid.Row="1" x:Name="PostalCodeBox" Margin="249,64,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="26" FontSize="15" HorizontalAlignment="Left" Width="138"/>
-
-        <Label Grid.Row="1" Content="Seksuele voorkeur:" Margin="175,115,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <RadioButton Grid.Row="1" Content="Hetero" Name="HeteroSexuality" GroupName="Sexuality" Margin="325,123,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Grid.Row="1" Content="Homo" Name="HomoSexuality" GroupName="Sexuality" Margin="420,123,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Grid.Row="1" Content="Bi" Name="BiSexuality" GroupName="Sexuality" Margin="512,123,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15" RenderTransformOrigin="0.474,0.158"/>
+        </StackPanel>
 
 
-        <Label Grid.Row="1" Content="Geslacht:" Margin="175,149,0,0" FontSize="15" HorizontalAlignment="Left" Width="145" Height="32" VerticalAlignment="Top"/>
-        <RadioButton Grid.Row="1" Content="Vrouw" Name="FemaleGender" GroupName="Gender" Margin="328,157,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Grid.Row="1" Content="Man" Name="MaleGender" GroupName="Gender" Margin="420,157,0,0" HorizontalAlignment="Left" Width="87" Height="20" VerticalAlignment="Top" FontSize="15"/>
-        <RadioButton Grid.Row="1" Content="Non-binair" Name="NonBinaryGender" GroupName="Gender" Margin="512,157,0,0" HorizontalAlignment="Left" Width="99" Height="20" VerticalAlignment="Top" FontSize="15"/>
 
-        <Button Grid.Row="1" x:Name="ConfirmButton" Content="Opslaan" Margin="273,226,0,0" FontSize="15" Height="41" VerticalAlignment="Top" HorizontalAlignment="Left" Width="234" Click="ConfirmChanges"/>
+
+        <Label  Content="Woonplaats:"  Width="132"  Grid.Row="1" Grid.Column="2"/>
+        <TextBox  x:Name="CityBox" TextWrapping="Wrap" Text="" Width="155" Padding="3" HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Row="2"  Grid.Column="2"/>
+
+
+
+        <Label  Content="Land:" Width="132"  HorizontalAlignment="Center" VerticalAlignment="Center"  Grid.Row="1" Grid.Column="3"/>
+        <TextBox x:Name="CountryBox" TextWrapping="Wrap" Text="" Width="155" Padding="3" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="2" Grid.Column="3" />
+
+
+
+        <Label  Content="Postcode:"  Width="132" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="1" Grid.Column="4"/>
+        <TextBox x:Name="PostalCodeBox" TextWrapping="Wrap" Text="" Width="155" Padding="4" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="2" Grid.Column="4"/>
+
+
+
+        <Label Content="Seksuele voorkeur:" Width="160" Grid.Row="3"  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="3" />
+       
+        <ComboBox x:Name="sexuelPreferenceBox" Grid.Row="4" Grid.Column="3" Foreground="White" FontSize="18">
+            <ComboBoxItem Content="Hetero"/>
+            <ComboBoxItem Content="Homosexueel"/>
+            <ComboBoxItem Content="Bisexueel"/>
+            
+        </ComboBox>
+
+        <Label Content="Geslacht:" Width="145" Grid.Row="3"  HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="2" />
+        
+        <ComboBox x:Name="genderBox" Grid.Row="4" Grid.Column="2" Foreground="White" FontSize="18">
+            <ComboBoxItem Content="Man"/>
+            <ComboBoxItem Content="Vrouw"/>
+            <ComboBoxItem Content="Non-binair"/>
+        </ComboBox>
+
+        <Label Grid.Row="3" Grid.Column="4" Content="Geboortedatum:"   HorizontalAlignment="Left" Width="155" Height="32" />
+        <DatePicker Grid.Row="4" Grid.Column="4" x:Name="BirthDatePicker"  FirstDayOfWeek="Monday"  Width="138" Height="40"/>
+
+
+
+
+
+        <Button x:Name="ConfirmButton" Content="Opslaan" Grid.Row="7" Grid.Column="3" VerticalAlignment="Center"  Height="30" Click="ConfirmChanges"/>
+
+        <Frame x:Name="profilePreviewFrame" Grid.Column="7" Grid.RowSpan="8" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Stretch" MinWidth="200" Visibility="Visible" IsEnabled="True"/>
+
 
     </Grid>
 </Page>

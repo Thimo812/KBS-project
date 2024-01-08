@@ -172,9 +172,11 @@ namespace MatchingApp.DataAccess.SQL
                     : "");
 
                 sql.Append($" AND Gebruikersnaam != '{profile.UserName}'");
-                sql.Append($"ORDER BY CASE WHEN (Gebruiker1Liked = 'true' AND Gebruiker2Liked = 'true') THEN 1 "
-                           + $"WHEN ((Gebruiker1 = '{profile.UserName}' AND Gebruiker1Liked = 'true') OR (Gebruiker2 = '{profile.UserName}' AND Gebruiker2Liked = 'true')) THEN 2 ELSE 3 END");
-
+                if (likebutt)
+                {
+                    sql.Append($"ORDER BY CASE WHEN (Gebruiker1Liked = 'true' AND Gebruiker2Liked = 'true') THEN 1 "
+                                              + $"WHEN ((Gebruiker1 = '{profile.UserName}' AND Gebruiker1Liked = 'true') OR (Gebruiker2 = '{profile.UserName}' AND Gebruiker2Liked = 'true')) THEN 2 ELSE 3 END");
+                }
                 connection.Open();
                 using (SqlCommand command = new SqlCommand(sql.ToString(), connection))
                 {
