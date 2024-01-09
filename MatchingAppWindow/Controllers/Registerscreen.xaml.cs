@@ -32,7 +32,7 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class RegisterScreen : Page
     {
-        public event EventHandler ExitPage;
+        public event EventHandler RegistrationSuccesfull;
 
         private List<Control> invalidFields;
 
@@ -113,7 +113,7 @@ namespace MatchingAppWindow.Views
 
             MainWindow.repo.SaveProfile(MainWindow.profile);
 
-            ExitPage?.Invoke(this, EventArgs.Empty);
+            RegistrationSuccesfull?.Invoke(this, EventArgs.Empty);
         }
 
         private string CheckField(TextBox textBox, RegistrationFields field)

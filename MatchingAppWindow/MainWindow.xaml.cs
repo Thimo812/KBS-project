@@ -77,21 +77,10 @@ namespace MatchingAppWindow
 
         private void InitScreen()
         {
-            startScreen.LoginSuccessful += (sender, e) =>
-            {
-                navigation = new();
-                navigation.logoutButton.MouseDown += LogoutButton_Click;
-                navigation.InitScreens();
-                Content = navigation;
-            };
+            startScreen.LoginSuccessful += LoadProfile;
+            registerScreen.RegistrationSuccesfull += LoadProfile;
 
             registerScreen.loginButton.Click += (sender, e) => Content = startScreen;
-
-            registerScreen.ExitPage += (sender, e) =>
-            {
-                navigation = new();
-                Content = navigation;
-            };
 
             startScreen.registerButton.Click += (sender, e) => Content = registerScreen;
 
@@ -99,6 +88,14 @@ namespace MatchingAppWindow
             Closed += MainWindow_Closed;
 
             Content = startScreen;
+        }
+
+        private void LoadProfile(object sender, EventArgs args)
+        {
+            navigation = new();
+            navigation.logoutButton.MouseDown += LogoutButton_Click;
+            navigation.InitScreens();
+            Content = navigation;
         }
 
         private void LogoutButton_Click(object? sender, RoutedEventArgs e)
