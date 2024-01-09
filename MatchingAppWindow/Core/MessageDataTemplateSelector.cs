@@ -11,7 +11,7 @@ namespace MatchingAppWindow.Views
 {
     class MessageDataTemplateSelector : DataTemplateSelector
     {
-        public DataTemplate SenderTemplate {  get; set; }
+        public DataTemplate SenderTemplate { get; set; }
         public DataTemplate ReceiverTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)

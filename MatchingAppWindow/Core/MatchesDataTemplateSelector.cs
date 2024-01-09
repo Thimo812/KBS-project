@@ -1,4 +1,5 @@
 ﻿using KBS_project;
+using MatchingAppWindow.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace MatchingAppWindow.Views
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if(item is Match match)
+            if (item is Match match)
             {
-                if(match.Likes && match.IsLiked)
+                if (match.Likes && match.IsLiked)
                 {
                     return MatchTemplate;
                 }

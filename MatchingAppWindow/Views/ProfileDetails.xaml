@@ -102,7 +102,7 @@
 
             <Button x:Name="chatrequest" Grid.Column="0" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40" Click="NewChatRequest">
                 <Button.Content>
-                    <Image Source="/Views/MessageIcon.png" Margin="10"/>
+                    <Image Source="../Images/MessageIcon.png" Margin="10"/>
                 </Button.Content>
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
@@ -115,7 +115,7 @@
 
             <Button x:Name="likebutton" Grid.Column="1" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40" Click="LikeProfileEvent">
                 <Button.Content>
-                    <Image Source="/Views/LikeIcon2.png" Margin="10"/>
+                    <Image Source="../Images/LikeIcon2.png" Margin="10"/>
                 </Button.Content>
                 <Button.Template>
                     <ControlTemplate TargetType="Button">
@@ -132,7 +132,7 @@
             </Button>
             <Button x:Name="dislikebutton" Grid.Column="1" Foreground="White" Background="#434E5B" BorderThickness="0" Width="40" Height="40" Click="DislikeProfileEvent">
                 <Button.Content>
-                    <Image Source="/Views/LikeIcon.png" Margin="10"/>
+                    <Image Source="../Images/LikeIcon.png" Margin="10"/>
                 </Button.Content>
                 <Button.Template>
                     <ControlTemplate TargetType="Button">

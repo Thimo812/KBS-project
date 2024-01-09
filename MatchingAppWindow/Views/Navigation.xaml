@@ -70,12 +70,12 @@
         <Rectangle Fill="#1D2228" Grid.Column="0"/>
         
         <StackPanel Grid.Column="0">
-            <Image x:Name="profileButton" Source="/Views/AccountIcon.png" Margin="20" MouseEnter="ProfileButtonFocus" MouseLeave="ProfileButtonFocusLost" MouseDown="ToggleProfileButtons"/>
+            <Image x:Name="profileButton" Source="../Images/AccountIcon.png" Margin="20" MouseEnter="ProfileButtonFocus" MouseLeave="ProfileButtonFocusLost" MouseDown="ToggleProfileButtons"/>
             <Button x:Name="profilesButton" Content="Profielen" Style="{StaticResource navButtonStyle}" FontSize="15"/>
             <Button x:Name="matchesButton" Content="Matches" Style="{StaticResource navButtonStyle}" FontSize="15"/>
             <Button x:Name="messageButton" Content="Berichten" Style="{StaticResource navButtonStyle}" FontSize="15"/>
         </StackPanel>
-        <Image x:Name="logoutButton" Source="/Views/LogoutIcon.png" Margin="0,0,0,20" Width="25" Height="25" MouseEnter="LogoutButtonFocus" MouseLeave="LogoutButtonFocusLost" VerticalAlignment="Bottom"/>
+        <Image x:Name="logoutButton" Source="../Images/LogoutIcon.png" Margin="0,0,0,20" Width="25" Height="25" MouseEnter="LogoutButtonFocus" MouseLeave="LogoutButtonFocusLost" VerticalAlignment="Bottom"/>
 
         <Frame x:Name="contentFrame" Grid.Column="1" NavigationUIVisibility="Hidden" Grid.ColumnSpan="2"/>
 

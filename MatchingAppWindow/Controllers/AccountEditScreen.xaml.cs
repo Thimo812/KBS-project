@@ -1,6 +1,7 @@
 ﻿using KBS_project;
 using KBS_project.Enums;
 using KBS_project.Exceptions;
+using MatchingAppWindow.Core;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;

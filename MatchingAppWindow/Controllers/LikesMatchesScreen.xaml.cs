@@ -20,6 +20,7 @@ using System.Security.Policy;
 using System.Data.SqlClient;
 using System.Windows.Controls.Primitives;
 using System.Net;
+using MatchingAppWindow.Model;
 
 namespace MatchingAppWindow.Views
 {

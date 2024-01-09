@@ -281,13 +281,13 @@
             <!--addPhotoButton-->
 
             <Button x:Name="AddPhotoButton" Click="AddPhoto" FontSize="16" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" BorderThickness="0">
-                <Image Source="/Views/PlusIcon.png" Height="30"/>
+                <Image Source="../Images/PlusIcon.png" Height="30"/>
             </Button>
 
 
             <!--deletePhotoButton-->
             <Button x:Name="deletePhotoButton" Click="DeletePhoto" FontSize="16" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" BorderThickness="0" Visibility="Hidden">
-                <Image Source="/Views/DeleteIcon.png" Height="30"/>
+                <Image Source="../Images/DeleteIcon.png" Height="30"/>
             </Button>
         </StackPanel>
 

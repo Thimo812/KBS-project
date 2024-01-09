@@ -29,21 +29,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Logo.png" />
-    <Resource Include="Views\AccountIcon.png" />
-    <Resource Include="Views\AccountIconFocus.png">
+    <Resource Include="Images\Logo.png" />
+    <Resource Include="Images\AccountIcon.png" />
+    <Resource Include="Images\AccountIconFocus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Views\DeleteIcon.png" />
-    <Resource Include="Views\LikeIcon.png" />
-    <Resource Include="Views\LikeIcon2.png" />
-    <Resource Include="Views\LogoutIcon.png" />
-    <Resource Include="Views\LogoutIconFocus.png" />
-    <Resource Include="Views\MessageIcon.png" />
-    <Resource Include="Views\PlusIcon.png" />
-    <Resource Include="Views\SendMessageIcon.png" />
-    <Resource Include="Views\SendMessageIconFocus.png" />
-    <Resource Include="Views\SendMessageIconUnabled.png" />
+    <Resource Include="Images\DeleteIcon.png" />
+    <Resource Include="Images\LikeIcon.png" />
+    <Resource Include="Images\LikeIcon2.png" />
+    <Resource Include="Images\LogoutIcon.png" />
+    <Resource Include="Images\LogoutIconFocus.png" />
+    <Resource Include="Images\MessageIcon.png" />
+    <Resource Include="Images\PlusIcon.png" />
+    <Resource Include="Images\SendMessageIcon.png" />
+    <Resource Include="Images\SendMessageIconFocus.png" />
+    <Resource Include="Images\SendMessageIconUnabled.png" />
   </ItemGroup>
 
 </Project>

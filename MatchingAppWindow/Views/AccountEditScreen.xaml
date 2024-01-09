@@ -430,11 +430,11 @@
 
         <StackPanel  Grid.Row="0" Grid.Column="7" HorizontalAlignment="Left" Margin="0,15,10,0" >
             <Button x:Name="addPhotoButton"  Background="Transparent" BorderBrush="Transparent" Click="AddPhoto" FontSize="16">
-                <Image Source="/Views/PlusIcon.png"  Height="35"/>
+                <Image Source="../Images/PlusIcon.png"  Height="35"/>
             </Button>
 
             <Button x:Name="deletePhotoButton"  Background="Transparent" BorderBrush="Transparent" Click="DeletePhoto" FontSize="16">
-                <Image Source="/Views/DeleteIcon.png" Height="35"/>
+                <Image Source="../Images/DeleteIcon.png" Height="35"/>
             </Button>
         </StackPanel>
 

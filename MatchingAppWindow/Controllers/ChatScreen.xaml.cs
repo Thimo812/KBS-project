@@ -1,5 +1,7 @@
 ﻿using KBS_project;
 using KBS_project.Exceptions;
+using MatchingAppWindow.Core;
+using MatchingAppWindow.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

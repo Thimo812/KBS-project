@@ -1,5 +1,6 @@
 ﻿using KBS_project;
 using MatchingApp.DataAccess.SQL;
+using MatchingAppWindow.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

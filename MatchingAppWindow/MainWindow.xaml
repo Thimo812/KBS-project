@@ -7,7 +7,7 @@
         mc:Ignorable="d"
 
         Title="Tango Together" Height="600" Width="1000" MinWidth="1000" MinHeight="600"
-        Icon="/Logo.png"
+        Icon="Images/Logo.png"
         WindowState="Maximized">
 
 </Window>

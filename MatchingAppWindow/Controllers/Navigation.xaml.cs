@@ -87,12 +87,12 @@ namespace MatchingAppWindow.Views
 
         private void ProfileButtonFocus(object? sender, MouseEventArgs e)
         {
-            profileButton.Source = new BitmapImage(new Uri("/Views/AccountIconFocus.png", UriKind.Relative));
+            profileButton.Source = new BitmapImage(new Uri("/Images/AccountIconFocus.png", UriKind.Relative));
         }
 
         private void ProfileButtonFocusLost(object? sender, MouseEventArgs e)
         {
-            profileButton.Source = new BitmapImage(new Uri("/Views/AccountIcon.png", UriKind.Relative));
+            profileButton.Source = new BitmapImage(new Uri("/Images/AccountIcon.png", UriKind.Relative));
         }
 
         private void ToggleProfileButtons(object? sender, RoutedEventArgs e)
@@ -117,12 +117,12 @@ namespace MatchingAppWindow.Views
 
         private void LogoutButtonFocus(object? sender, MouseEventArgs e)
         {
-            logoutButton.Source = new BitmapImage(new Uri("/Views/LogoutIconFocus.png", UriKind.Relative));
+            logoutButton.Source = new BitmapImage(new Uri("/Images/LogoutIconFocus.png", UriKind.Relative));
         }
 
         private void LogoutButtonFocusLost(object? sender, MouseEventArgs e)
         {
-            logoutButton.Source = new BitmapImage(new Uri("/Views/LogoutIcon.png", UriKind.Relative));
+            logoutButton.Source = new BitmapImage(new Uri("/Images/LogoutIcon.png", UriKind.Relative));
         }
     }
 }
