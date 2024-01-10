@@ -427,8 +427,8 @@
             <ComboBoxItem Content="Anders"/>
         </ComboBox>
 
-        <Label Content="Geselecteerde hobbies" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"/>
-        <Label Content="Beschikbare hobbies" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2"/>
+        <Label Content="Geselecteerde hobby's" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Padding="2"/>
+        <Label Content="Beschikbare hobby's" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="2" Padding="2"/>
 
         <ListBox x:Name="hobbyBox" ItemsSource="{Binding Interests, Mode=TwoWay}" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="InterestSelectionChanged"/>
         <ListBox x:Name="availableHobbyBox"  ItemsSource="{Binding AvailableInterests, Mode=TwoWay}" Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="AvailableInterestSelectionChanged"/>
