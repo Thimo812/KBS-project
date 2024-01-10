@@ -32,7 +32,7 @@ namespace MatchingAppWindow.Views
     public partial class ChatScreen : Page
     {
 
-        public static int chatRefreshDelay = 100;
+        public static int chatRefreshDelay = 10;
         private ObservableCollection<Contact> Contacts { get; set; } = new();
 
         private ObservableCollection<Message> Messages { get; set; } = new();
