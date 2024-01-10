@@ -196,7 +196,6 @@ namespace MatchingApp.DataAccess.SQL
             return results;
         }
 
-
         private Profile ProfileFromQuery(SqlDataReader reader)
         {
             string userName = reader.GetString(0);
@@ -255,9 +254,6 @@ namespace MatchingApp.DataAccess.SQL
             return new Profile(userName, firstName, infix, lastName, birthDate, gender, pref, city, postalCode, country, GetImages(userName), GetHobbies(userName), GetMatchingQuiz(userName), description, degree, school, workplace, diet, vaccinated);
 
         }
-
-
-
 
         public void SaveProfile(Profile profile)
         {

@@ -47,8 +47,8 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="{Binding UserName}" FontSize="25" Foreground="White" Margin="6" ></TextBlock>
-                <Image Grid.Column="1" Grid.Row="1" Source="/Views/LikeIcon.png" Visibility="Hidden" Margin="6" ></Image>
-                <Image Grid.Column="2" Grid.Row="1" Source="/Views/LikeIcon2.png" Margin="6" ></Image>
+                <Image Grid.Column="1" Grid.Row="1" Source="../Images/LikeIcon.png" Visibility="Hidden" Margin="6" ></Image>
+                <Image Grid.Column="2" Grid.Row="1" Source="../Images/LikeIcon2.png" Margin="6" ></Image>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="likes">
@@ -64,8 +64,8 @@
                    
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Margin="6" Foreground="White" Text="{Binding UserName}" FontSize="25"  HorizontalAlignment="Stretch"></TextBlock>
-                <Image Grid.Column="1" Grid.Row="1" Source="/Views/LikeIcon.png" Margin="6" ></Image>
-                <Image Grid.Column="2" Grid.Row="1" Source="/Views/LikeIcon2.png" Visibility="Hidden" Margin="6" ></Image>
+                <Image Grid.Column="1" Grid.Row="1" Source="../Images/LikeIcon.png" Margin="6" ></Image>
+                <Image Grid.Column="2" Grid.Row="1" Source="../Images/LikeIcon2.png" Visibility="Hidden" Margin="6" ></Image>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="match">
@@ -80,8 +80,8 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Margin="6" Foreground="White" Text="{Binding UserName}" FontSize="25"  HorizontalAlignment="Stretch" ></TextBlock>
-                <Image Grid.Column="1" Grid.Row="1" Source="/Views/LikeIcon.png" Margin="6"></Image>
-                <Image Grid.Column="2" Grid.Row="1" Source="/Views/LikeIcon2.png" Margin="6"></Image>
+                <Image Grid.Column="1" Grid.Row="1" Source="../Images/LikeIcon.png" Margin="6"></Image>
+                <Image Grid.Column="2" Grid.Row="1" Source="../Images/LikeIcon2.png" Margin="6"></Image>
             </Grid>
         </DataTemplate>
         <local:MatchesDataTemplateSelector x:Key="templateSelector" IsLikedTemplate="{StaticResource isLiked}" LikesTemplate="{StaticResource likes}" MatchTemplate="{StaticResource match}"/>
