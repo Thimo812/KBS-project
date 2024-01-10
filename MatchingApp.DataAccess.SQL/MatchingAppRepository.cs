@@ -594,7 +594,7 @@ namespace MatchingApp.DataAccess.SQL
         }
 
             // gets a list of every message request send to the receiver
-            public List<string> GetIncomingMessageRequest(string receiver)
+        public List<string> GetIncomingMessageRequest(string receiver)
             {
                 List<string> requests = new List<string>();
 
@@ -624,7 +624,7 @@ namespace MatchingApp.DataAccess.SQL
                 return requests;
             }
 
-            public List<string> GetOutgoingMessageRequest(string sender)
+        public List<string> GetOutgoingMessageRequest(string sender)
             {
                 List<string> requests = new List<string>();
 
@@ -655,7 +655,7 @@ namespace MatchingApp.DataAccess.SQL
             }
 
 
-            public void UpdateMessageRequest(int status, string receiver, string sender)
+        public void UpdateMessageRequest(int status, string receiver, string sender)
             {
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
                 { 

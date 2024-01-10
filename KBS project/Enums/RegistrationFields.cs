@@ -91,23 +91,5 @@ namespace KBS_project.Enums
             }
             return (DateTime)input;
         }
-
-        public static Gender ValidateGender(List<bool?> radioButtons)
-        {
-            for (int i = 0; i < radioButtons.Count; i++)
-            {
-                if ((bool)radioButtons[i]) return (Gender)i;
-            }
-            throw new InvalidFieldException(RegistrationFields.Gender);
-        }
-
-        public static SexualPreference ValidateSexuality(List<bool?> radioButtons)
-        {
-            for (int i = 0; i < radioButtons.Count; i++)
-            {
-                if ((bool)radioButtons[i]) return (SexualPreference)i;
-            }
-            throw new InvalidFieldException(RegistrationFields.Sexuality);
-        }
     }
 }
