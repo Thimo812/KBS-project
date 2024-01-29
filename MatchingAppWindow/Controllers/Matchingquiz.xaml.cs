@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -126,7 +127,6 @@ namespace MatchingAppWindow
             if (unansweredQuestions.Count > 0)
             {
                 ShowErrors();
-               // MessageBox.Show($"Please answer the following questions:\n\n{string.Join("\n", unansweredQuestions)}");
             }
             else
             {
@@ -197,6 +197,18 @@ namespace MatchingAppWindow
         public void ExitQuiz()
         {
             ExitPage?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void GetAnswers_Click(object sender, RoutedEventArgs e)
+        {
+            List<int> you = MainWindow.repo.GetMatchingQuiz(MainWindow.profile.UserName);
+
+            string yourAnswers = "";
+            foreach (int answer in you)
+            {
+                yourAnswers += answer + ", ";
+            }
+            MessageBox.Show(yourAnswers);
         }
 
     }

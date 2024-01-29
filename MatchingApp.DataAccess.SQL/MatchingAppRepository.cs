@@ -14,6 +14,7 @@ using System.Data.SqlTypes;
 using Renci.SshNet;
 using System.Diagnostics;
 using System.Data;
+using System.Reflection.PortableExecutable;
 
 namespace MatchingApp.DataAccess.SQL
 {
@@ -654,7 +655,6 @@ namespace MatchingApp.DataAccess.SQL
                 return requests;
             }
 
-
         public void UpdateMessageRequest(int status, string receiver, string sender)
             {
                 using (SqlConnection connection = new SqlConnection(builder.ConnectionString))
@@ -1101,7 +1101,6 @@ namespace MatchingApp.DataAccess.SQL
             }
         }
 
-
         public (List<string>, List<bool>, List<bool>) FilterLikes(Profile profile)
         {
             List<string> profiles = new List<string>();
@@ -1145,3 +1144,4 @@ namespace MatchingApp.DataAccess.SQL
         }
     }
 }
+

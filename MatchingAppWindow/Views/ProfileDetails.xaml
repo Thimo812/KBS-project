@@ -16,6 +16,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -46,7 +47,9 @@
 
         <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center"   Background="#252C33" Foreground="White" Height="auto"/>
 
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+        <Label Name="MatchingPercentage" HorizontalAlignment="Center" Grid.Row="2" FontSize="20" Background="#252C33" Foreground="White" Height="auto"></Label>
+        
+        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
             <Grid Width="300">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -92,7 +95,7 @@
 
         
 
-        <Grid Grid.Row="2" VerticalAlignment="Bottom" Height="50">
+        <Grid Grid.Row="3" VerticalAlignment="Bottom" Height="50">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
