@@ -282,7 +282,22 @@ namespace MatchingAppWindow.Views
                     //question 13
                     if (i == 12)
                     {
-                        matchingnumber += 5;
+                        if (you[i] == other[i])
+                        {
+                            matchingnumber += 5;
+                        }
+                        if ((you[i] == (other[i] + 1)) || (you[i] == (other[i] - 1)))
+                        {
+                            matchingnumber += 3;
+                        }
+                        if ((you[i] == (other[i] + 2)) || (you[i] == (other[i] - 2)))
+                        {
+                            matchingnumber += 1;
+                        }
+                        if ((you[i] == (other[i] + 2)) || (you[i] == (other[i] - 2)))
+                        {
+                            matchingnumber += 0;
+                        }
                     }
 
                     double matchingpercentage = (matchingnumber / 60) * 100;
@@ -291,7 +306,7 @@ namespace MatchingAppWindow.Views
             }
             else
             {
-                MatchingPercentage.Content = "matchingpercentage onbekend";
+                MatchingPercentage.Content = "geen matchingpercentage";
             }
         }
 
@@ -340,6 +355,15 @@ namespace MatchingAppWindow.Views
                 likebutton.Visibility = Visibility.Visible;
                 dislikebutton.Visibility = Visibility.Collapsed;
             }
+        }
+
+        public void ViewAnswers_Click(object sender, RoutedEventArgs e)
+        {
+            List<int> you = MainWindow.repo.GetMatchingQuiz(usr);
+            List<int> other = MainWindow.repo.GetMatchingQuiz(selectedProfile.UserName);
+
+            MatchInfoScreen matchInfoScreen = new MatchInfoScreen(usr, selectedProfile.UserName);
+            matchInfoScreen.Visibility = Visibility.Visible;
         }
     }
 }

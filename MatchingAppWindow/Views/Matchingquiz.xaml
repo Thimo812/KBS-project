@@ -271,6 +271,7 @@
                 </Button.Template>
             </Button>
         </Border>
+        
         <Button Content="antwoorden" Name="answers" Click="GetAnswers_Click"></Button>
         <Label Grid.Row="2" Grid.Column="1" x:Name="errorMessage" Content="Vul bij elke vraag een antwoord in" Margin="10" Foreground="Red" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" Width="400" Height="30" VerticalAlignment="Top" Visibility="Hidden" />
     </Grid>

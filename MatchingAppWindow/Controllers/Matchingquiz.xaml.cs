@@ -22,7 +22,6 @@ namespace MatchingAppWindow
             InitializeComponent();
             WireUpRadioButtons();
             var radioButtons = FindRadioButtons(this);
-            Console.WriteLine($"Found {radioButtons.Count} RadioButtons.");
         }
         private void WireUpRadioButtons()
         {
@@ -51,7 +50,7 @@ namespace MatchingAppWindow
             return answerManager.GetAnswer(question);
         }
 
-        private string GetQuestion(RadioButton radioButton)
+        public static string GetQuestion(RadioButton radioButton)
         {
             Dictionary<string, string> questions = new Dictionary<string, string>()
             {

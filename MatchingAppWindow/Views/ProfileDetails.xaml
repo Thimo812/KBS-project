@@ -47,8 +47,20 @@
 
         <Label x:Name="nameLabel" Grid.Row="1" HorizontalContentAlignment="Center"   Background="#252C33" Foreground="White" Height="auto"/>
 
-        <Label Name="MatchingPercentage" HorizontalAlignment="Center" Grid.Row="2" FontSize="20" Background="#252C33" Foreground="White" Height="auto"></Label>
-        
+        <Label Name="MatchingPercentage" HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" FontSize="20" Background="#252C33" Foreground="White" Height="auto"></Label>
+
+        <Border CornerRadius="15" Grid.Row="2" Grid.Column="1">
+            <Button Content="i" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="20" Click="ViewAnswers_Click" FontSize="14" Background="#AD0090" BorderBrush="#AD0090" Foreground="White" Margin="10">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Border>
+
         <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
             <Grid Width="300">
                 <Grid.RowDefinitions>
@@ -57,11 +69,10 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="20"/>
                 </Grid.RowDefinitions>
-                
+
                 <Border CornerRadius="10" Grid.Row="0" Background="#434E5B"  Margin="3" >
                     <TextBlock x:Name="descriptionBlock" Text="" TextWrapping="Wrap"  HorizontalAlignment="Stretch" Margin="5" Foreground="White" Padding="4"/>
                 </Border>
-
 
                 <Border Grid.Row="1" BorderBrush="#252C33" Background="#434E5B" CornerRadius="10" Margin="3">
                     <ItemsControl x:Name="interestBlock" d:ItemsSource="{d:SampleData ItemCount=5}">

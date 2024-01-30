@@ -1,0 +1,17 @@
+﻿<Window x:Class="MatchingAppWindow.Views.MatchInfoScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MatchingAppWindow.Views"
+        mc:Ignorable="d"
+        Title="MatchInfoScreen" Height="auto" Width="auto" Background="#252C33">
+    
+    <Grid Name="table">
+        <DataGrid GridLinesVisibility="All" AutoGenerateColumns="False" HeadersVisibility="All" Background="#252C33">
+            <DataGridTextColumn Header="Vragen" FontSize="22" FontWeight="Bold" Width="200"/>
+            <DataGridTextColumn Header="Jij" FontSize="22" FontWeight="Bold" Width="200"/>
+            <DataGridTextColumn Header="{Binding}" FontSize="22" FontWeight="Bold" Width="200"/>
+        </DataGrid>
+    </Grid>
+</Window>
