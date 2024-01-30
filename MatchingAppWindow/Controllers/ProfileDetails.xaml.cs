@@ -93,7 +93,7 @@ namespace MatchingAppWindow.Views
 
         public void SetMatchingPercentage()
         {
-            List<int> you = MainWindow.repo.GetMatchingQuiz(MainWindow.profile.UserName);
+            List<int> you = MainWindow.repo.GetMatchingQuiz(usr);
             List<int> other = MainWindow.repo.GetMatchingQuiz(selectedProfile.UserName);
 
             double matchingnumber = 0;
@@ -282,10 +282,10 @@ namespace MatchingAppWindow.Views
                     //question 13
                     if (i == 12)
                     {
-
+                        matchingnumber += 5;
                     }
 
-                    double matchingpercentage = (matchingnumber / 65) * 100;
+                    double matchingpercentage = (matchingnumber / 60) * 100;
                     MatchingPercentage.Content = Math.Round(matchingpercentage) + "% match";
                 }
             }
