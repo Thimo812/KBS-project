@@ -49,7 +49,7 @@
 
         <Label Name="MatchingPercentage" HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" FontSize="20" Background="#252C33" Foreground="White" Height="auto"></Label>
 
-        <Border CornerRadius="15" Grid.Row="2" Grid.Column="1">
+        <Border Name="ViewAnswers" CornerRadius="15" Grid.Row="2" Grid.Column="1">
             <Button Content="i" HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="20" Width="20" Click="ViewAnswers_Click" FontSize="14" Background="#AD0090" BorderBrush="#AD0090" Foreground="White" Margin="10">
                 <Button.Template>
                     <ControlTemplate TargetType="Button">

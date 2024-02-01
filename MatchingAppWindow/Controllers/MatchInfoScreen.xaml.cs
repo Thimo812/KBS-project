@@ -38,29 +38,96 @@ namespace MatchingAppWindow.Views
             { "Als je partner een huisdier heeft, hoe zou je dit vinden?" }
         };
 
+        List<int> answersCurrentUser;
+        List<int> answersSelectedUser;
+
         public MatchInfoScreen(string currentUser, string selectedUser)
         {
             InitializeComponent();
 
-            //int i = 2;
-            //foreach (string question in questions)
-            //{
-            //    System.Windows.Controls.Label label = new System.Windows.Controls.Label();
+            answersCurrentUser = MainWindow.repo.GetMatchingQuiz(currentUser);
+            answersSelectedUser = MainWindow.repo.GetMatchingQuiz(selectedUser);
 
-            //    label.FontSize = 16;
-            //    label.Content = question;
-            //    label.Foreground = new SolidColorBrush(Colors.White);
-            //    label.Visibility = Visibility.Visible;
-            //    label.Margin = new Thickness(3);
-
-            //    Grid.SetColumn(label, 0);
-            //    Grid.SetRow(label, i);
-            //    i++;
-
-            //    table.Children.Add(label);
-            //}
+            setQuestions();
+            setAnswersCurrentUser();
+            setAnswersSelectedUser();
 
             DataContext = selectedUser;
+        }
+
+        private void setQuestions()
+        {
+            int i = 1;
+            foreach (string question in questions)
+            {
+                System.Windows.Controls.Label label = new System.Windows.Controls.Label();
+
+                label.FontSize = 16;
+                label.Content = question;
+                label.Foreground = new SolidColorBrush(Colors.White);
+                label.Visibility = Visibility.Visible;
+                label.Margin = new Thickness(3);
+
+                Grid.SetColumn(label, 0);
+                Grid.SetRow(label, i);
+
+                table.Children.Add(label);
+
+                Rectangle rectangle = new Rectangle();
+
+                rectangle.Stroke = (SolidColorBrush)new BrushConverter().ConvertFrom("#434E5B");
+
+                Grid.SetColumnSpan(rectangle, 3);
+                Grid.SetRow(rectangle, i);
+
+                table.Children.Add(rectangle);
+
+                i++;
+            }
+        }
+
+        private void setAnswersCurrentUser()
+        {
+            int i = 1;
+            foreach (int answer in answersCurrentUser)
+            {
+                System.Windows.Controls.Label label = new System.Windows.Controls.Label();
+
+                label.FontSize = 14;
+                label.Content = answer;
+                label.Foreground = new SolidColorBrush(Colors.White);
+                label.Visibility = Visibility.Visible;
+                label.Margin = new Thickness(3);
+
+                Grid.SetColumn(label, 1);
+                Grid.SetRow(label, i);
+
+                table.Children.Add(label);
+
+                i++;
+            }
+        }
+
+        private void setAnswersSelectedUser()
+        {
+            int i = 1;
+            foreach (int answer in answersSelectedUser)
+            {
+                System.Windows.Controls.Label label = new System.Windows.Controls.Label();
+
+                label.FontSize = 14;
+                label.Content = answer;
+                label.Foreground = new SolidColorBrush(Colors.White);
+                label.Visibility = Visibility.Visible;
+                label.Margin = new Thickness(3);
+
+                Grid.SetColumn(label, 2);
+                Grid.SetRow(label, i);
+
+                table.Children.Add(label);
+
+                i++;
+            }
         }
     }
 }

@@ -5,13 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MatchingAppWindow.Views"
         mc:Ignorable="d"
-        Title="MatchInfoScreen" Height="auto" Width="auto" Background="#252C33">
-    
-    <Grid Name="table">
-        <DataGrid GridLinesVisibility="All" AutoGenerateColumns="False" HeadersVisibility="All" Background="#252C33">
-            <DataGridTextColumn Header="Vragen" FontSize="22" FontWeight="Bold" Width="200"/>
-            <DataGridTextColumn Header="Jij" FontSize="22" FontWeight="Bold" Width="200"/>
-            <DataGridTextColumn Header="{Binding}" FontSize="22" FontWeight="Bold" Width="200"/>
-        </DataGrid>
-    </Grid>
+        Title="MatchInfoScreen" Height="400" Width="1000" Background="#252C33">
+
+    <ScrollViewer>
+        <Grid Name="table">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Rectangle Stroke="#434E5B" Grid.Column="0" Grid.RowSpan="15"/>
+            <Label Content="Vragen" FontSize="18" FontWeight="Bold" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" Foreground="White"/>
+
+            <Rectangle Stroke="#434E5B" Grid.Column="1" Grid.RowSpan="15"/>
+            <Label Content="Jij" FontSize="18" FontWeight="Bold" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" Foreground="White"/>
+
+            <Rectangle Stroke="#434E5B" Grid.Column="2" Grid.RowSpan="15"/>
+            <Label Content="{Binding}" FontSize="18" FontWeight="Bold" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" Foreground="White"/>
+        </Grid>
+    </ScrollViewer>
 </Window>
