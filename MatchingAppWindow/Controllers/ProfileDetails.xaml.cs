@@ -32,6 +32,9 @@ namespace MatchingAppWindow.Views
         private string usr = MainWindow.profile.UserName;
         private int currentImage;
 
+        List<int> you;
+        List<int> other;
+
         public ObservableCollection<string> ProfileInfo { get; set; }
 
         public ProfileDetails()
@@ -43,7 +46,7 @@ namespace MatchingAppWindow.Views
             Visibility = Visibility.Collapsed;
 
             likebutton.Visibility = Visibility.Visible;
-            dislikebutton.Visibility = Visibility.Collapsed;       
+            dislikebutton.Visibility = Visibility.Collapsed;
         }
 
         public List<string> GetProfileDetails()
@@ -86,21 +89,25 @@ namespace MatchingAppWindow.Views
             interestBlock.ItemsSource = selectedProfile.Interests;
             detailList.ItemsSource = ProfileInfo;
 
-            if(you.Count > 0 && other.Count > 0)
+            you = MainWindow.repo.GetMatchingQuiz(usr);
+            other = MainWindow.repo.GetMatchingQuiz(selectedProfile.UserName);
+
+            if (you.Count > 0 && other.Count > 0)
             {
+                ViewAnswers.Visibility = Visibility.Visible;
+                MatchingPercentage.Visibility = Visibility.Visible;
+
                 SetMatchingPercentage();
             }
             else
             {
-                ViewAnswers.Visibility = Visibility.Hidden;
+                ViewAnswers.Visibility = Visibility.Collapsed;
+                MatchingPercentage.Visibility = Visibility.Collapsed;
             }
         }
 
         public void SetMatchingPercentage()
         {
-            List<int> you = MainWindow.repo.GetMatchingQuiz(usr);
-            List<int> other = MainWindow.repo.GetMatchingQuiz(selectedProfile.UserName);
-
             double matchingnumber = 0;
 
                 for (int i = 0; i < 13; i++)
