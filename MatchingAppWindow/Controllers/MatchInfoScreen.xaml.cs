@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KBS_project.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
@@ -20,7 +21,6 @@ namespace MatchingAppWindow.Views
     /// </summary>
     public partial class MatchInfoScreen : Window
     {
-
         List<string> questions = new List<string>()
         {
             { "Ben je meer een introvert of extrovert?"},
@@ -40,13 +40,15 @@ namespace MatchingAppWindow.Views
 
         List<int> answersCurrentUser;
         List<int> answersSelectedUser;
+        Brush[] AnswerDifference;
 
-        public MatchInfoScreen(string currentUser, string selectedUser)
+        public MatchInfoScreen(string currentUser, string selectedUser, Brush[] answerDifference)
         {
             InitializeComponent();
 
             answersCurrentUser = MainWindow.repo.GetMatchingQuiz(currentUser);
             answersSelectedUser = MainWindow.repo.GetMatchingQuiz(selectedUser);
+            AnswerDifference = answerDifference;
 
             setQuestions();
             setAnswersCurrentUser();
@@ -68,6 +70,14 @@ namespace MatchingAppWindow.Views
                 label.Visibility = Visibility.Visible;
                 label.Margin = new Thickness(3);
 
+                //if (1 != 1)
+                //{
+                //    SolidColorBrush originalBrush = (SolidColorBrush)AnswerDifference[i - 1];
+                //    SolidColorBrush answerColor = new SolidColorBrush(originalBrush.Color);
+                //    answerColor.Opacity = 0.3;
+                //    label.Background = answerColor;
+                //}
+
                 Grid.SetColumn(label, 0);
                 Grid.SetRow(label, i);
 
@@ -84,6 +94,7 @@ namespace MatchingAppWindow.Views
 
                 i++;
             }
+            MessageBox.Show($"{AnswerDifference.Length}");
         }
 
         private void setAnswersCurrentUser()
@@ -94,7 +105,7 @@ namespace MatchingAppWindow.Views
                 System.Windows.Controls.Label label = new System.Windows.Controls.Label();
 
                 label.FontSize = 14;
-                label.Content = answer;
+                label.Content = FormatEnumValue(GetEnumValueByIndex(answer, i));
                 label.Foreground = new SolidColorBrush(Colors.White);
                 label.Visibility = Visibility.Visible;
                 label.Margin = new Thickness(3);
@@ -116,7 +127,7 @@ namespace MatchingAppWindow.Views
                 System.Windows.Controls.Label label = new System.Windows.Controls.Label();
 
                 label.FontSize = 14;
-                label.Content = answer;
+                label.Content = FormatEnumValue(GetEnumValueByIndex(answer, i));
                 label.Foreground = new SolidColorBrush(Colors.White);
                 label.Visibility = Visibility.Visible;
                 label.Margin = new Thickness(3);
@@ -127,6 +138,42 @@ namespace MatchingAppWindow.Views
                 table.Children.Add(label);
 
                 i++;
+            }
+        }
+
+        private string FormatEnumValue(string enumValue)
+        {
+            return enumValue.Replace("_", " ");
+        }
+
+        private string GetEnumValueByIndex(int answer, int questionIndex)
+        {
+            switch (questionIndex)
+            {
+                case 1:
+                case 2:
+                    return Enum.GetName(typeof(MatchingquizAnswers.AnswerQuestion1_2), answer);
+                case 3:
+                case 4:
+                case 7:
+                    return Enum.GetName(typeof(MatchingquizAnswers.AnswerQuestion3_4_7), answer);
+                case 5:
+                case 6:
+                    return Enum.GetName(typeof(MatchingquizAnswers.AnswerQuestion5_6), answer);
+                case 8:
+                    return Enum.GetName(typeof(MatchingquizAnswers.AnswerQuestion8), answer);
+                case 9:
+                    return Enum.GetName(typeof(MatchingquizAnswers.AnswerQuestion9), answer);
+                case 10:
+                    return Enum.GetName(typeof(MatchingquizAnswers.AnswerQuestion10), answer);
+                case 11:
+                    return Enum.GetName(typeof(MatchingquizAnswers.AnswerQuestion11), answer);
+                case 12:
+                    return Enum.GetName(typeof(MatchingquizAnswers.AnswerQuestion12), answer);
+                case 13:
+                    return Enum.GetName(typeof(MatchingquizAnswers.AnswerQuestion13), answer);
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

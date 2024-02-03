@@ -32,8 +32,10 @@ namespace MatchingAppWindow.Views
         private string usr = MainWindow.profile.UserName;
         private int currentImage;
 
-        List<int> you;
-        List<int> other;
+        List<int> answersCurrentUser;
+        List<int> answersSelectedUser;
+        //List<Brush> answerDifference = new List<Brush>();
+        Brush[] answerDifference = new Brush[13];
 
         public ObservableCollection<string> ProfileInfo { get; set; }
 
@@ -89,10 +91,10 @@ namespace MatchingAppWindow.Views
             interestBlock.ItemsSource = selectedProfile.Interests;
             detailList.ItemsSource = ProfileInfo;
 
-            you = MainWindow.repo.GetMatchingQuiz(usr);
-            other = MainWindow.repo.GetMatchingQuiz(selectedProfile.UserName);
+            answersCurrentUser = MainWindow.repo.GetMatchingQuiz(usr);
+            answersSelectedUser = MainWindow.repo.GetMatchingQuiz(selectedProfile.UserName);
 
-            if (you.Count > 0 && other.Count > 0)
+            if (answersCurrentUser.Count > 0 && answersSelectedUser.Count > 0)
             {
                 ViewAnswers.Visibility = Visibility.Visible;
                 MatchingPercentage.Visibility = Visibility.Visible;
@@ -112,46 +114,55 @@ namespace MatchingAppWindow.Views
 
                 for (int i = 0; i < 13; i++)
                 {
-                    int diff = Math.Abs(you[i] - other[i]);
+                    int diff = Math.Abs(answersCurrentUser[i] - answersSelectedUser[i]);
 
                     if (i == 0 || i == 1 || i == 4 || i == 5)
                     {
                         matchingnumber += CalculateMatchingNumber(diff, 5, 3, 2, 1, 0);
+                        GetColorCode(i, diff, 5);
                     }
                     else if (i == 2)
                     {
-                        if (you[11] == other[11])
+                        if (answersCurrentUser[11] == answersSelectedUser[11])
                         {
                             matchingnumber += 5;
+                            GetColorCode(11, 0, 1);
+                            GetColorCode(i, 0, 0);
 
-                            if (you[2] == 1)
+                        if (answersCurrentUser[2] == 1)
                                 matchingnumber += 3;
-                            else if (you[2] == 3)
+                            else if (answersCurrentUser[2] == 3)
                                 matchingnumber += 5;
                         }
                         else
                         {
-                            if (you[2] == 1)
+                            GetColorCode(11, 1, 1);
+
+                            if (answersCurrentUser[2] == 1)
                                 matchingnumber -= 3;
-                            else if (you[2] == 3)
+                            else if (answersCurrentUser[2] == 3)
                                 matchingnumber -= 5;
                         }
                     }
                     else if (i == 3 || i == 6 || i == 7)
                     {
                         matchingnumber += CalculateMatchingNumber(diff, 5, 3, 0);
+                        GetColorCode(i, diff, 3);
                     }
                     else if (i == 8)
                     {
-                        matchingnumber += (you[8] == other[8]) ? 5 : 0;
+                        matchingnumber += CalculateMatchingNumber(diff, 5, 0);
+                        GetColorCode(i, diff, 2);
                     }
                     else if (i == 9 || i == 10)
                     {
                         matchingnumber += CalculateMatchingNumber(diff, 5, 0, 3);
+                        GetColorCode(i, diff, 3);
                     }
                     else if (i == 12)
                     {
                         matchingnumber += CalculateMatchingNumber(diff, 5, 3, 1, 0);
+                        GetColorCode(i, diff, 4);
                     }
                 }
 
@@ -167,6 +178,22 @@ namespace MatchingAppWindow.Views
                     return weights[i];
             }
             return 0;
+        }
+
+        private void GetColorCode(int id, int diff, int answerAmount)
+        {
+            if (diff == 0)
+            {
+                answerDifference[id] = Brushes.Green;
+            }
+            else if (diff == answerAmount)
+            {
+                answerDifference[id] = Brushes.Red;
+            }
+            else
+            {
+                answerDifference[id] = Brushes.Yellow;
+            }
         }
 
         public void NewChatRequest(object sender, RoutedEventArgs e)
@@ -218,7 +245,7 @@ namespace MatchingAppWindow.Views
 
         public void ViewAnswers_Click(object sender, RoutedEventArgs e)
         {
-            MatchInfoScreen matchInfoScreen = new MatchInfoScreen(usr, selectedProfile.UserName);
+            MatchInfoScreen matchInfoScreen = new MatchInfoScreen(usr, selectedProfile.UserName, answerDifference);
             matchInfoScreen.Visibility = Visibility.Visible;
         }
     }
