@@ -127,9 +127,8 @@ namespace MatchingAppWindow.Views
                         {
                             matchingnumber += 5;
                             GetColorCode(11, 0, 1);
-                            GetColorCode(i, 0, 0);
 
-                        if (answersCurrentUser[2] == 1)
+                            if (answersCurrentUser[2] == 1)
                                 matchingnumber += 3;
                             else if (answersCurrentUser[2] == 3)
                                 matchingnumber += 5;

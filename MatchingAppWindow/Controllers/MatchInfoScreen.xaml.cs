@@ -70,13 +70,13 @@ namespace MatchingAppWindow.Views
                 label.Visibility = Visibility.Visible;
                 label.Margin = new Thickness(3);
 
-                //if (1 != 1)
-                //{
-                //    SolidColorBrush originalBrush = (SolidColorBrush)AnswerDifference[i - 1];
-                //    SolidColorBrush answerColor = new SolidColorBrush(originalBrush.Color);
-                //    answerColor.Opacity = 0.3;
-                //    label.Background = answerColor;
-                //}
+                if (AnswerDifference[i-1] != null)
+                {
+                    SolidColorBrush originalBrush = (SolidColorBrush)AnswerDifference[i - 1];
+                    SolidColorBrush answerColor = new SolidColorBrush(originalBrush.Color);
+                    answerColor.Opacity = 0.3;
+                    label.Background = answerColor;
+                }
 
                 Grid.SetColumn(label, 0);
                 Grid.SetRow(label, i);
