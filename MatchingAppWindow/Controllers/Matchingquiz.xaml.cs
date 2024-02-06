@@ -31,7 +31,6 @@ namespace MatchingAppWindow
             }
         }
 
-
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
             List<RadioButton> radioButtons = FindSameElementsUI<RadioButton>(this);
@@ -42,8 +41,6 @@ namespace MatchingAppWindow
                 answerManager.StoreAnswer(question, radioButton.Content.ToString());
             }
         }
-
-
 
         public string GetSelectedAnswer(string question)
         {
@@ -99,15 +96,10 @@ namespace MatchingAppWindow
                     }
                 }
             }
-
             TraverseVisualTree(parent);
 
             return radioButtonsList;
         }
-
-
-
-
 
         private void SaveAnswers_Click(object sender, RoutedEventArgs e)
         {
@@ -135,18 +127,12 @@ namespace MatchingAppWindow
                 MainWindow.repo.SaveMatchingQuiz(answerList, MainWindow.profile);
                 ExitQuiz();
             }
-
-            
-            
         }
 
         private void ShowErrors()
         {
-            
-
             errorMessage.Visibility = Visibility.Visible;
         }
-
 
         private bool IsAnyRadioButtonChecked(GroupBox groupBox)
         {
@@ -163,9 +149,6 @@ namespace MatchingAppWindow
 
             return radioButtons.Any(radioButton => radioButton.IsChecked == true);
         }
-
-
-    
 
         public static List<T> FindSameElementsUI<T>(UIElement parent, int depth = 0) where T : UIElement
         {
@@ -193,22 +176,10 @@ namespace MatchingAppWindow
             }
             throw new IndexOutOfRangeException();
         }
+
         public void ExitQuiz()
         {
             ExitPage?.Invoke(this, EventArgs.Empty);
         }
-
-        public void GetAnswers_Click(object sender, RoutedEventArgs e)
-        {
-            List<int> you = MainWindow.repo.GetMatchingQuiz(MainWindow.profile.UserName);
-
-            string yourAnswers = "";
-            foreach (int answer in you)
-            {
-                yourAnswers += answer + ", ";
-            }
-            MessageBox.Show(yourAnswers);
-        }
-
     }
 }

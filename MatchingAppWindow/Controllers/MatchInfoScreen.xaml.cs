@@ -50,14 +50,14 @@ namespace MatchingAppWindow.Views
             answersSelectedUser = MainWindow.repo.GetMatchingQuiz(selectedUser);
             AnswerDifference = answerDifference;
 
-            setQuestions();
-            setAnswersCurrentUser();
-            setAnswersSelectedUser();
+            SetQuestions();
+            SetAnswersCurrentUser();
+            SetAnswersSelectedUser();
 
             DataContext = selectedUser;
         }
 
-        private void setQuestions()
+        private void SetQuestions()
         {
             int i = 1;
             foreach (string question in questions)
@@ -94,10 +94,9 @@ namespace MatchingAppWindow.Views
 
                 i++;
             }
-            MessageBox.Show($"{AnswerDifference.Length}");
         }
 
-        private void setAnswersCurrentUser()
+        private void SetAnswersCurrentUser()
         {
             int i = 1;
             foreach (int answer in answersCurrentUser)
@@ -119,7 +118,7 @@ namespace MatchingAppWindow.Views
             }
         }
 
-        private void setAnswersSelectedUser()
+        private void SetAnswersSelectedUser()
         {
             int i = 1;
             foreach (int answer in answersSelectedUser)

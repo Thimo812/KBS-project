@@ -92,7 +92,6 @@ namespace KBS_project.Enums
             ligt_aan_soort,
             allergisch,
             liever_niet,
-            Anders,
             zeg_ik_liever_niet
         }
     }
