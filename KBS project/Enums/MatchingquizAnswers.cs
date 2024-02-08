@@ -64,16 +64,16 @@ namespace KBS_project.Enums
         public enum AnswerQuestion10
         {
             ochtendmens,
-            avondmens,
             beide,
+            avondmens,
             zeg_ik_liever_niet
         }
 
         public enum AnswerQuestion11
         {
             buitenactiviteiten,
-            binnenactiviteiten,
             beide,
+            binnenactiviteiten,
             zeg_ik_liever_niet
         }
 

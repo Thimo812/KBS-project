@@ -209,9 +209,9 @@
                     <StackPanel>
                         <TextBlock Text="Ben je een ochtend of avond mens?" Style="{StaticResource LargeTextBlock}" />
                         <StackPanel Orientation="Horizontal" Margin="5">
-                            <RadioButton Content="Ochtend mens" Style="{StaticResource SmallRadioButton}" GroupName="Question10"/>
-                            <RadioButton Content="Avond mens" Style="{StaticResource SmallRadioButton}" GroupName="Question10"/>
+                            <RadioButton Content="Ochtendmens" Style="{StaticResource SmallRadioButton}" GroupName="Question10"/>
                             <RadioButton Content="Beide" Style="{StaticResource SmallRadioButton}" GroupName="Question10"/>
+                            <RadioButton Content="Avondmens" Style="{StaticResource SmallRadioButton}" GroupName="Question10"/>
                             <RadioButton Content="Zeg ik liever niet" Style="{StaticResource SmallRadioButton}" GroupName="Question10"/>
                         </StackPanel>
                     </StackPanel>
@@ -222,9 +222,9 @@
                     <StackPanel>
                         <TextBlock Text="Heb je liever buitendoorse activiteiten, binnen activiteiten of allebij?" Style="{StaticResource LargeTextBlock}" />
                         <StackPanel Orientation="Horizontal" Margin="5">
-                            <RadioButton Content="Buitendoorse activiteiten" Style="{StaticResource SmallRadioButton}" GroupName="Question11"/>
-                            <RadioButton Content="Binnen activiteiten" Style="{StaticResource SmallRadioButton}" GroupName="Question11"/>
-                            <RadioButton Content="Mix of beide" Style="{StaticResource SmallRadioButton}" GroupName="Question11"/>
+                            <RadioButton Content="Buiten activiteiten" Style="{StaticResource SmallRadioButton}" GroupName="Question11"/>
+                            <RadioButton Content="Beide" Style="{StaticResource SmallRadioButton}" GroupName="Question11"/>
+                            <RadioButton Content="Binnenactiveiten" Style="{StaticResource SmallRadioButton}" GroupName="Question11"/>
                             <RadioButton Content="Zeg ik liever niet" Style="{StaticResource SmallRadioButton}" GroupName="Question11"/>
                         </StackPanel>
                     </StackPanel>

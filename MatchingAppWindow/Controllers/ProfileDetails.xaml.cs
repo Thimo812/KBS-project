@@ -90,10 +90,11 @@ namespace MatchingAppWindow.Views
             interestBlock.ItemsSource = selectedProfile.Interests;
             detailList.ItemsSource = ProfileInfo;
 
+            AnswerDifference = new Brush[13];
             AnswersCurrentUser = MainWindow.repo.GetMatchingQuiz(usr);
             AnswersSelectedUser = MainWindow.repo.GetMatchingQuiz(selectedProfile.UserName);
 
-            if (AnswersCurrentUser.Count > 0 && AnswersSelectedUser.Count > 0)
+            if (AnswersCurrentUser.Count > 0 && AnswersSelectedUser.Count > 0 && usr != selectedProfile.UserName)
             {
                 ViewAnswers.Visibility = Visibility.Visible;
                 MatchingPercentage.Visibility = Visibility.Visible;
@@ -116,83 +117,70 @@ namespace MatchingAppWindow.Views
             {
                 int diff = Math.Abs(AnswersCurrentUser[i] - AnswersSelectedUser[i]);
 
-                if (i == 0 && AnswerFilledIn(5, AnswersCurrentUser[i], AnswersSelectedUser[i]))
-                {
-                    matchingnumber += CalculateMatchingNumber(AnswersCurrentUser[i] - AnswersSelectedUser[1], 5, 3, 2, 1, 0);
-                    GetColorCode(i, AnswersCurrentUser[i] - AnswersSelectedUser[1], 5);
-                    total += 5;
-                }
-                else if (i == 1 && AnswerFilledIn(5, AnswersCurrentUser[i], AnswersSelectedUser[i]))
-                {
-                    matchingnumber += CalculateMatchingNumber(AnswersCurrentUser[i] - AnswersSelectedUser[0], 5, 3, 2, 1, 0);
-                    GetColorCode(i, AnswersCurrentUser[i] - AnswersSelectedUser[0], 5);
-                    total += 5;
-                }
-                else if (i == 4 && AnswerFilledIn(5, AnswersCurrentUser[i], AnswersSelectedUser[i]))
-                {
-                    matchingnumber += CalculateMatchingNumber(AnswersCurrentUser[i] - AnswersSelectedUser[5], 5, 3, 2, 1, 0);
-                    GetColorCode(i, AnswersCurrentUser[i] - AnswersSelectedUser[5], 5);
-                    total += 5;
-                }
-                else if (i == 5 && AnswerFilledIn(5, AnswersCurrentUser[i], AnswersSelectedUser[i]))
-                {
-                    matchingnumber += CalculateMatchingNumber(AnswersCurrentUser[i] - AnswersSelectedUser[4], 5, 3, 2, 1, 0);
-                    GetColorCode(i, AnswersCurrentUser[i] - AnswersSelectedUser[4], 5);
-                    total += 5;
-                }
-                else if (i == 2 && AnswerFilledIn(3, AnswersCurrentUser[i], AnswersSelectedUser[i]))
-                {
-                    total += 5;
-                    if (AnswersCurrentUser[11] == AnswersSelectedUser[11] && AnswerFilledIn(4, AnswersCurrentUser[11], AnswersSelectedUser[11]))
-                    {
-                        matchingnumber += 5;
-                        GetColorCode(11, 0, 1);
-                        total += 5;
-
-                        if (AnswersCurrentUser[2] == 1)
-                            matchingnumber += 3;
-                        else if (AnswersCurrentUser[2] == 3)
-                            matchingnumber += 5;
-                    }
-                    else if (AnswerFilledIn(4, AnswersCurrentUser[11], AnswersSelectedUser[11]))
-                    {
-                        GetColorCode(11, 1, 1);
-                        total += 5;
-
-                        if (AnswersCurrentUser[2] == 1)
-                            matchingnumber -= 3;
-                        else if (AnswersCurrentUser[2] == 3)
-                            matchingnumber -= 5;
-                    }
-                }
-                else if ((i == 3 || i == 6 || i == 7) && AnswerFilledIn(3, AnswersCurrentUser[i], AnswersSelectedUser[i]))
+                if ((i == 3 || i == 6 || i == 7 || i == 9 || i == 10) && AnswerFilledIn(3, AnswersCurrentUser[i], AnswersSelectedUser[i]))
                 {
                     matchingnumber += CalculateMatchingNumber(diff, 5, 3, 0);
-                    GetColorCode(i, diff, 3);
+                    GiveColorCode(i, diff, 2);
                     total += 5;
+                }
+                else if (i == 0 && AnswerFilledIn(5, AnswersCurrentUser[i], AnswersSelectedUser[1]))
+                {
+                    matchingnumber += CalculateMatchingNumber(AnswersCurrentUser[i] - AnswersSelectedUser[1], 5, 3, 2, 1, 0);
+                    GiveColorCode(i, Math.Abs(AnswersCurrentUser[i] - AnswersSelectedUser[1]), 5);
+                    total += 5;
+                }
+                else if (i == 1 && AnswerFilledIn(5, AnswersCurrentUser[i], AnswersSelectedUser[0]))
+                {
+                    matchingnumber += CalculateMatchingNumber(AnswersCurrentUser[i] - AnswersSelectedUser[0], 5, 3, 2, 1, 0);
+                    GiveColorCode(i, Math.Abs(AnswersCurrentUser[i] - AnswersSelectedUser[0]), 5);
+                    total += 5;
+                }
+                else if (i == 4 && AnswerFilledIn(5, AnswersCurrentUser[i], AnswersSelectedUser[5]))
+                {
+                    matchingnumber += CalculateMatchingNumber(AnswersCurrentUser[i] - AnswersSelectedUser[5], 5, 0, 0, 0, 0);
+                    GiveColorCode(i, Math.Abs(AnswersCurrentUser[i] - AnswersSelectedUser[5]), 1);
+                    total += 5;
+                }
+                else if (i == 5 && AnswerFilledIn(5, AnswersCurrentUser[i], AnswersSelectedUser[4]))
+                {
+                    matchingnumber += CalculateMatchingNumber(AnswersCurrentUser[i] - AnswersSelectedUser[4], 5, 0, 0, 0, 0);
+                    GiveColorCode(i, Math.Abs(AnswersCurrentUser[i] - AnswersSelectedUser[4]), 1);
+                    total += 5;
+                }
+                if (i == 11 && AnswerFilledIn(4, AnswersCurrentUser[i], AnswersSelectedUser[i]))
+                {
+                    matchingnumber += CalculateMatchingNumber(diff, 5, 0, 0, 0);
+                    GiveColorCode(i, diff, 1);
+                    total += 5;
+                    matchingnumber += ReligionImportance(diff == 0, AnswersCurrentUser[2], AnswersSelectedUser[2]);
+                    GiveColorCode(2, Math.Abs(AnswersCurrentUser[2] - AnswersSelectedUser[2]), 3);
                 }
                 else if (i == 8 && AnswerFilledIn(2, AnswersCurrentUser[i], AnswersSelectedUser[i]))
                 {
                     matchingnumber += CalculateMatchingNumber(diff, 5, 0);
-                    GetColorCode(i, diff, 2);
-                    total += 5;
-                }
-                else if ((i == 9 || i == 10) && AnswerFilledIn(3, AnswersCurrentUser[i], AnswersSelectedUser[i]))
-                {
-                    matchingnumber += CalculateMatchingNumber(diff, 5, 0, 3);
-                    GetColorCode(i, diff, 3);
+                    GiveColorCode(i, diff, 1);
                     total += 5;
                 }
                 else if (i == 12 && AnswerFilledIn(4, AnswersCurrentUser[i], AnswersSelectedUser[i]))
                 {
                     matchingnumber += CalculateMatchingNumber(diff, 5, 3, 1, 0);
-                    GetColorCode(i, diff, 4);
+                    GiveColorCode(i, diff, 4);
                     total += 5;
                 }
             }
 
             double matchingpercentage = (matchingnumber / total) * 100;
             MatchingPercentage.Content = Math.Round(matchingpercentage) + "% match";
+        }
+
+        private int ReligionImportance(bool sameReligion, int answerCurrentUser, int answerSelectedUser)
+        {
+            int number = 0;
+
+            number += ((answerCurrentUser - answerSelectedUser == 0) || answerCurrentUser == 2) ? 5 : (answerCurrentUser == 1) ? 3 : 0;
+            number *= (!sameReligion) ? -1 : 1;
+
+            return number;
         }
 
         private double CalculateMatchingNumber(int diff, params int[] weights)
@@ -207,19 +195,12 @@ namespace MatchingAppWindow.Views
 
         private bool AnswerFilledIn(int optionAmount, int answerCurrentUser, int answerSelectedUser)
         {
-            if (answerCurrentUser < optionAmount && answerSelectedUser < optionAmount)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (answerCurrentUser < optionAmount && answerSelectedUser < optionAmount);
         }
 
-        private void GetColorCode(int id, int diff, int answerAmount)
+        private void GiveColorCode(int id, int diff, int answerAmount)
         {
-            AnswerDifference[id] = (diff == 0) ? Brushes.Green : (diff == answerAmount) ? Brushes.Red : Brushes.Yellow;
+            AnswerDifference[id] = (diff == 0) ? Brushes.Green : (diff >= answerAmount) ? Brushes.Red : Brushes.Yellow;
         }
 
         public void NewChatRequest(object sender, RoutedEventArgs e)
